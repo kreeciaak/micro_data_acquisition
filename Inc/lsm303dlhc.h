@@ -21,10 +21,16 @@
 // The LSM303DLHC uses two device addresses, one for the accerometer, and on
 // for the megnetometer.
 // ----------------------------------------------------------------------------
-#define LSM303DLHC_ADDRESS_A            0x19
-#define LSM303DLHC_ADDRESS_M            0x1E
+#define LSM303DLHC_ADDRESS_A            (0x19 << 1)
+#define LSM303DLHC_ADDRESS_M            (0x1E << 1)
 #define LSM303DLHC_DEFAULT_ADDRESS_A    0x19
 #define LSM303DLHC_DEFAULT_ADDRESS_M    0x1E
+
+#define LSM303DLHC_ADDRESS_A_WRITE		0x32
+#define LSM303DLHC_ADDRESS_A_READ		0x33
+
+#define LSM303DLHC_ADDRESS_M_WRITE		0x3C
+#define LSM303DLHC_ADDRESS_M_READ		0x3D
 
 // ----------------------------------------------------------------------------
 // STUB TODO:
@@ -108,16 +114,21 @@
 #define LSM303DLHC_YEN_BIT              1
 #define LSM303DLHC_XEN_BIT              0
 
-#define LSM303DLHC_ODR_RATE_POWERDOWN       0b0000
-#define LSM303DLHC_ODR_RATE_1               0b0001
-#define LSM303DLHC_ODR_RATE_10              0b0010
-#define LSM303DLHC_ODR_RATE_25              0b0011
-#define LSM303DLHC_ODR_RATE_50              0b0100
-#define LSM303DLHC_ODR_RATE_100             0b0101
-#define LSM303DLHC_ODR_RATE_200             0b0110
-#define LSM303DLHC_ODR_RATE_400             0b0111
-#define LSM303DLHC_ODR_RATE_1620_LP         0b1000
-#define LSM303DLHC_ODR_RATE_1344_N_5376_LP  0b1001
+#define LSM303DLHC_ODR_RATE_POWERDOWN       0x00
+#define LSM303DLHC_ODR_RATE_1               0x10
+#define LSM303DLHC_ODR_RATE_10              0x20
+#define LSM303DLHC_ODR_RATE_25              0x30
+#define LSM303DLHC_ODR_RATE_50              0x40
+#define LSM303DLHC_ODR_RATE_100             0x50
+#define LSM303DLHC_ODR_RATE_200             0x60
+#define LSM303DLHC_ODR_RATE_400             0x70
+#define LSM303DLHC_ODR_RATE_1620_LP         0x80
+#define LSM303DLHC_ODR_RATE_1344_N_5376_LP  0x90
+
+#define LSM303DLHC_LPEN_NORMAL_MODE			0x00
+#define LSM303DLHC_LPEN_LOW_POWER_MODE		0x08
+
+#define LSM303DLHC_3AXIS_ENABLE				0x07
 
 //CTRL_REG2_A
 #define LSM303DLHC_HPM_BIT              7
@@ -156,14 +167,15 @@
 #define LSM303DLHC_HR_BIT               3
 #define LSM303DLHC_SIM_BIT              0
 
-#define LSM303DLHC_LITTLE_ENDIAN        0
-#define LSM303DLHC_BIG_ENDIAN           1
-#define LSM303DLHC_FS_2                 0b00
-#define LSM303DLHC_FS_4                 0b01
-#define LSM303DLHC_FS_8                 0b10
-#define LSM303DLHC_FS_16                0b11
-#define LSM303DLHC_SIM_3W               1
-#define LSM303DLHC_SIM_4W               0
+#define LSM303DLHC_CONTINUOS_UPDATE		0x00
+#define LSM303DLHC_LITTLE_ENDIAN        0x00
+#define LSM303DLHC_BIG_ENDIAN           0x40
+#define LSM303DLHC_FS_2                 0x00
+#define LSM303DLHC_FS_4                 0x10
+#define LSM303DLHC_FS_8                 0x20
+#define LSM303DLHC_FS_16                0x30
+#define LSM303DLHC_HIGH_RES				0x08
+
 
 //CTRL_REG5_A
 #define LSM303DLHC_BOOT_BIT             7
@@ -302,34 +314,37 @@
 #define LSM303DLHC_DO_BIT                   4
 #define LSM303DLHC_DO_LENGTH                3
 
-#define LSM303DLHC_DO_RATE_0                0b000
-#define LSM303DLHC_DO_RATE_1                0b001
-#define LSM303DLHC_DO_RATE_3                0b010
-#define LSM303DLHC_DO_RATE_7                0b011
-#define LSM303DLHC_DO_RATE_15               0b100
-#define LSM303DLHC_DO_RATE_30               0b101
-#define LSM303DLHC_DO_RATE_75               0b110
-#define LSM303DLHC_DO_RATE_220              0b111
+#define LSM303DLHC_DO_RATE_0                0x00
+#define LSM303DLHC_DO_RATE_1                0x04
+#define LSM303DLHC_DO_RATE_3                0x08
+#define LSM303DLHC_DO_RATE_7                0x0C
+#define LSM303DLHC_DO_RATE_15               0x10
+#define LSM303DLHC_DO_RATE_30               0x14
+#define LSM303DLHC_DO_RATE_75               0x18
+#define LSM303DLHC_DO_RATE_220              0x1C
+
+#define LSM303DLHC_TEMP_ENABLE				0x80
+#define LSM303DLHC_TEMP_DISABLE				0x00
 
 //CRB_REG_M
 #define LSM303DLHC_GN_BIT                   7
 #define LSM303DLHC_GN_LENGTH                3
 
-#define LSM303DLHC_GN_1100                  0b001
-#define LSM303DLHC_GN_855                   0b010
-#define LSM303DLHC_GN_670                   0b011
-#define LSM303DLHC_GN_450                   0b100
-#define LSM303DLHC_GN_400                   0b101
-#define LSM303DLHC_GN_330                   0b110
-#define LSM303DLHC_GN_230                   0b111
+#define LSM303DLHC_GN_1100                  0x20
+#define LSM303DLHC_GN_855                   0x40
+#define LSM303DLHC_GN_670                   0x60
+#define LSM303DLHC_GN_450                   0x80
+#define LSM303DLHC_GN_400                   0xA0
+#define LSM303DLHC_GN_330                   0xC0
+#define LSM303DLHC_GN_230                   0xE0
 
 //MR_REG_M
 #define LSM303DLHC_MD_BIT                   1
 #define LSM303DLHC_MD_LENGTH                2
 
-#define LSM303DLHC_MD_CONTINUOUS            0b00
-#define LSM303DLHC_MD_SINGLE                0b01
-#define LSM303DLHC_MD_SLEEP                 0b10
+#define LSM303DLHC_MD_CONTINUOUS            0x00
+#define LSM303DLHC_MD_SINGLE                0x01
+#define LSM303DLHC_MD_SLEEP                 0x02
 
 //OUT_X_H_M
 //OUT_X_L_M
@@ -349,6 +364,15 @@
 //TEMP_OUT_H_M
 //TEMP_OUT_L_M
 
-
-
 #endif /* LSM303DLHC_H_ */
+
+void LSM_Error(void);
+void LSM_Success(void);
+static uint8_t LSM_I2C_Read(uint16_t Addr, uint8_t Reg);
+static void LSM_I2C_Write(uint16_t Addr, uint8_t Reg, uint8_t Value);
+uint8_t LSM_I2C_ReadID(uint16_t Addr);
+void LSM_Accel_Ini(void);
+void LSM_Accel_GetXYZ(int16_t* pData);
+void LSM_Mag_Ini(void);
+void LSM_Mag_GetXYZ(int16_t* pData);
+
