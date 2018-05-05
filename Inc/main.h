@@ -67,6 +67,9 @@
 #define DRDY_ACC_Pin GPIO_PIN_4
 #define DRDY_ACC_GPIO_Port GPIOE
 #define DRDY_ACC_EXTI_IRQn EXTI4_IRQn
+#define BUTTON_EXT_Pin GPIO_PIN_0
+#define BUTTON_EXT_GPIO_Port GPIOA
+#define BUTTON_EXT_EXTI_IRQn EXTI0_IRQn
 #define LED_green_Pin GPIO_PIN_12
 #define LED_green_GPIO_Port GPIOD
 #define LED_orange_Pin GPIO_PIN_13

@@ -159,6 +159,9 @@
 #define LSM303DLHC_I1_WTM_BIT           2
 #define LSM303DLHC_I1_OVERRUN_BIT       1
 
+#define LSM303DLHC_I1_DRDY2_ENABLE		0x08
+#define LSM303DLHC_I1_DRDY1_ENABLE		0x10
+
 //CTRL_REG4_A
 #define LSM303DLHC_BDU_BIT              7
 #define LSM303DLHC_BLE_BIT              6
@@ -352,6 +355,8 @@
 //OUT_Y_L_M
 //OUT_Z_H_M
 //OUT_Z_L_M
+
+#define LSM303DLHC_OUT_MULTI_READ			0x80
 
 //SR_REG_M
 #define LSM303DLHC_M_DRDY_BIT                 0

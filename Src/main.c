@@ -54,6 +54,7 @@
 /* USER CODE BEGIN Includes */
 #include "usbd_cdc_if.h" //biblioteka do transmisji
 #include "lsm303dlhc.h"
+#include "l3gd20.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -65,9 +66,10 @@ TIM_HandleTypeDef htim10;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-char str1[60] = {0};
+char str1[100] = {0};
 int16_t AccelData[3];
 int16_t MagData[3];
+int16_t GyroData[3];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -123,6 +125,10 @@ int main(void)
 
   LSM_Accel_Ini();
   LSM_Mag_Ini();
+  L3G_Gyro_Ini();
+
+  LSM_Accel_GetXYZ(AccelData);
+  L3G_Gyro_GetXYZ(GyroData);
 
   /* USER CODE END 2 */
 
@@ -130,11 +136,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  LSM_Accel_GetXYZ(AccelData);
-	  LSM_Mag_GetXYZ(MagData);
 
-	  sprintf(str1, "gX: %06d; gY: %06d; gZ %06d; mX: %06d; mZ: %06d; mY %06d; \n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2]);
+
+
+	  sprintf(str1, "gX: %06d; gY: %06d; gZ %06d; mX: %06d; mY: %06d; mZ %06d; gX %06d; gY %06d; gZ %06d; \n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
+	  //sprintf(str1, "gX: %06d; gY: %06d; gZ %06d; mX: %06d; mY: %06d; mZ %06d; \n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2]);
 	  CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
+
+	  HAL_Delay(100);
 
   /* USER CODE END WHILE */
 
@@ -297,14 +306,14 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(CS_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PA0 */
-  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  /*Configure GPIO pin : BUTTON_EXT_Pin */
+  GPIO_InitStruct.Pin = BUTTON_EXT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(BUTTON_EXT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_green_Pin LED_orange_Pin LED_red_Pin LED_blue_Pin */
   GPIO_InitStruct.Pin = LED_green_Pin|LED_orange_Pin|LED_red_Pin|LED_blue_Pin;
@@ -329,7 +338,29 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(GPIO_Pin);
+  /* NOTE: This function Should not be modified, when the callback is needed,
+           the HAL_GPIO_EXTI_Callback could be implemented in the user file
+   */
+  if (GPIO_Pin == DRDY_ACC_Pin){
+	  LSM_Accel_GetXYZ(AccelData);
+  }
 
+  if (GPIO_Pin == DRDY_MAG_Pin){
+	  LSM_Mag_GetXYZ(MagData);
+  }
+
+  if (GPIO_Pin == DRDY_GYRO_Pin){
+	  L3G_Gyro_GetXYZ(GyroData);
+  }
+
+  if (GPIO_Pin == BUTTON_EXT_Pin){
+
+  }
+}
 /* USER CODE END 4 */
 
 /**

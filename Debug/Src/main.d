@@ -42,7 +42,8 @@ Src/main.o: ../Src/main.c D:/EclipseOxygen/MGR/MGR/Inc/main.h \
  D:/EclipseOxygen/MGR/MGR/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h \
  D:/EclipseOxygen/MGR/MGR/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
  D:/EclipseOxygen/MGR/MGR/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h \
- D:/EclipseOxygen/MGR/MGR/Inc/lsm303dlhc.h
+ D:/EclipseOxygen/MGR/MGR/Inc/lsm303dlhc.h \
+ D:/EclipseOxygen/MGR/MGR/Inc/l3gd20.h
 
 D:/EclipseOxygen/MGR/MGR/Inc/main.h:
 
@@ -133,3 +134,5 @@ D:/EclipseOxygen/MGR/MGR/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_i
 D:/EclipseOxygen/MGR/MGR/Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h:
 
 D:/EclipseOxygen/MGR/MGR/Inc/lsm303dlhc.h:
+
+D:/EclipseOxygen/MGR/MGR/Inc/l3gd20.h:
