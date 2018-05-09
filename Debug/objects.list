@@ -22,6 +22,7 @@
 "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o"
 "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o"
 "Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o"
+"Src/calculations.o"
 "Src/l3gd20.o"
 "Src/lsm303dlhc.o"
 "Src/main.o"
@@ -33,4 +34,5 @@
 "Src/usbd_cdc_if.o"
 "Src/usbd_conf.o"
 "Src/usbd_desc.o"
+"Src/vector.o"
 "startup/startup_stm32f411xe.o"

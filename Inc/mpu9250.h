@@ -8,6 +8,14 @@
 #ifndef MPU9250_H_
 #define MPU9250_H_
 
+
+#define READWRITE_CMD		 0x80
+#define MULTIPLEBYTE_CMD	 0x40
+#define CS2_ON				 HAL_GPIO_WritePin(CS2_GPIO_Port, CS2_Pin, GPIO_PIN_RESET)
+#define CS2_OFF				 HAL_GPIO_WritePin(CS2_GPIO_Port, CS2_Pin, GPIO_PIN_SET)
+#define DUMMY_BYTE			 0x00
+
+
 //Magnetometer Registers
 #define MPU9150_RA_MAG_ADDRESS		0x0C
 #define MPU9150_RA_MAG_XOUT_L		0x03
@@ -373,3 +381,16 @@
 
 
 #endif /* MPU9250_H_ */
+
+void MPU_Error(void);
+void MPU_Success(void);
+static uint8_t MPU_I2C_Read(uint16_t Addr, uint8_t Reg);
+//static void MPU_I2C_Write(uint16_t Addr, uint8_t Reg, uint8_t Value);
+uint8_t MPU_I2C_ReadID(uint16_t Addr);
+void MPU_Accel_Ini(void);
+
+uint8_t MPU_SPIx_WriteRead(uint8_t Byte);
+void MPU_Gyro_IO_Read(uint8_t *pBuffer, uint8_t ReadAddr, uint16_t NumByteToRead);
+uint8_t MPU_Gyro_ReadID(void);
+void MPU_Gyro_Ini(void);
+

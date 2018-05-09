@@ -8,7 +8,7 @@
 #include "l3gd20.h"
 
 
-extern I2C_HandleTypeDef hspi1;
+extern SPI_HandleTypeDef hspi1;
 
 void L3G_Error(void)
 {

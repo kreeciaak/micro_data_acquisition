@@ -55,6 +55,8 @@
 #include "usbd_cdc_if.h" //biblioteka do transmisji
 #include "lsm303dlhc.h"
 #include "l3gd20.h"
+#include "vector.h"
+
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -70,6 +72,9 @@ char str1[100] = {0};
 int16_t AccelData[3];
 int16_t MagData[3];
 int16_t GyroData[3];
+
+Matrix3f MagCalib, AccCalib;
+Vector3f MagR, AccR, Mag, Acc, Gyro, MagShift, AccShift, GyroShift;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -127,6 +132,42 @@ int main(void)
   LSM_Mag_Ini();
   L3G_Gyro_Ini();
 
+  MagShift[0] = -79.568073f;
+  	MagShift[1] = -43.539449f;
+  	MagShift[2] = -59.246582f;
+
+  	AccShift[0] = -82.776597f;
+  	AccShift[1] = 175.771870f;
+  	AccShift[2] = 647.287009f;
+
+  	GyroShift[0] = -81.166333f;
+  	GyroShift[1] = 40.882f;
+  	GyroShift[2] = -39.596f;
+
+  	MagCalib[0][0] = 0.983101f;
+  	MagCalib[0][1] = 0.019143f;
+  	MagCalib[0][2] = 0.008105f;
+
+  	MagCalib[1][0] = 0.019143f;
+  	MagCalib[1][1] = 1.012514f;
+  	MagCalib[1][2] = -0.003008f;
+
+  	MagCalib[2][0] = 0.008105f;
+  	MagCalib[2][1] = -0.003008f;
+  	MagCalib[2][2] = 0.960453f;
+
+  	AccCalib[0][0] = 0.984432f;
+  	AccCalib[0][1] = 0.001300f;
+  	AccCalib[0][2] = -0.001628f;
+
+  	AccCalib[1][0] = 0.001300f;
+  	AccCalib[1][1] = 1.009410f;
+  	AccCalib[1][2] = 0.000265f;
+
+  	AccCalib[2][0] = -0.001628f;
+  	AccCalib[2][1] = 0.000265f;
+  	AccCalib[2][2] = 1.023268f;
+
   LSM_Accel_GetXYZ(AccelData);
   L3G_Gyro_GetXYZ(GyroData);
 
@@ -137,13 +178,28 @@ int main(void)
   while (1)
   {
 
+	  MagR[0] = (float)MagData[0]-MagShift[0];
+	  MagR[1] = (float)MagData[1]-MagShift[1];
+	  MagR[2] = (float)MagData[2]-MagShift[2];
 
+	  V3fTransform(MagR, MagCalib, Mag);
 
-	  sprintf(str1, "gX: %06d; gY: %06d; gZ %06d; mX: %06d; mY: %06d; mZ %06d; gX %06d; gY %06d; gZ %06d; \n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
-	  //sprintf(str1, "gX: %06d; gY: %06d; gZ %06d; mX: %06d; mY: %06d; mZ %06d; \n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2]);
+	  AccR[0] = (float)AccelData[0]-AccShift[0];
+	  AccR[1] = (float)AccelData[1]-AccShift[1];
+	  AccR[2] = (float)AccelData[2]-AccShift[2];
+
+	  V3fTransform(AccR, AccCalib, Acc);
+
+	  Gyro[0] = (float)GyroData[0]-GyroShift[0];
+	  Gyro[1] = (float)GyroData[1]-GyroShift[1];
+	  Gyro[2] = (float)GyroData[2]-GyroShift[1];
+
+	  //sprintf(str1, "gX: %06d; gY: %06d; gZ %06d; mX: %06d; mY: %06d; mZ %06d; gX %06d; gY %06d; gZ %06d; \n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
+	  //sprintf(str1, "%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;\n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
+	  sprintf(str1, "%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;\n\r", (int)Acc[0], (int)Acc[1], (int)Acc[2], (int)Mag[0], (int)Mag[1], (int)Mag[2], (int)Gyro[0], (int)Gyro[1], (int)Gyro[2]);
 	  CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
 
-	  HAL_Delay(100);
+	  HAL_Delay(10);
 
   /* USER CODE END WHILE */
 
@@ -291,23 +347,23 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(CS_GPIO_Port, CS_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOE, CS_Pin|CS2_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOD, LED_green_Pin|LED_orange_Pin|LED_red_Pin|LED_blue_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : DRDY_MAG_Pin DRDY_ACC_Pin DRDY_GYRO_Pin */
-  GPIO_InitStruct.Pin = DRDY_MAG_Pin|DRDY_ACC_Pin|DRDY_GYRO_Pin;
+  /*Configure GPIO pins : DRDY_MAG_Pin DRDY_ACC_Pin DRDY_MPU_Pin DRDY_GYRO_Pin */
+  GPIO_InitStruct.Pin = DRDY_MAG_Pin|DRDY_ACC_Pin|DRDY_MPU_Pin|DRDY_GYRO_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : CS_Pin */
-  GPIO_InitStruct.Pin = CS_Pin;
+  /*Configure GPIO pins : CS_Pin CS2_Pin */
+  GPIO_InitStruct.Pin = CS_Pin|CS2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(CS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /*Configure GPIO pin : BUTTON_EXT_Pin */
   GPIO_InitStruct.Pin = BUTTON_EXT_Pin;
@@ -334,6 +390,9 @@ static void MX_GPIO_Init(void)
 
   HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(EXTI4_IRQn);
+
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 }
 
