@@ -20,3 +20,4 @@ typedef float Matrix3f[3][3];
 void M3fMultiply(Matrix3f M1, Matrix3f M2, Matrix3f MRes);
 void V3fTransform(Vector3f V, Matrix3f M, Vector3f VRes);
 void V3Subtract(Vector3f V1, Vector3f V2, Vector3f VRes);
+float Norm(Vector3f V);

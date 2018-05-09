@@ -56,6 +56,7 @@
 #include "lsm303dlhc.h"
 #include "l3gd20.h"
 #include "vector.h"
+#include "calculations.h"
 
 /* USER CODE END Includes */
 
@@ -73,8 +74,6 @@ int16_t AccelData[3];
 int16_t MagData[3];
 int16_t GyroData[3];
 
-Matrix3f MagCalib, AccCalib;
-Vector3f MagR, AccR, Mag, Acc, Gyro, MagShift, AccShift, GyroShift;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -132,41 +131,41 @@ int main(void)
   LSM_Mag_Ini();
   L3G_Gyro_Ini();
 
-  MagShift[0] = -79.568073f;
-  	MagShift[1] = -43.539449f;
-  	MagShift[2] = -59.246582f;
+  /*MagShift[0] = -79.568073f;
+  MagShift[1] = -43.539449f;
+  MagShift[2] = -59.246582f;
 
-  	AccShift[0] = -82.776597f;
-  	AccShift[1] = 175.771870f;
-  	AccShift[2] = 647.287009f;
+  AccShift[0] = -82.776597f;
+  AccShift[1] = 175.771870f;
+  AccShift[2] = 647.287009f;
 
-  	GyroShift[0] = -81.166333f;
-  	GyroShift[1] = 40.882f;
-  	GyroShift[2] = -39.596f;
+  GyroShift[0] = -81.166333f;
+  GyroShift[1] = 40.882f;
+  GyroShift[2] = -39.596f;
 
-  	MagCalib[0][0] = 0.983101f;
-  	MagCalib[0][1] = 0.019143f;
-  	MagCalib[0][2] = 0.008105f;
+  MagCalib[0][0] = 0.983101f;
+  MagCalib[0][1] = 0.019143f;
+  MagCalib[0][2] = 0.008105f;
 
-  	MagCalib[1][0] = 0.019143f;
-  	MagCalib[1][1] = 1.012514f;
-  	MagCalib[1][2] = -0.003008f;
+  MagCalib[1][0] = 0.019143f;
+  MagCalib[1][1] = 1.012514f;
+  MagCalib[1][2] = -0.003008f;
 
-  	MagCalib[2][0] = 0.008105f;
-  	MagCalib[2][1] = -0.003008f;
-  	MagCalib[2][2] = 0.960453f;
+  MagCalib[2][0] = 0.008105f;
+  MagCalib[2][1] = -0.003008f;
+  MagCalib[2][2] = 0.960453f;
 
-  	AccCalib[0][0] = 0.984432f;
-  	AccCalib[0][1] = 0.001300f;
-  	AccCalib[0][2] = -0.001628f;
+  AccCalib[0][0] = 0.984432f;
+  AccCalib[0][1] = 0.001300f;
+  AccCalib[0][2] = -0.001628f;
 
-  	AccCalib[1][0] = 0.001300f;
-  	AccCalib[1][1] = 1.009410f;
-  	AccCalib[1][2] = 0.000265f;
+  AccCalib[1][0] = 0.001300f;
+  AccCalib[1][1] = 1.009410f;
+  AccCalib[1][2] = 0.000265f;
 
-  	AccCalib[2][0] = -0.001628f;
-  	AccCalib[2][1] = 0.000265f;
-  	AccCalib[2][2] = 1.023268f;
+  AccCalib[2][0] = -0.001628f;
+  AccCalib[2][1] = 0.000265f;
+  AccCalib[2][2] = 1.023268f;*/
 
   LSM_Accel_GetXYZ(AccelData);
   L3G_Gyro_GetXYZ(GyroData);
@@ -178,7 +177,7 @@ int main(void)
   while (1)
   {
 
-	  MagR[0] = (float)MagData[0]-MagShift[0];
+	 /* MagR[0] = (float)MagData[0]-MagShift[0];
 	  MagR[1] = (float)MagData[1]-MagShift[1];
 	  MagR[2] = (float)MagData[2]-MagShift[2];
 
@@ -192,7 +191,7 @@ int main(void)
 
 	  Gyro[0] = (float)GyroData[0]-GyroShift[0];
 	  Gyro[1] = (float)GyroData[1]-GyroShift[1];
-	  Gyro[2] = (float)GyroData[2]-GyroShift[1];
+	  Gyro[2] = (float)GyroData[2]-GyroShift[1];*/
 
 	  //sprintf(str1, "gX: %06d; gY: %06d; gZ %06d; mX: %06d; mY: %06d; mZ %06d; gX %06d; gY %06d; gZ %06d; \n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
 	  //sprintf(str1, "%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;\n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
