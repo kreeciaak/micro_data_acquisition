@@ -4,117 +4,93 @@
  *  Created on: 6 maj 2018
  *      Author: User
  */
-
-
-#include <stdlib.h>
-#include <math.h>
 #include <calculations.h>
-#include <vector.h>
-#include <CalibrationConst.h>
 
-typedef float Vector3f[3];
-typedef float Matrix3f[3][3];
 
-void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag)// funckja zawierajaca wsyztskie obliczenia - argumety to surowe dane z czujnika
+void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)// funckja zawierajaca wsyztskie obliczenia - argumety to surowe dane z czujnika
 {
-	Vector3f AccR, GyroR, MagR, RawAngles, GyroAngles, CFAngles, KalmanAngles;
-	Macierz_Acc_Gyro_Mag[3][3] = RawDataCorrection(Acc, Gyro, Mag);
-	//na tym etapie trzeba by to rozbic znowu na wektory, chyba ¿e da siê przes³ac po prostu 3 wektory z tamtej funkcji zamiast macierzy
-	//Za³o¿ny ze nowe wekory bêd¹ nazywac siê np. AccR
-	RawAngles = PitchRollYawMA(AccR, MagR);
+	Vector3f AccR= {0.0,0.0,0.0}, GyroR= {0,0,0}, MagR= {0,0,0}, RawAngles= {0,0,0}, GyroAngles= {0,0,0};
+	//statyczna inicjalizacja zmiennych
+	static Vector3f CFAngles = {0,0,0};
+	static Vector3f KalmanAngles = {0,0,0};
 
-	if (CFAngles[0] == 0 && CFAngles[1] == 0 && CFAngles[2] == 0 && KalmanAngles[0] == 0 && KalmanAngles[1] == 0 && KalmanAngles[2] == 0) //Wykonanie inicjalizacji tylko dla pierwszego wywolania funckji
-	{
-		CFAngles = RawAngles;
-		KalmanAngles = RawAngles;
-	}
-
-	GyroAngles = GyroIntegral(GyroR);
-	CFAngles = ComplementaryFilter(CFAngles,GyroAngles,RawAngles,weight); //weight pochodzi z calibration const
-	KalmanAngles[0] = KalmanFilter();
+	RawDataOrientationCorrection(Acc,AccShift,AccCalib, AccR);
+	RawDataOrientationCorrection(Mag,MagShift,MagCalib, MagR);
+	V3Subtract(Gyro,GyroShift, GyroR);
+	//na tym etapie trzeba by to rozbic znowu na wektory, chyba Â¿e da siÃª przesÂ³ac po prostu 3 wektory z tamtej funkcji zamiast macierzy
+	//ZaÂ³oÂ¿ny ze nowe wekory bÃªdÂ¹ nazywac siÃª np. AccR
+	PitchRollYawMA(AccR, MagR, RawAngles);
 
 
-	return //zwracana jest duza macierz 3-kolumnowa na t¹ chwile musi miec 7 wierszy (do Kalmana)
-	//WSZYTSKIE WEKTORY Z WYNIKAMI PONI¯EJ RAWANGLES MUSZ¥ ZACHOWAC SWOJ¥ WARTOŒC DO NASTEPNEGO WYWOLANIA FUNKCJI BO ZACHODZI SUMOWANIE (CHYBA MUSZA BYC GLOBALNE)
+	GyroIntegral(GyroR, GyroAngles, 0.01);
+	ComplementaryFilter(CFAngles,GyroAngles,RawAngles,weight); //weight pochodzi z calibration const
+//	KalmanAngles[0] = KalmanFilter();
+
+ //zwracana jest duza macierz 3-kolumnowa na tÂ¹ chwile musi miec 7 wierszy (do Kalmana)
+	//WSZYTSKIE WEKTORY Z WYNIKAMI PONIÂ¯EJ RAWANGLES MUSZÂ¥ ZACHOWAC SWOJÂ¥ WARTOÅ’C DO NASTEPNEGO WYWOLANIA FUNKCJI BO ZACHODZI SUMOWANIE (CHYBA MUSZA BYC GLOBALNE)
 }
 
-void RawDataCorrection(Vector3f Acc, Vector3f Gyro, Vector3f Mag) //funkcja koryguj¹ca - argumenty to odczyty z czujnikow w postaci wektorów(wartosci rejestrow - int)
+void RawDataOrientationCorrection(Vector3f V, Vector3f VCorr, Matrix3f MCorr, float *VRes) //Argumenty - sutrowy wektor z czujnika (moze byc int), Wektor korekcyjny z calibration.h (float/double), macierz korekcji (float/dobule)
 {
-	Matrix3f AccCorr, MagCorr, GyroCorr, MagShift, GyroShift, AccShift, MagCalib, AccCalib;
-	Vector3f Angles;
-
-	AccCorr = RawDataOrientationCorrection(Acc,AccShift,AccCalib);
-	MagCorr = RawDataOrientationCorrection(Mag,MagShift,MagCalib);
-	GyroCorr = V3Subtract(Gyro,GyroShift);
-
-	return //funcja zwraca 3 nowe wektory danych (takie jak wejsciowe) - moze byc macierz 3x3
-}
-
-void RawDataOrientationCorrection(Vector3f V, Vector3f VCorr, Matrix3f MCorr) //Argumenty - sutrowy wektor z czujnika (moze byc int), Wektor korekcyjny z calibration.h (float/double), macierz korekcji (float/dobule)
-{
-	float VBuff[3];
-	float VRes;
+	Vector3f VBuff;
 
 	V3Subtract(V,VCorr,VBuff); //trzeba bedzie rzutowac wartosc z czujnika na jakis float?
-	V3fTransform(MCorr,VBuff,VRes);
-
-	return VRes; //zwrot - wektor z czujnika po korekcji (float/double)
+	V3fTransform(VBuff, MCorr, VRes);
 }
 
-PitchRollYawMA(Vector3f AccCorr, Vector3f MagCorr) //wstepne przeliczenie katow - argumenty to korygowane przyspieszenie i mag - float
+void PitchRollYawMA(Vector3f AccCorr, Vector3f MagCorr, float *Angles) //wstepne przeliczenie katow - argumenty to korygowane przyspieszenie i mag - float
 {
-	Vector3f Angles;
-	Angles[0] = atan2(AccCorr[1],AccCorr[2]);
-	Angles[1] = atan2(-AccCorr[0],Norm(AccCorr));
+	Angles[0] = atan2f(AccCorr[1],AccCorr[2]);
+	Angles[1] = atan2f(-AccCorr[0],Norm(AccCorr));
 
-	double normA = Norm(AccCorr);
-	double pitchA = -asin(AccCorr[0]/normA);
-	double rollA = asin(AccCorr[1]/(cos(pitchA)*normA));
-
-	double normM = Norm(MagCorr);
-	double mx = MagCorr[0]/normM;
-	double my = -MagCorr[1]/normM;
-	double mz = MagCorr[2]/normM;
-
-	double MX = mx*cos(pitchA)+mz*sin(pitchA);
-	double MY = mx*sin(rollA)*sin(pitchA)+my*cos(rollA)-mz*sin(rollA)*cos(pitchA);
-
-	Angles[3] = atan2(-MY,MX);
-
-	for (int i=1;i<=3;i++)
-	{
-		Angles[i] = Angles[i] * RadToDegrees;
-	}
-
-
-	return Angles; // zwraca katy w stopniach - float wektor
+	float normA = Norm(AccCorr);
+	float pitchA = -asinf(AccCorr[0]/normA);
+	float rollA = asinf(AccCorr[1]/(cos(pitchA)*normA));
+//
+//	double normM = Norm(MagCorr);
+//	double mx = MagCorr[0]/normM;
+//	double my = -MagCorr[1]/normM;
+//	double mz = MagCorr[2]/normM;
+//
+//	double MX = mx*cos(pitchA)+mz*sin(pitchA);
+//	double MY = mx*sin(rollA)*sin(pitchA)+my*cos(rollA)-mz*sin(rollA)*cos(pitchA);
+//
+//	Angles[3] = atan2(-MY,MX);
+//
+//	for (int i=1;i<=3;i++)
+//	{
+//		Angles[i] = Angles[i] * RadToDegrees;
+//	}
 }
 
-GyroIntegral(Vector3f GyroCorr, Vector3f GyroAngles, float Timestamp) //Ca³kowanie prêdkosci k¹towej - argument predkosc katowa korygowana, dotychczasowy k¹t, próbka czasu
+void GyroIntegral(Vector3f GyroCorr, float *GyroAngles, float Timestamp) //CaÂ³kowanie prÃªdkosci kÂ¹towej - argument predkosc katowa korygowana, dotychczasowy kÂ¹t, prÃ³bka czasu
 {
 	for (int i=1;i<=3;i++)
 	{
 		GyroAngles[i] = GyroAngles[i] * RadToDegrees;
-		GyroCorr = RegisterToDPS*GyroCorr;
+		GyroCorr[i] = RegisterToDPS*GyroCorr[i];
 		GyroAngles[i] += GyroCorr[i] * Timestamp;
 	}
-
-	return GyroAngles; // zwraca po calkowaniu zyroskopu w stopniach - wektor
 }
 
 
-ComplementaryFilter(Vector3f CFAngles, Vector3f GyroAngles, Vector3f RawAngles, float weight) // filtr komplementarny - poprzednia wartosc kata, katy z zyro, surowe katy z acce i waga
+void ComplementaryFilter(float *CFAngles, Vector3f GyroAngles, Vector3f RawAngles, float weight) // filtr komplementarny - poprzednia wartosc kata, katy z zyro, surowe katy z acce i waga
 {
 	for (int i=1;i<=3;i++)
 	{
 		CFAngles[i] = weight*(CFAngles[i] + GyroAngles[i]) + (1-weight)*RawAngles[i];
 	}
-
-	return CFAngles; //funkcja zwaraca k¹ty w stopniach - wektor
 }
 
-float KalmanFilter(float RawAngle, float NewGyro, float Timestamp) //funkcja musi pamiêtac sowje wartosci (bias, angle i macierz P), do tego potrzebna jest inicjalizacja tych zmiennych jako 0
+float KalmanFilter(float RawAngle, float NewGyro, float Timestamp) //funkcja musi pamiÃªtac sowje wartosci (bias, angle i macierz P), do tego potrzebna jest inicjalizacja tych zmiennych jako 0
 {
+	static float bias = 0;
+	static float angle = 0;
+	static Matrix3f P = {{0,0,0},{0,0,0},{0,0,0}};
+	static float dt = 0.2;
+
+	static float newAngle = 0; //?
+
 	for (int i=1;i<=3;i++)
 	{
 		NewGyro = NewGyro - bias;
@@ -157,6 +133,3 @@ float KalmanFilter(float RawAngle, float NewGyro, float Timestamp) //funkcja mus
 
 	    return angle;
 }
-
-
-

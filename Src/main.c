@@ -193,6 +193,10 @@ int main(void)
 	  Gyro[1] = (float)GyroData[1]-GyroShift[1];
 	  Gyro[2] = (float)GyroData[2]-GyroShift[1];*/
 
+	  Result result;
+
+	  RawToResult(AccShift ,GyroShift, MagShift, result);
+
 	  //sprintf(str1, "gX: %06d; gY: %06d; gZ %06d; mX: %06d; mY: %06d; mZ %06d; gX %06d; gY %06d; gZ %06d; \n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
 	  //sprintf(str1, "%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;\n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
 	  sprintf(str1, "%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;\n\r", (int)Acc[0], (int)Acc[1], (int)Acc[2], (int)Mag[0], (int)Mag[1], (int)Mag[2], (int)Gyro[0], (int)Gyro[1], (int)Gyro[2]);

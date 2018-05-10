@@ -1,3 +1,4 @@
-Src/vector.o: ../Src/vector.c D:/EclipseOxygen/MGR/MGR/Inc/vector.h
+Src/vector.o: ../Src/vector.c \
+ /home/slomkarafa/Projects/stm-tracker/micro_data_acquisition/Inc/vector.h
 
-D:/EclipseOxygen/MGR/MGR/Inc/vector.h:
+/home/slomkarafa/Projects/stm-tracker/micro_data_acquisition/Inc/vector.h:
