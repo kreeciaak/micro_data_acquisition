@@ -13,6 +13,7 @@
 
 
 #define PI 3.14159265358979323846f;
+#define RadToDegrees 	57.29578
 
 typedef float Vector3f[3];
 typedef float Matrix3f[3][3];
@@ -23,5 +24,7 @@ void V3fTransform(Vector3f V, Matrix3f M, float *VRes);
 void V3Subtract(Vector3f V1, Vector3f V2, float *VRes);
 float Norm(Vector3f V);
 float VectorTo2PowSum(Vector3f V);
+float invSqrt(float x);
+void QuaterniontoEulerAngle(float *quaternion, Vector3f MagdwickAngles);
 
 #endif /* VECTOR_H_ */

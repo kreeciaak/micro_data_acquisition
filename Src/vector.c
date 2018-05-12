@@ -51,5 +51,39 @@ float Norm(Vector3f V) //tu chyba ok? ma zwracac modul wetkora
 	return norm; //modul wektora
 }
 
+float invSqrt(float x) {
+	float halfx = 0.5f * x;
+	float y = x;
+	long i = *(long*)&y;
+	i = 0x5f3759df - (i>>1);
+	y = *(float*)&i;
+	y = y * (1.5f - (halfx * y * y));
+	return y;
+}
+
+void QuaterniontoEulerAngle(float *quaternion, Vector3f MagdwickAngles)
+{
+	// roll (x-axis rotation)
+	double sinr = +2.0 * (quaternion[0] * quaternion[1] + quaternion[2] * quaternion[3]);
+	double cosr = +1.0 - 2.0 * (quaternion[1] * quaternion[1] + quaternion[2] * quaternion[2]);
+	MagdwickAngles[0] = atan2(sinr, cosr);
+
+	// pitch (y-axis rotation)
+	double sinp = +2.0 * (quaternion[0] * quaternion[2] - quaternion[3] * quaternion[1]);
+	if (fabs(sinp) >= 1)
+		MagdwickAngles[1] = copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+	else
+		MagdwickAngles[1] = asin(sinp);
+
+	// yaw (z-axis rotation)
+	double siny = +2.0 * (quaternion[0] * quaternion[3] + quaternion[1] * quaternion[2]);
+	double cosy = +1.0 - 2.0 * (quaternion[2] * quaternion[2] + quaternion[3] * quaternion[3]);
+	MagdwickAngles[2] = atan2(siny, cosy);
+
+	for (int i=0;i<=2;i++)
+	{
+		MagdwickAngles[i] = MagdwickAngles[i] * RadToDegrees;
+	}
+}
 
 

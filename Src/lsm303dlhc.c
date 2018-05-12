@@ -52,8 +52,9 @@ uint8_t LSM_I2C_ReadID(uint16_t Addr)
 
 void LSM_Accel_Ini(void)
 {
-	uint8_t ctrl;
-	if (LSM_I2C_ReadID(LSM303DLHC_ADDRESS_A)==0x32)
+	uint8_t ctrl, adress;
+	adress = LSM_I2C_ReadID(LSM303DLHC_ADDRESS_A);
+	if (adress ==0x32 || adress == 0x33)
 	{
 		ctrl = LSM303DLHC_ODR_RATE_200 | LSM303DLHC_LPEN_NORMAL_MODE | LSM303DLHC_3AXIS_ENABLE;
 		LSM_I2C_Write(LSM303DLHC_ADDRESS_A,LSM303DLHC_RA_CTRL_REG1_A,ctrl);
