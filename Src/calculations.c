@@ -10,7 +10,10 @@
 
 void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 {
+	float def;
 	Vector3f AccR= {0,0,0}, GyroR= {0,0,0}, MagR= {0,0,0}, RawAngles= {0,0,0}, KalmanAngles = {0,0,0}, Madgwickangles = {0,0,0};
+	Matrix3f MadgwickRotM 		= {{0,0,0},{0,0,0},{0,0,0}},
+			 MadgwickRotMInv 	= {{0,0,0},{0,0,0},{0,0,0}};
 
 	//statyczna inicjalizacja zmiennych
 	static Vector3f CFAngles = {0,0,0}; //czy to sie przypadkiem nie nadpisze przy kolejnym wywolaniu?st
@@ -29,7 +32,12 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	ComplementaryFilter(CFAngles,GyroAngles,RawAngles,weight);
 	KalmanFilter(RawAngles, GyroR, 0.01, KalmanAngles);
 	MadgwickAHRSupdate(GyroR[0],GyroR[1],GyroR[2],AccR[0],AccR[1],AccR[2],MagR[0],MagR[1],MagR[2],quaternion);
-	QuaterniontoEulerAngle(quaternion, Madgwickangles);
+	QuaternionToEulerAngle(quaternion, Madgwickangles);
+
+	//wyznaczenie macierzy obrotu
+	RotationMatrixFromQuaternion(quaternion, MadgwickRotM);
+	M3fInvert(MadgwickRotM, MadgwickRotMInv);
+
 
 }
 
@@ -92,7 +100,7 @@ void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAn
 
 	for (int i=0;i<=2;i++)
 	{
-		NewGyro[i] = RegisterToDPS*NewGyro[i] - bias[i];
+		NewGyro[i] = RegisterToDPS * NewGyro[i] - bias[i];
 		angles[i] += dt * NewGyro[i];
 
 		// Update estimation error covariance - Project the error covariance ahead

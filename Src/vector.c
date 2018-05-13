@@ -35,6 +35,84 @@ void V3Subtract(Vector3f V1, Vector3f V2, float *VRes) //Odejmowanie wektorów
 	VRes[2] = V1[2] - V2[2];
 }
 
+void RotationMatrixFromQuaternion(float *q, Matrix3f *RotM)
+{
+	RotM[0][0] = 1 - 2*(q[2]^2 + q[3]^2);
+	RotM[1][0] = 2 * (q[1]*q[2] + q[3]*q[0]);
+	RotM[2][0] = 2 * (q[1]*q[3] - q[2]*q[0]);
+
+	RotM[0][1] = 2 * (q[1]*q[2] - q[3]*q[0]);
+	RotM[1][1] = 1 - 2*(q[1]^2 + q[3]^2);
+	RotM[2][1] = 2 * (q[2]*q[3] + q[1]*q[0]);
+
+	RotM[0][2] = 2 * (q[1]*q[3] + q[2]*q[0]);
+	RotM[1][2] = 2 * (q[2]*q[3] - q[1]*q[0]);
+	RotM[2][2] = 1- 2*(q[1]^2 + q[2]^2);
+}
+
+void RotationMatrixFromAngles(Vector3f Angles, Matrix3f *RotM) //Tait-Bryan angles - A3*A2*A1
+{
+	float yaw = 0, pitch = 0, roll = 0;
+	for (int i=0;i<=2;i++)
+	{
+		Angles[i] = Angles[i]/RadToDegrees;
+	}
+
+	roll = Angles[0];
+	pitch = Angles[1];
+	yaw = Angles[2];
+
+
+	RotM[0][0] = cos(yaw)*cos(pitch);
+	RotM[1][0] = cos(pitch)*sin(yaw);
+	RotM[2][0] = -sin(pitch);
+
+	RotM[0][1] = cos(yaw)*sin(pitch)*sin(roll)-cos(roll)*sin(yaw);
+	RotM[1][1] = cos(yaw)*cos(roll)+sin(yaw)*sin(pitch)*sin(roll);
+	RotM[2][1] = cos(pitch)*sin(roll);
+
+	RotM[0][2] = sin(yaw)*sin(roll)+cos(yaw)*cos(roll)*sin(pitch);
+	RotM[1][2] = cos(roll)*sin(yaw)*sin(pitch)-cos(yaw)*sin(roll);
+	RotM[2][2] = cos(pitch)*cos(roll);
+}
+
+float M3fDefiner(Matrix3f M1)
+{
+	float def;
+
+	def =	M1[0][0] * M1[1][1] * M1[2][2]
+		  + M1[1][0] * M1[0][2] * M1[2][1]
+		  + M1[0][1] * M1[2][0] * M1[1][2]
+		  - M1[2][0] * M1[1][1] * M1[0][2]
+		  - M1[1][0] * M1[2][2] * M1[0][1]
+		  - M1[2][1] * M1[0][0] * M1[1][2];
+
+	return def;
+}
+
+int8_t M3fInvert(Matrix3f M1, Matrix3f *MInv)//do poprawki matematycznej
+{
+	float def = M3fDefiner(M1);
+	if (def == 0)
+		return 0;
+	else
+		def = 1.0f/def;
+
+	MInv[0][0] = ( M1[1][1] * M1[2][2] - M1[1][2] * M1[2][1]) * def;
+	MInv[1][0] = (-M1[1][0] * M1[2][2] + M1[1][2] * M1[2][0]) * def;
+	MInv[2][0] = ( M1[1][0] * M1[2][1] - M1[1][1] * M1[2][0]) * def;
+
+	MInv[0][1] = (-M1[0][1] * M1[2][2] + M1[0][2] * M1[2][1]) * def;
+	MInv[1][1] = ( M1[0][0] * M1[2][2] - M1[0][2] * M1[2][0]) * def;
+	MInv[2][1] = (-M1[0][0] * M1[2][1] + M1[0][1] * M1[2][0]) * def;
+
+	MInv[0][2] = ( M1[0][1] * M1[1][2] - M1[0][2] * M1[1][1]) * def;
+	MInv[1][2] = (-M1[0][0] * M1[1][2] + M1[0][2] * M1[1][0]) * def;
+	MInv[2][2] = ( M1[0][0] * M1[1][1] - M1[0][1] * M1[1][0]) * def;
+
+	return 1;
+}
+
 float VectorTo2PowSum(Vector3f V) {
 	float result = 0.0;
 	for(int i = 0 ; i < 3 ; i++) {
