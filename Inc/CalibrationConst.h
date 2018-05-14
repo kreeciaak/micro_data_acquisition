@@ -9,12 +9,18 @@
 #define CALIBRATIONCONST_H_
 
 //#define RadToDegrees 	57.29578
-#define RegisterToDPS 	250/32768
+
+
 
 #define sampleFreq	512.0f		// sample frequency in Hz
 #define betaDef		0.1f		// 2 * proportional gain
 
-Vector3f MagR, AccR, Mag, Acc, Gyro;
+//Vector3f MagR, AccR, Mag, Acc, Gyro;
+static const Vector3f GravityVector = {
+		0.0f,
+		0.0f,
+		GravityConst
+};
 
 static const Vector3f MagShift = {
 			-79.568073f,
