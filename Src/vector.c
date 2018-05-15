@@ -35,7 +35,7 @@ void V3Subtract(Vector3f V1, Vector3f V2, float *VRes)
 	VRes[2] = V1[2] - V2[2];
 }
 
-void RotationMatrixFromQuaternion(float *q, float **RotM)
+void RotationMatrixFromQuaternion(float *q, float **RotM) //q bez wskaznika? , tez sie cos jebei
 {
 	RotM[0][0] = 1 - 2*(pow(q[2],2) + pow(q[3], 2));
 	RotM[1][0] = 2 * (q[1]*q[2] + q[3]*q[0]);
@@ -52,7 +52,7 @@ void RotationMatrixFromQuaternion(float *q, float **RotM)
 
 void RotationMatrixFromAngles(Vector3f Angles, float **RotM) //Tait-Bryan angles - A3*A2*A1
 {
-	float yaw = 0, pitch = 0, roll = 0;
+	float yaw = 0, pitch = 0, roll = 0; //yaw - optimized out, coœ sie jebie
 
 	roll = Angles[0];
 	pitch = Angles[1];
@@ -119,26 +119,27 @@ void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Ti
 
 void IntegratioAdamsBashworthMethod(Vector3f DataInput, float *DataOutput, float Timestamp)
 {
-	static int order = 0;
-//	static float fv = {{0,0,0,0,0},{0,0,0}}; //??? tablica nie moze tak wygladac xd
-//	for (int i=0;i<=2;i++)
-//	{
-//		if (order<=3)
-//		{
-//			fv[order][i] = DataInput[i];
-//			IntegrationReactangleMethod(fv[order][i], DataOutput[i], Timestamp);
-//			order++;
-//		}else{
-//
-//			fv[4][i] = DataInput[i];
-//			DataOutput[i] += (Timestamp/1440) * (1901*fv[4][i] - 2774*fv[3][i] + 2616*fv[2][i] - 1274*fv[1][i] + 251*fv[0][i]);
-//
-//			for (order=0;order<=3;order++)
-//			{
-//				fv[order][i] = fv[order+1][i];
-//			}
-//		}
-//	}
+	static int order = 0; //tu nie moze byc nic static
+	static float fv[5][3] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}}; //??? tablica nie moze tak wygladac xd
+	for (int i=0;i<=2;i++)
+	{
+		if (order<=3)
+		{
+			fv[order][i] = DataInput[i];
+			DataOutput[i] += fv[order][i] * Timestamp;
+			//IntegrationReactangleMethod(fv[order][i], DataOutput[i], Timestamp);
+			order++;
+		}else{
+
+			fv[4][i] = DataInput[i];
+			DataOutput[i] += (Timestamp/1440) * (1901*fv[4][i] - 2774*fv[3][i] + 2616*fv[2][i] - 1274*fv[1][i] + 251*fv[0][i]);
+
+			for (order=0;order<=3;order++)
+			{
+				fv[order][i] = fv[order+1][i];
+			}
+		}
+	}
 }
 
 void RadiansToDegrees(Vector3f AnglesInRadians, float *AnglesInDegrees)

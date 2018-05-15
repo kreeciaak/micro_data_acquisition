@@ -158,7 +158,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	  	vResBuff += 3;
 	  	addVector3fToRes(test1, vResBuff);
 	  	vResBuff += 3;
-	  		  	addVector3fToRes(test2, vResBuff);
+	  	addVector3fToRes(test2, vResBuff);
 
 }
 
@@ -172,7 +172,7 @@ void RawDataOrientationCorrection(Vector3f V, Vector3f VCorr, Matrix3f MCorr, fl
 
 void PitchRollYawMA(Vector3f AccCorr, Vector3f MagCorr, float *Angles) //wstepne przeliczenie katow - argumenty to korygowane przyspieszenie i mag - float
 {
-	Angles[0] = atan2f(AccCorr[1],AccCorr[2]);
+	Angles[0] = atan2f(AccCorr[1],AccCorr[2]); //sprawdzic funkcje trygonometryczne
 	Angles[1] = atan2f(-AccCorr[0],Norm(VectorTo2PowSum(AccCorr)));
 
 	float normA = Norm(VectorTo2PowSum(AccCorr));
@@ -366,7 +366,7 @@ void MadgwickAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, flo
 	float s0, s1, s2, s3;
 	float qDot1, qDot2, qDot3, qDot4;
 	float _2q0, _2q1, _2q2, _2q3, _4q0, _4q1, _4q2 ,_8q1, _8q2, q0q0, q1q1, q2q2, q3q3;
-	float beta, q0, q1, q2, q3;
+	float beta = betaDef, q0 = quaternion[0], q1 = quaternion[1], q2 = quaternion[2], q3 = quaternion[3];
 
 	// Rate of change of quaternion from gyroscope
 	qDot1 = 0.5f * (-q1 * gx - q2 * gy - q3 * gz);

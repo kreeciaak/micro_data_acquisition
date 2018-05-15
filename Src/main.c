@@ -120,19 +120,19 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
-//  MX_GPIO_Init();
-//  MX_I2C1_Init();
-//  MX_SPI1_Init();
-//  MX_USB_DEVICE_Init();
-//  MX_TIM10_Init();
-//  /* USER CODE BEGIN 2 */
-//
-//  LSM_Accel_Ini();
-//  LSM_Mag_Ini();
-//  L3G_Gyro_Ini();
-//
-//  LSM_Accel_GetXYZ(AccelData);
-//  L3G_Gyro_GetXYZ(GyroData);
+  MX_GPIO_Init();
+  MX_I2C1_Init();
+  MX_SPI1_Init();
+  MX_USB_DEVICE_Init();
+  MX_TIM10_Init();
+  /* USER CODE BEGIN 2 */
+
+  LSM_Accel_Ini();
+  LSM_Mag_Ini();
+  L3G_Gyro_Ini();
+
+  LSM_Accel_GetXYZ(AccelData);
+  L3G_Gyro_GetXYZ(GyroData);
 
   Result result;
 
@@ -152,9 +152,22 @@ int main(void)
 //	  float *x;
 //	  x=test();
 
+	  AccelData[0] = 181;
+	  AccelData[1] = -43;
+	  AccelData[2] = 16298;
+
+	  GyroData[0] = 78;
+	  GyroData[1] = 0;
+	  GyroData[2] = -77;
+
+	  MagData[0] = 69;
+	  MagData[1] = -462;
+	  MagData[2] = 90;
+
 	  intToVector3f(AccelData, fAccelData);
-	  intToVector3f(AccelData, fGyroData);
-	  intToVector3f(AccelData, fMagData);
+	  intToVector3f(GyroData, fGyroData);
+	  intToVector3f(MagData, fMagData);
+
 
 	  RawToResult(fAccelData, fGyroData, fMagData, result);
 
