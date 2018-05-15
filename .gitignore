@@ -1,2 +1,8 @@
 /Release/
 /Debug/
+MGR.cfg
+MGR Run.cfg
+.cproject
+MGR.xml
+.project
+.settings/

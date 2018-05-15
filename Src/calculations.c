@@ -58,7 +58,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 
 	//MadgwickAHRS
 	MadgwickAHRSupdate(GyroR[0],GyroR[1],GyroR[2],AccR[0],AccR[1],AccR[2],MagR[0],MagR[1],MagR[2],quaternion);
-	QuaternionToEulerAngle(quaternion, MadgwickAngles); //Przeliczenie na k¹ty w stopniach bo algorytm operuje na kwaternionach
+	QuaternionToEulerAngle(quaternion, MadgwickAngles); //Przeliczenie na kï¿½ty w stopniach bo algorytm operuje na kwaternionach
 	RadiansToDegrees(MadgwickAngles, MadgwickAnglesDeg);
 
 
@@ -97,7 +97,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	V3fTransform(AccN, MadgwickRotMInv, AccTMF);
 
 
-	/*---REDUKCJA SK£ADOWEJ GRAWITACJI Z WEKTORA PRZYSPIESZENIA---*/
+	/*---REDUKCJA SKï¿½ADOWEJ GRAWITACJI Z WEKTORA PRZYSPIESZENIA---*/
 	//Brak filtra
 	V3Subtract(AccTGyro, GravityVector, AccGRGyro);
 
@@ -151,7 +151,14 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	 * sprawdzic poprawnosc zapisu matematycznego funkcji
 	 * debugowac
 	 */
+	  Vector3f test = {1,2,3}, test1={4,5,6}, test2={9,2.23,6};;
 
+
+	  	addVector3fToRes(test, vResBuff);
+	  	vResBuff += 3;
+	  	addVector3fToRes(test1, vResBuff);
+	  	vResBuff += 3;
+	  		  	addVector3fToRes(test2, vResBuff);
 
 }
 
@@ -194,7 +201,12 @@ void ComplementaryFilter(float *CFAngles, Vector3f GyroAngles, Vector3f RawAngle
 void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAngles) //funkcja musi pamiÃªtac sowje wartosci (bias, angle i macierz P), do tego potrzebna jest inicjalizacja tych zmiennych jako 0
 {
 	static Vector3f bias = {0,0,0};
-	static Vector3f angles = {RawAngle[0],RawAngle[1],RawAngle[2]};
+	static Vector3f angles = {0,0,0};
+	static bool isFirst = true;
+	if (isFirst){
+		cpyVector3f(RawAngle, angles);
+		isFirst = false;
+	};
 	static float P[2][2][3] = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
 	float S[3], y[3], P00_temp[3], P01_temp[3];
 
@@ -354,6 +366,7 @@ void MadgwickAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, flo
 	float s0, s1, s2, s3;
 	float qDot1, qDot2, qDot3, qDot4;
 	float _2q0, _2q1, _2q2, _2q3, _4q0, _4q1, _4q2 ,_8q1, _8q2, q0q0, q1q1, q2q2, q3q3;
+	float beta, q0, q1, q2, q3;
 
 	// Rate of change of quaternion from gyroscope
 	qDot1 = 0.5f * (-q1 * gx - q2 * gy - q3 * gz);
@@ -420,6 +433,11 @@ void MadgwickAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, flo
 	quaternion[1] = q1;
 	quaternion[2] = q2;
 	quaternion[3] = q3;
+}
+
+Vector3f *test() {
+	static Vector3f x = {0,0,0};
+	return &x;
 }
 
 

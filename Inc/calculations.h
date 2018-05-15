@@ -13,7 +13,9 @@
 #include <vector.h>
 #include <CalibrationConst.h>
 
-typedef float Result[3][7];
+typedef enum { false, true } bool;
+
+typedef float Result[7][3];
 
 extern volatile float beta;				// algorithm gain
 extern volatile float q0, q1, q2, q3;	// quaternion of sensor frame relative to auxiliary frame
@@ -26,6 +28,8 @@ void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float Timestamp, float *K
 
 void MadgwickAHRSupdate(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz, float *quaternion);
 void MadgwickAHRSupdateIMU(float gx, float gy, float gz, float ax, float ay, float az, float *quaternion);
+
+Vector3f *test();
 
 #endif /* CALCULATIONS_H_ */
 

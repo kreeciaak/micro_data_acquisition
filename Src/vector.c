@@ -37,17 +37,17 @@ void V3Subtract(Vector3f V1, Vector3f V2, float *VRes)
 
 void RotationMatrixFromQuaternion(float *q, float **RotM)
 {
-	RotM[0][0] = 1 - 2*(q[2]^2 + q[3]^2);
+	RotM[0][0] = 1 - 2*(pow(q[2],2) + pow(q[3], 2));
 	RotM[1][0] = 2 * (q[1]*q[2] + q[3]*q[0]);
 	RotM[2][0] = 2 * (q[1]*q[3] - q[2]*q[0]);
 
 	RotM[0][1] = 2 * (q[1]*q[2] - q[3]*q[0]);
-	RotM[1][1] = 1 - 2*(q[1]^2 + q[3]^2);
+	RotM[1][1] = 1 - 2*(pow(q[1],2) + pow(q[3], 2));
 	RotM[2][1] = 2 * (q[2]*q[3] + q[1]*q[0]);
 
 	RotM[0][2] = 2 * (q[1]*q[3] + q[2]*q[0]);
 	RotM[1][2] = 2 * (q[2]*q[3] - q[1]*q[0]);
-	RotM[2][2] = 1- 2*(q[1]^2 + q[2]^2);
+	RotM[2][2] = 1- 2*(pow(q[1],2) + pow(q[2],2));
 }
 
 void RotationMatrixFromAngles(Vector3f Angles, float **RotM) //Tait-Bryan angles - A3*A2*A1
@@ -120,25 +120,25 @@ void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Ti
 void IntegratioAdamsBashworthMethod(Vector3f DataInput, float *DataOutput, float Timestamp)
 {
 	static int order = 0;
-	static float fv = {{0,0,0,0,0},{0,0,0}};
-	for (int i=0;i<=2;i++)
-	{
-		if (order<=3)
-		{
-			fv[order][i] = DataInput[i];
-			IntegrationReactangleMethod(fv[order][i], DataOutput[i], Timestamp);
-			order++;
-		}else{
-
-			fv[4][i] = DataInput[i];
-			DataOutput[i] += (Timestamp/1440) * (1901*fv[4][i] - 2774*fv[3][i] + 2616*fv[2][i] - 1274*fv[1][i] + 251*fv[0][i]);
-
-			for (order=0;order<=3;order++)
-			{
-				fv[order][i] = fv[order+1][i];
-			}
-		}
-	}
+//	static float fv = {{0,0,0,0,0},{0,0,0}}; //??? tablica nie moze tak wygladac xd
+//	for (int i=0;i<=2;i++)
+//	{
+//		if (order<=3)
+//		{
+//			fv[order][i] = DataInput[i];
+//			IntegrationReactangleMethod(fv[order][i], DataOutput[i], Timestamp);
+//			order++;
+//		}else{
+//
+//			fv[4][i] = DataInput[i];
+//			DataOutput[i] += (Timestamp/1440) * (1901*fv[4][i] - 2774*fv[3][i] + 2616*fv[2][i] - 1274*fv[1][i] + 251*fv[0][i]);
+//
+//			for (order=0;order<=3;order++)
+//			{
+//				fv[order][i] = fv[order+1][i];
+//			}
+//		}
+//	}
 }
 
 void RadiansToDegrees(Vector3f AnglesInRadians, float *AnglesInDegrees)
@@ -192,7 +192,7 @@ float invSqrt(float x) {
 	return y;
 }
 
-void QuaterniontoEulerAngle(float *quaternion, Vector3f MagdwickAngles)
+void QuaternionToEulerAngle(float *quaternion, Vector3f MagdwickAngles)
 {
 	// roll (x-axis rotation)
 	double sinr = +2.0 * (quaternion[0] * quaternion[1] + quaternion[2] * quaternion[3]);
@@ -212,4 +212,23 @@ void QuaterniontoEulerAngle(float *quaternion, Vector3f MagdwickAngles)
 	MagdwickAngles[2] = atan2(siny, cosy);
 }
 
+void cpyVector3f(float *in, float *out){
+	for(int i = 0 ; i < 3; i++){
+		*out = *in;
+		out++;
+		in++;
+	}
+}
+
+void intToVector3f(int16_t *in, float*out){
+	for(int i = 0 ; i < 3; i++){
+		*out = (float) *in;
+		out++;
+		in++;
+	}
+}
+
+void addVector3fToRes(float *in, float *out){
+	cpyVector3f(in,out);
+}
 

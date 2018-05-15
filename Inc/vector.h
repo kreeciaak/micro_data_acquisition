@@ -10,6 +10,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include "stm32f4xx_hal.h"
 
 
 #define PI 				3.14159265358979323846f;
@@ -37,6 +38,9 @@ void NormaliseUnits(Vector3f Acc, Vector3f Gyro, float *AccN, float *GyroN);
 float Norm(float powervalue);
 float VectorTo2PowSum(Vector3f V);
 float invSqrt(float x);
-void QuaterniontoEulerAngle(float *quaternion, Vector3f MagdwickAngles);
+void QuaternionToEulerAngle(float *quaternion, Vector3f MagdwickAngles);
+void cpyVector3f(float *in, float *out);
+void intToVector3f(int16_t *in, float*out);
+void addVector3fToRes(float *in, float *out);
 
 #endif /* VECTOR_H_ */
