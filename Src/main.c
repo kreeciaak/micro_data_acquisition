@@ -133,6 +133,7 @@ int main(void)
 
   LSM_Accel_GetXYZ(AccelData);
   L3G_Gyro_GetXYZ(GyroData);
+  LSM_Mag_GetXYZ(MagData);
 
   Result result;
 
@@ -152,17 +153,17 @@ int main(void)
 //	  float *x;
 //	  x=test();
 
-	  AccelData[0] = 181;
-	  AccelData[1] = -43;
-	  AccelData[2] = 16298;
-
-	  GyroData[0] = 78;
-	  GyroData[1] = 0;
-	  GyroData[2] = -77;
-
-	  MagData[0] = 69;
-	  MagData[1] = -462;
-	  MagData[2] = 90;
+//	  AccelData[0] = 181;
+//	  AccelData[1] = -43;
+//	  AccelData[2] = 16298;
+//
+//	  GyroData[0] = 78;
+//	  GyroData[1] = 0;
+//	  GyroData[2] = -77;
+//
+//	  MagData[0] = 69;
+//	  MagData[1] = -462;
+//	  MagData[2] = 90;
 
 	  intToVector3f(AccelData, fAccelData);
 	  intToVector3f(GyroData, fGyroData);
@@ -174,6 +175,10 @@ int main(void)
 	  //sprintf(str1, "gX: %06d; gY: %06d; gZ %06d; mX: %06d; mY: %06d; mZ %06d; gX %06d; gY %06d; gZ %06d; \n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
 	  //sprintf(str1, "%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;\n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
 	  //sprintf(str1, "%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;\n\r", (int)Acc[0], (int)Acc[1], (int)Acc[2], (int)Mag[0], (int)Mag[1], (int)Mag[2], (int)Gyro[0], (int)Gyro[1], (int)Gyro[2]);
+//	  float x = result[0][0];
+//	  float x1 = result[0][1];
+//	  float x2 = result[0][2];
+//	  sprintf(str1, "%06f;%06f;%06f;\n\r", x,x1,x2);
 	  CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
 
 	  HAL_Delay(10);

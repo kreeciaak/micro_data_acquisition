@@ -37,6 +37,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 
 	/*---KOREKCJA SUROWYCH DANYCH Z CZUJNIKOW---*/
 	RawDataOrientationCorrection(Acc,AccShift,AccCalib, AccR);
+	addVector3fToRes(AccR, vResBuff);
 	RawDataOrientationCorrection(Mag,MagShift,MagCalib, MagR);
 	V3Subtract(Gyro, GyroShift, GyroR);
 	NormaliseUnits(AccR, GyroR, AccN, GyroN);
@@ -151,18 +152,18 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	 * sprawdzic poprawnosc zapisu matematycznego funkcji
 	 * debugowac
 	 */
-	  Vector3f test = {1,2,3}, test1={4,5,6}, test2={9,2.23,6};;
-
-
-	  	addVector3fToRes(test, vResBuff);
-	  	vResBuff += 3;
-	  	addVector3fToRes(test1, vResBuff);
-	  	vResBuff += 3;
-	  	addVector3fToRes(test2, vResBuff);
+//	  Vector3f test = {1,2,3}, test1={4,5,6}, test2={9,2.23,6};;
+//
+//
+//	  	addVector3fToRes(test, vResBuff);
+//	  	vResBuff += 3;
+//	  	addVector3fToRes(test1, vResBuff);
+//	  	vResBuff += 3;
+//	  	addVector3fToRes(test2, vResBuff);
 
 }
 
-void RawDataOrientationCorrection(Vector3f V, Vector3f VCorr, Matrix3f MCorr, float *VRes) //Argumenty - sutrowy wektor z czujnika (moze byc int), Wektor korekcyjny z calibration.h (float/double), macierz korekcji (float/dobule)
+void RawDataOrientationCorrection(Vector3f V, Vector3f VCorr, Matrix3f MCorr, float *VRes) //dzia³a w chuj
 {
 	Vector3f VBuff;
 

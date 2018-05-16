@@ -52,14 +52,19 @@ void RotationMatrixFromQuaternion(float *q, float **RotM) //q bez wskaznika? , t
 
 void RotationMatrixFromAngles(Vector3f Angles, float **RotM) //Tait-Bryan angles - A3*A2*A1
 {
-	float yaw = 0, pitch = 0, roll = 0; //yaw - optimized out, coœ sie jebie
+	volatile float yaw = 0, pitch = 0, roll = 0; //yaw - optimized out, coœ sie jebie
 
-	roll = Angles[0];
+	roll = (volatile float)Angles[0];//proby
 	pitch = Angles[1];
 	yaw = Angles[2];
 
+//	float x = cos(0);
+//	float x1 = cosf(0);
+//	float x2 = cos(0.00001);
+//	float x3 = cosf(roll);
 
-	RotM[0][0] = cos(yaw)*cos(pitch);
+
+	RotM[0][0] = cosf(yaw)*cosf(pitch);
 	RotM[1][0] = cos(pitch)*sin(yaw);
 	RotM[2][0] = -sin(pitch);
 
