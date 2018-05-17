@@ -11,12 +11,13 @@
 void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 {
 	Vector3f AccR= {0,0,0}, GyroR= {0,0,0}, MagR= {0,0,0};
-	Vector3f AccN = {0,0,0}, GyroN = {0,0,0};
+	Vector3f AccN = {0,0,0}, GyroN = {0,0,0}, GyroNRad = {0,0,0};
 	Vector3f RawAngles= {0,0,0}, RawAnglesDeg = {0,0,0}, KalmanAngles = {0,0,0}, MadgwickAngles = {0,0,0}, MadgwickAnglesDeg = {0,0,0};
 	Vector3f GyroAnglesRad = {0,0,0}, CFAnglesRad = {0,0,0}, KalmanAnglesRad = {0,0,0};
 	Vector3f AccTGyro = {0,0,0}, AccTCF = {0,0,0}, AccTKF = {0,0,0}, AccTMF = {0,0,0};
 	Vector3f AccGRGyro = {0,0,0}, AccGRCF = {0,0,0}, AccGRKF = {0,0,0}, AccGRMF = {0,0,0};
-	Matrix3f GyroRotM 				= {{0,0,0},{0,0,0},{0,0,0}},
+	Matrix3f //GyroRotM 				= {{0,0,0},{0,0,0},{0,0,0}},
+			 GyroRotM				={},
 			 GyroRotMInv 			= {{0,0,0},{0,0,0},{0,0,0}},
 			 ComplimentaryRotM 		= {{0,0,0},{0,0,0},{0,0,0}},
 			 ComplimentaryRotMInv 	= {{0,0,0},{0,0,0},{0,0,0}},
@@ -33,11 +34,20 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	static Vector3f VelABGyro = {0,0,0}, VelABCF = {0,0,0}, VelABKF = {0,0,0}, VelABMF = {0,0,0};
 	static Vector3f PosRecGyro = {0,0,0}, PosRecCF = {0,0,0}, PosRecKF = {0,0,0}, PosRecMF = {0,0,0};
 	static Vector3f PosABGyro = {0,0,0}, PosABCF = {0,0,0}, PosABKF = {0,0,0}, PosABMF = {0,0,0};
+	static int ordvelgyro = 0, ordvelCF = 0, ordvelKF = 0, ordvelMF = 0, ordposgyro = 0, ordposCF = 0, ordposKF = 0, ordposMF = 0;//tu nie moze byc nic static
+	static float 	fvvelgyro[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
+					fvvelCF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
+					fvvelKF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
+					fvvelMF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
+					fvposgyro[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
+					fvposCF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
+					fvposKF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
+					fvposMF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}};//??? tablica nie moze tak wygladac xd
 
 
 	/*---KOREKCJA SUROWYCH DANYCH Z CZUJNIKOW---*/
 	RawDataOrientationCorrection(Acc,AccShift,AccCalib, AccR);
-	addVector3fToRes(AccR, vResBuff);
+	//addVector3fToRes(AccR, vResBuff);
 	RawDataOrientationCorrection(Mag,MagShift,MagCalib, MagR);
 	V3Subtract(Gyro, GyroShift, GyroR);
 	NormaliseUnits(AccR, GyroR, AccN, GyroN);
@@ -58,7 +68,8 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	KalmanFilter(RawAnglesDeg, GyroN, 0.01, KalmanAngles);
 
 	//MadgwickAHRS
-	MadgwickAHRSupdate(GyroR[0],GyroR[1],GyroR[2],AccR[0],AccR[1],AccR[2],MagR[0],MagR[1],MagR[2],quaternion);
+	DegreesToRadians(GyroN, GyroNRad);
+	MadgwickAHRSupdate(GyroNRad[0],GyroNRad[1],GyroNRad[2],AccR[0],AccR[1],AccR[2],MagR[0],MagR[1],MagR[2],quaternion);
 	QuaternionToEulerAngle(quaternion, MadgwickAngles); //Przeliczenie na k�ty w stopniach bo algorytm operuje na kwaternionach
 	RadiansToDegrees(MadgwickAngles, MadgwickAnglesDeg);
 
@@ -115,37 +126,37 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	/*---WYZNACZENIE PREDKOSCI RUCHU POJAZDU NA PODSTAWIE WEKTORA PRZYSPIESZENIA - 2 METODY CALKOWANIA---*/
 	//Brak filtra
 	IntegrationReactangleMethod(AccGRGyro, VelRecGyro, 0.01);
-	IntegratioAdamsBashworthMethod(AccGRGyro, VelABGyro, 0.01);
+	IntegratioAdamsBashworthMethod(AccGRGyro, fvvelgyro, VelABGyro, 0.01, ordvelgyro);
 
 	//Filtr komplementarny
 	IntegrationReactangleMethod(AccGRCF, VelRecCF, 0.01);
-	IntegratioAdamsBashworthMethod(AccGRCF, VelABCF, 0.01);
+	IntegratioAdamsBashworthMethod(AccGRCF, fvvelCF, VelABCF, 0.01, ordvelCF);
 
 	//Filtr Kalmana
 	IntegrationReactangleMethod(AccGRKF, VelRecKF, 0.01);
-	IntegratioAdamsBashworthMethod(AccGRKF, VelABKF, 0.01);
+	IntegratioAdamsBashworthMethod(AccGRKF, fvvelKF, VelABKF, 0.01, ordvelKF);
 
 	//MadgwickAHRS
 	IntegrationReactangleMethod(AccGRMF, VelRecMF, 0.01);
-	IntegratioAdamsBashworthMethod(AccGRMF, VelABMF, 0.01);
+	IntegratioAdamsBashworthMethod(AccGRMF, fvvelMF, VelABMF, 0.01, ordvelMF);
 
 
 	/*---WYZNACZENIE TRAJEKTORII RUCHU POJAZDU NA PODSTAWIE WEKTORA PREDKOSCI - 2 METODY CALKOWANIA---*/
 	//Brak filtra
 	IntegrationReactangleMethod(VelRecGyro, PosRecGyro, 0.01);
-	IntegratioAdamsBashworthMethod(VelABGyro, PosABGyro, 0.01);
+	IntegratioAdamsBashworthMethod(VelABGyro, fvposgyro, PosABGyro, 0.01, ordposgyro);
 
 	//Filtr komplementarny
 	IntegrationReactangleMethod(VelRecCF, PosRecCF, 0.01);
-	IntegratioAdamsBashworthMethod(VelABCF, PosABCF, 0.01);
+	IntegratioAdamsBashworthMethod(VelABCF, fvposCF, PosABCF, 0.01, ordposCF);
 
 	//Filtr Kalmana
 	IntegrationReactangleMethod(VelRecKF, PosRecKF, 0.01);
-	IntegratioAdamsBashworthMethod(VelABKF, PosABKF, 0.01);
+	IntegratioAdamsBashworthMethod(VelABKF, fvposKF, PosABKF, 0.01, ordposKF);
 
 	//MadgwickAHRS
 	IntegrationReactangleMethod(VelRecMF, PosRecMF, 0.01);
-	IntegratioAdamsBashworthMethod(VelABMF, PosABMF, 0.01);
+	IntegratioAdamsBashworthMethod(VelABMF, fvposMF, PosABMF, 0.01, ordposMF);
 
 
 	/*DO ZROBIENIA
@@ -201,6 +212,7 @@ void ComplementaryFilter(float *CFAngles, Vector3f GyroAngles, Vector3f RawAngle
 
 void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAngles) //funkcja musi pamiêtac sowje wartosci (bias, angle i macierz P), do tego potrzebna jest inicjalizacja tych zmiennych jako 0
 {
+	volatile Vector3f S = {0,0,0}, y = {0,0,0}, P00_temp = {0,0,0}, P01_temp = {0,0,0};
 	static Vector3f bias = {0,0,0};
 	static Vector3f angles = {0,0,0};
 	static bool isFirst = true;
@@ -208,8 +220,8 @@ void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAn
 		cpyVector3f(RawAngle, angles);
 		isFirst = false;
 	};
-	static float P[2][2][3] = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
-	float S[3], y[3], P00_temp[3], P01_temp[3];
+	static float P[3][2][2] = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
+
 
 	for (int i=0;i<=2;i++)
 	{
@@ -218,19 +230,19 @@ void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAn
 
 		// Update estimation error covariance - Project the error covariance ahead
 		/* Step 2 */
-		P[0][0][i] += dt * (dt*P[1][1][i] - P[0][1][i] - P[1][0][i] + Q_angle);
-		P[0][1][i] -= dt * P[1][1][i];
-		P[1][0][i] -= dt * P[1][1][i];
-		P[1][1][i] += Q_bias * dt;
+		P[i][0][0] += dt * (dt*P[i][1][1] - P[i][0][1] - P[i][1][0] + Q_angle);
+		P[i][0][1] -= dt * P[i][1][1];
+		P[i][1][0] -= dt * P[i][1][1];
+		P[i][1][1] += Q_bias * dt;
 
 		// Discrete Kalman filter measurement update equations - Measurement Update ("Correct")
 		// Calculate Kalman gain - Compute the Kalman gain
 		/* Step 4 */
-		S[i] = P[0][0][i] + R_measure; // Estimate error
+		S[i] = P[i][0][0] + R_measure; // Estimate error
 		/* Step 5 */
-		float K[2][3]; // Kalman gain - This is a 2x1 vector
-		K[0][i] = P[0][0][i] / S[i];
-		K[1][i] = P[1][0][i] / S[i];
+		volatile float K[2][3]; // Kalman gain - This is a 2x1 vector
+		K[0][i] = P[i][0][0] / S[i];
+		K[1][i] = P[i][1][0] / S[i];
 
 		// Calculate angle and bias - Update estimate with measurement zk (newAngle)
 		/* Step 3 */
@@ -241,13 +253,13 @@ void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAn
 
 		// Calculate estimation error covariance - Update the error covariance
 		/* Step 7 */
-		P00_temp[i] = P[0][0][i];
-		P01_temp[i] = P[0][1][i];
+		P00_temp[i] = P[i][0][0];
+		P01_temp[i] = P[i][0][1];
 
-		P[0][0][i] -= K[0][i] * P00_temp[i];
-		P[0][1][i] -= K[0][i] * P01_temp[i];
-		P[1][0][i] -= K[1][i] * P00_temp[i];
-		P[1][1][i] -= K[1][i] * P01_temp[i];
+		P[i][0][0] -= K[0][i] * P00_temp[i];
+		P[i][0][1] -= K[0][i] * P01_temp[i];
+		P[i][1][0] -= K[1][i] * P00_temp[i];
+		P[i][1][1] -= K[1][i] * P01_temp[i];
 
 		KalmanAngles[i] = angles[i];
 	}

@@ -8,8 +8,8 @@
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
-#include <math.h>
-#include <stdlib.h>
+#include "math.h"
+#include "stdlib.h"
 #include "stm32f4xx_hal.h"
 
 
@@ -31,7 +31,7 @@ void RotationMatrixFromAngles(Vector3f Angles, float **RotM);
 float M3fDefiner(Matrix3f M1);
 float M3fInvert(Matrix3f M1, float **MInv);
 void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Timestamp);
-void IntegratioAdamsBashworthMethod(Vector3f DataInput, float *DataOutput, float Timestamp);
+void IntegratioAdamsBashworthMethod(Vector3f DataInput,float *fv, float *DataOutput, float Timestamp, int order);
 void RadiansToDegrees(Vector3f AnglesInRadians, float *AnglesInDegrees);
 void DegreesToRadians(Vector3f AnglesInDegrees, float *AnglesInRadians);
 void NormaliseUnits(Vector3f Acc, Vector3f Gyro, float *AccN, float *GyroN);
