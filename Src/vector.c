@@ -35,7 +35,7 @@ void V3Subtract(Vector3f V1, Vector3f V2, float *VRes)
 	VRes[2] = V1[2] - V2[2];
 }
 
-void RotationMatrixFromQuaternion(float *q, float **RotM) //q bez wskaznika? , tez sie cos jebei
+void RotationMatrixFromQuaternion(float *q, Matrix3f RotM) //q bez wskaznika? , tez sie cos jebei
 {
 	RotM[0][0] = 1 - 2*(powf(q[2],2) + powf(q[3], 2));
 	RotM[1][0] = 2 * (q[1]*q[2] + q[3]*q[0]);
@@ -50,7 +50,8 @@ void RotationMatrixFromQuaternion(float *q, float **RotM) //q bez wskaznika? , t
 	RotM[2][2] = 1- 2*(powf(q[1],2) + powf(q[2],2));
 }
 
-void RotationMatrixFromAngles(Vector3f Angles, float **RotM) //Tait-Bryan angles - A3*A2*A1
+//void RotationMatrixFromAngles(Vector3f Angles, float **RotM) //Tait-Bryan angles - A3*A2*A1
+void RotationMatrixFromAngles(Vector3f Angles, Matrix3f RotM)
 {
 	volatile float yaw = Angles[2], pitch = Angles[1], roll = Angles[0]; //yaw - optimized out, coœ sie jebie
 //
@@ -62,7 +63,7 @@ void RotationMatrixFromAngles(Vector3f Angles, float **RotM) //Tait-Bryan angles
 //	float x1 = cosf(0);
 //	float x2 = cos(0.00001);
 //	float x3 = cosf(roll);
-	float x1 = cos(0.01)*cos(0.5);
+//	float x1 = cos(0.01)*cos(0.5);
 
 	RotM[0][0] = cosf(yaw)*cosf(pitch);
 	RotM[1][0] = cosf(pitch)*sinf(yaw);
@@ -91,27 +92,28 @@ float M3fDefiner(Matrix3f M1)
 	return def;
 }
 
-float M3fInvert(Matrix3f M1, float **MInv)
+float M3fInvert(Matrix3f M1, Matrix3f MInv)
 {
 	float def = M3fDefiner(M1);
-	if (def == 0)
+	if (def == 0){
 		return 0;
-	else
+	}else{
 		def = 1.0f/def;
 
-	MInv[0][0] = ( M1[1][1] * M1[2][2] - M1[1][2] * M1[2][1]) * def;
-	MInv[1][0] = (-M1[0][1] * M1[2][2] + M1[0][2] * M1[2][1]) * def;
-	MInv[2][0] = ( M1[0][1] * M1[1][2] - M1[0][2] * M1[1][1]) * def;
+		MInv[0][0] = ( M1[1][1] * M1[2][2] - M1[1][2] * M1[2][1]) *def;
+		MInv[1][0] = (-M1[1][0] * M1[2][2] + M1[1][2] * M1[2][0]) *def;
+		MInv[2][0] = ( M1[1][0] * M1[2][1] - M1[1][1] * M1[2][0]) *def;
 
-	MInv[0][1] = (-M1[1][0] * M1[2][2] + M1[1][2] * M1[2][0]) * def;
-	MInv[1][1] = ( M1[0][0] * M1[2][2] - M1[0][2] * M1[2][0]) * def;
-	MInv[2][1] = (-M1[0][0] * M1[1][2] + M1[0][2] * M1[1][0]) * def;
+		MInv[0][1] = (-M1[0][1] * M1[2][2] + M1[0][2] * M1[2][1]) *def;
+		MInv[1][1] = ( M1[0][0] * M1[2][2] - M1[0][2] * M1[2][0]) *def;
+		MInv[2][1] = (-M1[0][0] * M1[2][1] + M1[0][1] * M1[2][0]) *def;
 
-	MInv[0][2] = ( M1[1][0] * M1[2][1] - M1[1][1] * M1[2][0]) * def;
-	MInv[1][2] = (-M1[0][0] * M1[2][1] + M1[0][1] * M1[2][0]) * def;
-	MInv[2][2] = ( M1[0][0] * M1[1][1] - M1[0][1] * M1[1][0]) * def;
+		MInv[0][2] = ( M1[0][1] * M1[1][2] - M1[0][2] * M1[1][1]) *def;
+		MInv[1][2] = (-M1[0][0] * M1[1][2] + M1[0][2] * M1[1][0]) *def;
+		MInv[2][2] = ( M1[0][0] * M1[1][1] - M1[0][1] * M1[1][0]) *def;
 
-	return 1;
+		return 1;
+	}
 }
 
 void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Timestamp)
