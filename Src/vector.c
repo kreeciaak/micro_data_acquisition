@@ -28,7 +28,7 @@ void V3fTransform(Vector3f V, Matrix3f M, float *VRes)
 	VRes[2] = V[0]*M[2][0] + V[1]*M[2][1] + V[2]*M[2][2];
 }
 
-void V3Subtract(Vector3f V1, Vector3f V2, float *VRes)
+void V3Subtract(Vector3f V1, const Vector3f V2, float *VRes)
 {
 	VRes[0] = V1[0] - V2[0];
 	VRes[1] = V1[1] - V2[1];
@@ -53,17 +53,7 @@ void RotationMatrixFromQuaternion(float *q, Matrix3f RotM) //q bez wskaznika? , 
 //void RotationMatrixFromAngles(Vector3f Angles, float **RotM) //Tait-Bryan angles - A3*A2*A1
 void RotationMatrixFromAngles(Vector3f Angles, Matrix3f RotM)
 {
-	volatile float yaw = Angles[2], pitch = Angles[1], roll = Angles[0]; //yaw - optimized out, coœ sie jebie
-//
-//	roll = Angles[0];//proby
-//	pitch = Angles[1];
-//	yaw = Angles[2];
-
-//	float x = cos(0);
-//	float x1 = cosf(0);
-//	float x2 = cos(0.00001);
-//	float x3 = cosf(roll);
-//	float x1 = cos(0.01)*cos(0.5);
+	volatile float yaw = Angles[2], pitch = Angles[1], roll = Angles[0];
 
 	RotM[0][0] = cosf(yaw)*cosf(pitch);
 	RotM[1][0] = cosf(pitch)*sinf(yaw);
@@ -124,27 +114,27 @@ void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Ti
 	}
 }
 
-void IntegratioAdamsBashworthMethod(Vector3f DataInput,float *fv, float *DataOutput, float Timestamp, int order)
+void IntegratioAdamsBashworthMethod(Vector3f DataInput,float fv[][5], float *DataOutput, float Timestamp, int order)
 {
-//	for (int i=0;i<=2;i++)
-//	{
-//		if (order<=3)
-//		{
-//			fv[order][i] = DataInput[i];
-//			DataOutput[i] += fv[order][i] * Timestamp;
-//			//IntegrationReactangleMethod(fv[order][i], DataOutput[i], Timestamp);
-//			order++;
-//		}else{
-//
-//			fv[4][i] = DataInput[i];
-//			DataOutput[i] += (Timestamp/1440) * (1901*fv[4][i] - 2774*fv[3][i] + 2616*fv[2][i] - 1274*fv[1][i] + 251*fv[0][i]);
-//
-//			for (order=0;order<=3;order++)
-//			{
-//				fv[order][i] = fv[order+1][i];
-//			}
-//		}
-//	}
+	for (int i=0;i<=2;i++)
+	{
+		if (order<=3)
+		{
+			fv[order][i] = DataInput[i];
+			DataOutput[i] += fv[order][i] * Timestamp;
+			//IntegrationReactangleMethod(fv[order][i], DataOutput[i], Timestamp);
+			order++;
+		}else{
+
+			fv[4][i] = DataInput[i];
+			DataOutput[i] += (Timestamp/1440) * (1901*fv[4][i] - 2774*fv[3][i] + 2616*fv[2][i] - 1274*fv[1][i] + 251*fv[0][i]);
+
+			for (order=0;order<=3;order++)
+			{
+				fv[order][i] = fv[order+1][i];
+			}
+		}
+	}
 }
 
 void RadiansToDegrees(Vector3f AnglesInRadians, float *AnglesInDegrees)
@@ -236,5 +226,12 @@ void intToVector3f(int16_t *in, float*out){
 
 void addVector3fToRes(float *in, float *out){
 	cpyVector3f(in,out);
+}
+
+void addVector3fToMatrix(Vector3f V1, Result M1, int row)
+{
+	M1[row][0] = V1[0];
+	M1[row][1] = V1[1];
+	M1[row][2] = V1[2];
 }
 

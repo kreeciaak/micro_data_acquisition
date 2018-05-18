@@ -8,7 +8,7 @@
 //#include <CalibrationConst.h>
 
 
-void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
+void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
 {
 	Vector3f AccR= {0,0,0}, GyroR= {0,0,0}, MagR= {0,0,0};
 	Vector3f AccN = {0,0,0}, GyroN = {0,0,0}, GyroNRad = {0,0,0};
@@ -29,11 +29,14 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	//statyczna inicjalizacja zmiennych
 	static Vector3f GyroAngles = {0,0,0};
 	static Vector3f CFAngles = {0,0,0};
+	static Vector3f bias = {0,0,0};
 	static float quaternion[4] = {1.0,0.0,0.0,0.0};
 	static Vector3f VelRecGyro = {0,0,0}, VelRecCF = {0,0,0}, VelRecKF = {0,0,0}, VelRecMF = {0,0,0};
 	static Vector3f VelABGyro = {0,0,0}, VelABCF = {0,0,0}, VelABKF = {0,0,0}, VelABMF = {0,0,0};
 	static Vector3f PosRecGyro = {0,0,0}, PosRecCF = {0,0,0}, PosRecKF = {0,0,0}, PosRecMF = {0,0,0};
 	static Vector3f PosABGyro = {0,0,0}, PosABCF = {0,0,0}, PosABKF = {0,0,0}, PosABMF = {0,0,0};
+	static PKalman P[3][2][2] = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
+	static bool isFirst = true;
 	static int ordvelgyro = 0, ordvelCF = 0, ordvelKF = 0, ordvelMF = 0, ordposgyro = 0, ordposCF = 0, ordposKF = 0, ordposMF = 0;//tu nie moze byc nic static
 	static float 	fvvelgyro[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
 					fvvelCF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
@@ -48,6 +51,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	/*---KOREKCJA SUROWYCH DANYCH Z CZUJNIKOW---*/
 	RawDataOrientationCorrection(Acc,AccShift,AccCalib, AccR);
 	//addVector3fToRes(AccR, vResBuff);
+	addVector3fToMatrix(AccR, vResBuff, 0);
 	RawDataOrientationCorrection(Mag,MagShift,MagCalib, MagR);
 	V3Subtract(Gyro, GyroShift, GyroR);
 	NormaliseUnits(AccR, GyroR, AccN, GyroN);
@@ -65,7 +69,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	ComplementaryFilter(CFAngles,GyroAngles,RawAnglesDeg,weight);
 
 	//Filtr Kalamana
-	KalmanFilter(RawAnglesDeg, GyroN, 0.01, KalmanAngles);
+	KalmanFilter(RawAnglesDeg, GyroN, 0.01, KalmanAngles, bias, P, isFirst);
 
 	//MadgwickAHRS
 	DegreesToRadians(GyroN, GyroNRad);
@@ -158,23 +162,29 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, float *vResBuff)
 	IntegrationReactangleMethod(VelRecMF, PosRecMF, 0.01);
 	IntegratioAdamsBashworthMethod(VelABMF, fvposMF, PosABMF, 0.01, ordposMF);
 
-
-	/*DO ZROBIENIA
-	 * sprawdzic poprawnosc zapisu matematycznego funkcji
-	 * debugowac
-	 */
-//	  Vector3f test = {1,2,3}, test1={4,5,6}, test2={9,2.23,6};;
-//
-//
-//	  	addVector3fToRes(test, vResBuff);
-//	  	vResBuff += 3;
-//	  	addVector3fToRes(test1, vResBuff);
-//	  	vResBuff += 3;
-//	  	addVector3fToRes(test2, vResBuff);
-
 }
 
-void RawDataOrientationCorrection(Vector3f V, Vector3f VCorr, Matrix3f MCorr, float *VRes) //dzia³a w chuj
+void MagOffsetCalculation(Vector3f Data)
+{
+	Vector3f DataBuff;
+
+	for (int i=0; i<=200; i++)
+	{
+		LSM_Mag_GetXYZ(Data);
+		for (int j=0;j<=2;j++)
+		{
+			DataBuff[j] += Data[j];
+		}
+		HAL_Delay(50);
+	}
+
+	for (int j=0;j<=2;j++)
+	{
+		Data[j] = DataBuff[j] /200;
+	}
+}
+
+void RawDataOrientationCorrection(Vector3f V, const Vector3f VCorr, const Matrix3f MCorr, float *VRes) //dzia³a w chuj
 {
 	Vector3f VBuff;
 
@@ -210,23 +220,24 @@ void ComplementaryFilter(float *CFAngles, Vector3f GyroAngles, Vector3f RawAngle
 	}
 }
 
-void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAngles) //funkcja musi pamiÃªtac sowje wartosci (bias, angle i macierz P), do tego potrzebna jest inicjalizacja tych zmiennych jako 0
+void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAngles, float *bias, PKalman P, bool isFirst) //funkcja musi pamiÃªtac sowje wartosci (bias, angle i macierz P), do tego potrzebna jest inicjalizacja tych zmiennych jako 0
 {
 	volatile Vector3f S = {0,0,0}, y = {0,0,0}, P00_temp = {0,0,0}, P01_temp = {0,0,0};
-	static Vector3f bias = {0,0,0};
-	static Vector3f angles = {0,0,0};
-	static bool isFirst = true;
+	//static Vector3f bias = {0,0,0};
+	//static Vector3f angles = {0,0,0};
+	//static bool isFirst = true;
 	if (isFirst){
-		cpyVector3f(RawAngle, angles);
+		cpyVector3f(RawAngle, KalmanAngles);
 		isFirst = false;
 	};
-	static float P[3][2][2] = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
+	//static float P[3][2][2] = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
 
 
 	for (int i=0;i<=2;i++)
 	{
 		NewGyro[i] = NewGyro[i] - bias[i];
-		angles[i] += dt * NewGyro[i];
+		//angles[i] += dt * NewGyro[i];
+		KalmanAngles[i] += dt * NewGyro[i];
 
 		// Update estimation error covariance - Project the error covariance ahead
 		/* Step 2 */
@@ -246,9 +257,10 @@ void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAn
 
 		// Calculate angle and bias - Update estimate with measurement zk (newAngle)
 		/* Step 3 */
-		y[i] = RawAngle[i] - angles[i]; // Angle difference
+		y[i] = RawAngle[i] - KalmanAngles[i]; // Angle difference
 		/* Step 6 */
-		angles[i] += K[0][i] * y[i];
+		//angles[i] += K[0][i] * y[i];
+		KalmanAngles[i] += K[0][i] * y[i];
 		bias[i] += K[1][i] * y[i];
 
 		// Calculate estimation error covariance - Update the error covariance
@@ -261,7 +273,7 @@ void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAn
 		P[i][1][0] -= K[1][i] * P00_temp[i];
 		P[i][1][1] -= K[1][i] * P01_temp[i];
 
-		KalmanAngles[i] = angles[i];
+		//KalmanAngles[i] = angles[i];
 	}
 }
 
