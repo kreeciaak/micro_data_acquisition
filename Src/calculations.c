@@ -8,7 +8,7 @@
 //#include <CalibrationConst.h>
 
 
-void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
+void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, Result vResBuff)
 {
 	Vector3f AccR= {0,0,0}, GyroR= {0,0,0}, MagR= {0,0,0};
 	Vector3f AccN = {0,0,0}, GyroN = {0,0,0}, GyroNRad = {0,0,0};
@@ -35,7 +35,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
 	static Vector3f VelABGyro = {0,0,0}, VelABCF = {0,0,0}, VelABKF = {0,0,0}, VelABMF = {0,0,0};
 	static Vector3f PosRecGyro = {0,0,0}, PosRecCF = {0,0,0}, PosRecKF = {0,0,0}, PosRecMF = {0,0,0};
 	static Vector3f PosABGyro = {0,0,0}, PosABCF = {0,0,0}, PosABKF = {0,0,0}, PosABMF = {0,0,0};
-	static PKalman P[3][2][2] = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
+	static PKalman P = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
 	static bool isFirst = true;
 	static int ordvelgyro = 0, ordvelCF = 0, ordvelKF = 0, ordvelMF = 0, ordposgyro = 0, ordposCF = 0, ordposKF = 0, ordposMF = 0;//tu nie moze byc nic static
 	static float 	fvvelgyro[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
@@ -63,6 +63,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
 
 	//Wspolny poczatek dla filtrow: Kalmana, komplementarnego
 	PitchRollYawMA(AccN, MagR, RawAngles);
+	V3Subtract(RawAngles, MagOffset, RawAngles);
 	RadiansToDegrees(RawAngles, RawAnglesDeg);
 
 	//Filtr komplementarny
@@ -166,22 +167,41 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
 
 void MagOffsetCalculation(Vector3f Data)
 {
-	Vector3f DataBuff;
+	Vector3f VecAcc, VecMag, AccR, MagR, DataSum;
+	int16_t DataAccel[3], DataMag[3];
 
 	for (int i=0; i<=200; i++)
 	{
-		LSM_Mag_GetXYZ(Data);
-		for (int j=0;j<=2;j++)
-		{
-			DataBuff[j] += Data[j];
-		}
-		HAL_Delay(50);
+		LSM_Accel_GetXYZ(DataAccel);
+		LSM_Mag_GetXYZ(DataMag);
+
+		intToVector3f(DataAccel, VecAcc);
+		intToVector3f(DataMag, VecMag);
+
+		RawDataOrientationCorrection(VecAcc,AccShift,AccCalib, AccR);
+		RawDataOrientationCorrection(VecMag,MagShift,MagCalib, MagR);
+		PitchRollYawMA(AccR, MagR, Data);
+		//RadiansToDegrees(Data, Data);
+
+		DataSum[2] += Data[2];
+
+//		for (int j=0;j<=2;j++)
+//		{
+//			DataSum[j] += Data[j];
+//		}
+		HAL_Delay(25);
 	}
 
-	for (int j=0;j<=2;j++)
-	{
-		Data[j] = DataBuff[j] /200;
-	}
+	Data[0] = 0;
+	Data[1] = 0;
+	Data[2] = DataSum[2]/200;
+	HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 1);
+	HAL_Delay(200);
+
+//	for (int j=0;j<=2;j++)
+//	{
+//		Data[j] = DataBuff[j] /200;
+//	}
 }
 
 void RawDataOrientationCorrection(Vector3f V, const Vector3f VCorr, const Matrix3f MCorr, float *VRes) //dzia³a w chuj

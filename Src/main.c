@@ -73,7 +73,8 @@ char str1[100] = {0};
 int16_t AccelData[3];
 int16_t MagData[3];
 int16_t GyroData[3];
-
+Vector3f MagOffset;
+Result result;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -82,9 +83,12 @@ static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_TIM10_Init(void);
+static void MX_NVIC_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);
 
 /* USER CODE END PFP */
 
@@ -125,6 +129,9 @@ int main(void)
   MX_SPI1_Init();
   MX_USB_DEVICE_Init();
   MX_TIM10_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
   LSM_Accel_Ini();
@@ -135,7 +142,10 @@ int main(void)
   L3G_Gyro_GetXYZ(GyroData);
   LSM_Mag_GetXYZ(MagData);
 
-  Result result;
+  MagOffsetCalculation(MagOffset);
+  HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 0);
+
+  HAL_TIM_Base_Start_IT(&htim10);
 
   Vector3f fAccelData, fGyroData, fMagData;
   /* USER CODE END 2 */
@@ -170,18 +180,19 @@ int main(void)
 	  intToVector3f(MagData, fMagData);
 
 
-	  RawToResult(fAccelData, fGyroData, fMagData, result);
+	  RawToResult(fAccelData, fGyroData, fMagData, MagOffset, result);
 
 	  //sprintf(str1, "gX: %06d; gY: %06d; gZ %06d; mX: %06d; mY: %06d; mZ %06d; gX %06d; gY %06d; gZ %06d; \n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
 	  //sprintf(str1, "%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;\n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
 	  //sprintf(str1, "%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;\n\r", (int)Acc[0], (int)Acc[1], (int)Acc[2], (int)Mag[0], (int)Mag[1], (int)Mag[2], (int)Gyro[0], (int)Gyro[1], (int)Gyro[2]);
-	  float x = result[0][0];
-	  float x1 = result[0][1];
-	  float x2 = result[0][2];
-	  sprintf(str1, "%06f;%06f;%06f;\n\r", x,x1,x2);
-	  CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
+//	  float x = result[0][0];
+//	  float x1 = result[0][1];
+//	  float x2 = result[0][2];
+	  //sprintf(str1, "%06f;%06f;%06f;\n\r", result[0][0],result[0][1],result[0][2]);
+	  //sprintf(str1, "%06f;%06f;%06f;\n\r", x,x1,x2);
+	  //CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
 
-	  HAL_Delay(100);
+	  //HAL_Delay(100);
 
   /* USER CODE END WHILE */
 
@@ -249,6 +260,17 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* TIM1_UP_TIM10_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(TIM1_UP_TIM10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(TIM1_UP_TIM10_IRQn);
+}
+
 /* I2C1 init function */
 static void MX_I2C1_Init(void)
 {
@@ -298,9 +320,9 @@ static void MX_TIM10_Init(void)
 {
 
   htim10.Instance = TIM10;
-  htim10.Init.Prescaler = 0;
+  htim10.Init.Prescaler = 9999;
   htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 0;
+  htim10.Init.Period = 9599;
   htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
   {
@@ -379,6 +401,13 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	if(htim->Instance == TIM10){
+		sprintf(str1, "%06f;%06f;%06f;\n\r", result[0][0],result[0][1],result[0][2]);
+		CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
+	}
+}
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
   /* Prevent unused argument(s) compilation warning */
