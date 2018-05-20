@@ -23,8 +23,9 @@ extern volatile float q0, q1, q2, q3;	// quaternion of sensor frame relative to 
 void MagOffsetCalculation(Vector3f Data);
 void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, Result vResBuff);
 void RawDataOrientationCorrection(Vector3f V, const Vector3f VCorr, const Matrix3f MCorr, float *VRes);
-void PitchRollYawMA(Vector3f AccCorr, Vector3f MagCorr, float *Angles);
-void ComplementaryFilter(float *CFAngles, Vector3f GyroAngles, Vector3f RawAngles, float weight);
+void PitchRollYawMA(Vector3f AccCorr, Vector3f MagCorr, float *Angles, float *MY_n, int *x);
+//void ComplementaryFilter(float *CFAngles, Vector3f GyroAngles, Vector3f RawAngles, float weight);
+void ComplementaryFilter(float *CFAngles, Vector3f GyroN, Vector3f RawAngles, float weight, float dt);
 //void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float Timestamp, float *KalmanAngles);
 void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAngles, float *bias, PKalman P, bool isFirst);
 

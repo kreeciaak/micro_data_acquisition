@@ -123,7 +123,7 @@ void IntegratioAdamsBashworthMethod(Vector3f DataInput,float fv[][5], float *Dat
 			fv[order][i] = DataInput[i];
 			DataOutput[i] += fv[order][i] * Timestamp;
 			//IntegrationReactangleMethod(fv[order][i], DataOutput[i], Timestamp);
-			order++;
+			order = order + 1;
 		}else{
 
 			fv[4][i] = DataInput[i];
@@ -188,7 +188,7 @@ float invSqrt(float x) {
 	return y;
 }
 
-void QuaternionToEulerAngle(float *quaternion, Vector3f MagdwickAngles)
+void QuaternionToEulerAngle(float *quaternion, Vector3f MagdwickAngles, float *siny_n, int *x)
 {
 	// roll (x-axis rotation)
 	double sinr = +2.0 * (quaternion[0] * quaternion[1] + quaternion[2] * quaternion[3]);
@@ -205,7 +205,19 @@ void QuaternionToEulerAngle(float *quaternion, Vector3f MagdwickAngles)
 	// yaw (z-axis rotation)
 	double siny = +2.0 * (quaternion[0] * quaternion[3] + quaternion[1] * quaternion[2]);
 	double cosy = +1.0 - 2.0 * (quaternion[2] * quaternion[2] + quaternion[3] * quaternion[3]);
-	MagdwickAngles[2] = atan2(siny, cosy);
+	//MagdwickAngles[2] = atan2(siny, cosy);
+
+	if ((checkSignofValue(*siny_n)!=checkSignofValue(siny)) && (cosy < 0)){
+		if (siny>=0) {*x = *x +1;}
+		if (siny<0) {*x = *x - 1;}
+	}
+	if (*x!=0){
+		MagdwickAngles[2] = atan2f(siny,cosy) -2**x*PI;
+		*siny_n = siny;
+	}else{
+		MagdwickAngles[2] = atan2f(siny,cosy);
+		*siny_n = siny;
+	}
 }
 
 void cpyVector3f(float *in, float *out){
@@ -233,5 +245,14 @@ void addVector3fToMatrix(Vector3f V1, Result M1, int row)
 	M1[row][0] = V1[0];
 	M1[row][1] = V1[1];
 	M1[row][2] = V1[2];
+}
+
+int checkSignofValue(float Value)
+{
+	if (Value >= 0){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 

@@ -75,6 +75,7 @@ int16_t MagData[3];
 int16_t GyroData[3];
 Vector3f MagOffset;
 Result result;
+Vector3f fAccelData, fGyroData, fMagData;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -147,7 +148,7 @@ int main(void)
 
   HAL_TIM_Base_Start_IT(&htim10);
 
-  Vector3f fAccelData, fGyroData, fMagData;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -180,7 +181,7 @@ int main(void)
 	  intToVector3f(MagData, fMagData);
 
 
-	  RawToResult(fAccelData, fGyroData, fMagData, MagOffset, result);
+	  //RawToResult(fAccelData, fGyroData, fMagData, MagOffset, result);
 
 	  //sprintf(str1, "gX: %06d; gY: %06d; gZ %06d; mX: %06d; mY: %06d; mZ %06d; gX %06d; gY %06d; gZ %06d; \n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
 	  //sprintf(str1, "%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;%06d;\n\r", AccelData[0], AccelData[1], AccelData[2], MagData[0], MagData[1], MagData[2], GyroData[0], GyroData[1], GyroData[2]);
@@ -322,7 +323,7 @@ static void MX_TIM10_Init(void)
   htim10.Instance = TIM10;
   htim10.Init.Prescaler = 9999;
   htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 9599;
+  htim10.Init.Period = 95;
   htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
   {
@@ -403,7 +404,8 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance == TIM10){
-		sprintf(str1, "%06f;%06f;%06f;\n\r", result[0][0],result[0][1],result[0][2]);
+		RawToResult(fAccelData, fGyroData, fMagData, MagOffset, result);
+		sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2]);
 		CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
 	}
 }

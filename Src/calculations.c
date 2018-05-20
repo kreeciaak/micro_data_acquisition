@@ -16,8 +16,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	Vector3f GyroAnglesRad = {0,0,0}, CFAnglesRad = {0,0,0}, KalmanAnglesRad = {0,0,0};
 	Vector3f AccTGyro = {0,0,0}, AccTCF = {0,0,0}, AccTKF = {0,0,0}, AccTMF = {0,0,0};
 	Vector3f AccGRGyro = {0,0,0}, AccGRCF = {0,0,0}, AccGRKF = {0,0,0}, AccGRMF = {0,0,0};
-	Matrix3f //GyroRotM 				= {{0,0,0},{0,0,0},{0,0,0}},
-			 GyroRotM				={},
+	Matrix3f GyroRotM 				= {{0,0,0},{0,0,0},{0,0,0}},
 			 GyroRotMInv 			= {{0,0,0},{0,0,0},{0,0,0}},
 			 ComplimentaryRotM 		= {{0,0,0},{0,0,0},{0,0,0}},
 			 ComplimentaryRotMInv 	= {{0,0,0},{0,0,0},{0,0,0}},
@@ -37,7 +36,9 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	static Vector3f PosABGyro = {0,0,0}, PosABCF = {0,0,0}, PosABKF = {0,0,0}, PosABMF = {0,0,0};
 	static PKalman P = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
 	static bool isFirst = true;
-	static int ordvelgyro = 0, ordvelCF = 0, ordvelKF = 0, ordvelMF = 0, ordposgyro = 0, ordposCF = 0, ordposKF = 0, ordposMF = 0;//tu nie moze byc nic static
+	static float MY_n = 0, siny_n = 0;
+	static int RotCnt1 = 0, RotCnt2 = 0;
+	static int ordvelgyro = 0, ordvelCF = 0, ordvelKF = 0, ordvelMF = 0, ordposgyro = 0, ordposCF = 0, ordposKF = 0, ordposMF = 0; // ---> przezanie zmiennych wskaznikiem!
 	static float 	fvvelgyro[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
 					fvvelCF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
 					fvvelKF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
@@ -45,13 +46,11 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 					fvposgyro[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
 					fvposCF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
 					fvposKF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
-					fvposMF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}};//??? tablica nie moze tak wygladac xd
+					fvposMF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}};
 
 
 	/*---KOREKCJA SUROWYCH DANYCH Z CZUJNIKOW---*/
 	RawDataOrientationCorrection(Acc,AccShift,AccCalib, AccR);
-	//addVector3fToRes(AccR, vResBuff);
-	addVector3fToMatrix(AccR, vResBuff, 0);
 	RawDataOrientationCorrection(Mag,MagShift,MagCalib, MagR);
 	V3Subtract(Gyro, GyroShift, GyroR);
 	NormaliseUnits(AccR, GyroR, AccN, GyroN);
@@ -62,21 +61,24 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	IntegrationReactangleMethod(GyroN, GyroAngles, 0.01);
 
 	//Wspolny poczatek dla filtrow: Kalmana, komplementarnego
-	PitchRollYawMA(AccN, MagR, RawAngles);
-	V3Subtract(RawAngles, MagOffset, RawAngles);
+	PitchRollYawMA(AccN, MagR, RawAngles, &MY_n, &RotCnt1);
+	//V3Subtract(RawAngles, MagOffset, RawAngles); ----------------------------> Co z t¹ funkcja
 	RadiansToDegrees(RawAngles, RawAnglesDeg);
 
+
 	//Filtr komplementarny
-	ComplementaryFilter(CFAngles,GyroAngles,RawAnglesDeg,weight);
+	ComplementaryFilter(CFAngles,GyroN,RawAnglesDeg,weight, 0.01);
+
 
 	//Filtr Kalamana
 	KalmanFilter(RawAnglesDeg, GyroN, 0.01, KalmanAngles, bias, P, isFirst);
 
 	//MadgwickAHRS
 	DegreesToRadians(GyroN, GyroNRad);
-	MadgwickAHRSupdate(GyroNRad[0],GyroNRad[1],GyroNRad[2],AccR[0],AccR[1],AccR[2],MagR[0],MagR[1],MagR[2],quaternion);
-	QuaternionToEulerAngle(quaternion, MadgwickAngles); //Przeliczenie na kï¿½ty w stopniach bo algorytm operuje na kwaternionach
+	MadgwickAHRSupdate(GyroNRad[0],GyroNRad[1],GyroNRad[2],AccR[0],AccR[1],AccR[2],MagR[0],MagR[2],MagR[1],quaternion);
+	QuaternionToEulerAngle(quaternion, MadgwickAngles, &siny_n, &RotCnt2);
 	RadiansToDegrees(MadgwickAngles, MadgwickAnglesDeg);
+
 
 
 	/*---WYZNACZENIE ODWROTNEJ MACIERZY OBROTOW DLA KAZDEGO Z FILTROW---*/
@@ -105,7 +107,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	V3fTransform(AccN, GyroRotMInv, AccTGyro);
 
 	//Filtr komplementarny
-	V3fTransform(AccN, ComplimentaryRotMInv, AccTCF);
+	V3fTransform(AccN, ComplimentaryRotM, AccTCF); // -------------> Chyba nie potrzeba robic macierzy odwrotnej
 
 	//Filtr Kalmana
 	V3fTransform(AccN, KalmankRotMInv, AccTKF);
@@ -162,46 +164,47 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	//MadgwickAHRS
 	IntegrationReactangleMethod(VelRecMF, PosRecMF, 0.01);
 	IntegratioAdamsBashworthMethod(VelABMF, fvposMF, PosABMF, 0.01, ordposMF);
+	addVector3fToMatrix(PosABCF, vResBuff, 0);
 
 }
 
 void MagOffsetCalculation(Vector3f Data)
 {
-	Vector3f VecAcc, VecMag, AccR, MagR, DataSum;
-	int16_t DataAccel[3], DataMag[3];
-
-	for (int i=0; i<=200; i++)
-	{
-		LSM_Accel_GetXYZ(DataAccel);
-		LSM_Mag_GetXYZ(DataMag);
-
-		intToVector3f(DataAccel, VecAcc);
-		intToVector3f(DataMag, VecMag);
-
-		RawDataOrientationCorrection(VecAcc,AccShift,AccCalib, AccR);
-		RawDataOrientationCorrection(VecMag,MagShift,MagCalib, MagR);
-		PitchRollYawMA(AccR, MagR, Data);
-		//RadiansToDegrees(Data, Data);
-
-		DataSum[2] += Data[2];
-
-//		for (int j=0;j<=2;j++)
-//		{
-//			DataSum[j] += Data[j];
-//		}
-		HAL_Delay(25);
-	}
-
-	Data[0] = 0;
-	Data[1] = 0;
-	Data[2] = DataSum[2]/200;
-	HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 1);
-	HAL_Delay(200);
-
-//	for (int j=0;j<=2;j++)
+//	Vector3f VecAcc, VecMag, AccR, MagR, DataSum;
+//	int16_t DataAccel[3], DataMag[3];
+//
+//	for (int i=0; i<=200; i++)
 //	{
-//		Data[j] = DataBuff[j] /200;
+//		LSM_Accel_GetXYZ(DataAccel);
+//		LSM_Mag_GetXYZ(DataMag);
+//
+//		intToVector3f(DataAccel, VecAcc);
+//		intToVector3f(DataMag, VecMag);
+//
+//		RawDataOrientationCorrection(VecAcc,AccShift,AccCalib, AccR);
+//		RawDataOrientationCorrection(VecMag,MagShift,MagCalib, MagR);
+//		PitchRollYawMA(AccR, MagR, Data);
+//		//RadiansToDegrees(Data, Data);
+//
+//		DataSum[2] += Data[2];
+//
+////		for (int j=0;j<=2;j++)
+////		{
+////			DataSum[j] += Data[j];
+////		}
+//		HAL_Delay(25);
 //	}
+//
+//	Data[0] = 0;
+//	Data[1] = 0;
+//	Data[2] = DataSum[2]/200;
+//	HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 1);
+//	HAL_Delay(200);
+//
+////	for (int j=0;j<=2;j++)
+////	{
+////		Data[j] = DataBuff[j] /200;
+////	}
 }
 
 void RawDataOrientationCorrection(Vector3f V, const Vector3f VCorr, const Matrix3f MCorr, float *VRes) //dzia³a w chuj
@@ -212,51 +215,58 @@ void RawDataOrientationCorrection(Vector3f V, const Vector3f VCorr, const Matrix
 	V3fTransform(VBuff, MCorr, VRes);
 }
 
-void PitchRollYawMA(Vector3f AccCorr, Vector3f MagCorr, float *Angles) //wstepne przeliczenie katow - argumenty to korygowane przyspieszenie i mag - float
+
+void PitchRollYawMA(Vector3f AccCorr, Vector3f MagCorr, float *Angles, float *MY_n, int *x) //wstepne przeliczenie katow - argumenty to korygowane przyspieszenie i mag - float
 {
-	Angles[0] = atan2f(AccCorr[1],AccCorr[2]); //sprawdzic funkcje trygonometryczne
+
+	Angles[0] = atan2f(AccCorr[1],AccCorr[2]);
 	Angles[1] = atan2f(-AccCorr[0],Norm(VectorTo2PowSum(AccCorr)));
 
 	float normA = Norm(VectorTo2PowSum(AccCorr));
-	float pitchA = -asinf(AccCorr[0]/normA);
+	float pitchA = asinf(AccCorr[0]/normA);
 	float rollA = asinf(AccCorr[1]/(cos(pitchA)*normA));
 
-	double normM = Norm(VectorTo2PowSum(MagCorr));
-	double mx = MagCorr[0]/normM;
-	double my = -MagCorr[1]/normM;
-	double mz = MagCorr[2]/normM;
+	float normM = Norm(VectorTo2PowSum(MagCorr));
+	float mx = MagCorr[0]/normM;
+	float my = MagCorr[2]/normM;
+	float mz = MagCorr[1]/normM;
 
-	double MX = mx*cos(pitchA)+mz*sin(pitchA);
-	double MY = mx*sin(rollA)*sin(pitchA)+my*cos(rollA)-mz*sin(rollA)*cos(pitchA);
+	float MX = mx*cosf(pitchA)+mz*sinf(pitchA);
+	float MY = mx*sinf(rollA)*sinf(pitchA)+my*cosf(rollA)-mz*sinf(rollA)*cosf(pitchA);
 
-	Angles[2] = atan2(-MY,MX);
+	if ((checkSignofValue(*MY_n)!=checkSignofValue(MY)) && (MX < 0)){
+		if (MY>=0) {*x = *x +1;}
+		if (MY<0) {*x = *x - 1;}
+	}
+	if (*x!=0){
+		Angles[2] = atan2f(MY,MX) -2**x*PI;
+		*MY_n = MY;
+	}else{
+		Angles[2] = atan2f(MY,MX);
+		*MY_n = MY;
+	}
 }
 
-void ComplementaryFilter(float *CFAngles, Vector3f GyroAngles, Vector3f RawAngles, float weight) // filtr komplementarny - poprzednia wartosc kata, katy z zyro, surowe katy z acce i waga
+void ComplementaryFilter(float *CFAngles, Vector3f GyroN, Vector3f RawAngles, float weight, float dt) // filtr komplementarny - poprzednia wartosc kata, katy z zyro, surowe katy z acce i waga
 {
 	for (int i=0;i<=2;i++)
 	{
-		CFAngles[i] = weight*(CFAngles[i] + GyroAngles[i]) + (1-weight)*RawAngles[i];
+		CFAngles[i] = weight*(CFAngles[i] + GyroN[i]*dt) + (1-weight)*RawAngles[i];
 	}
 }
 
 void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAngles, float *bias, PKalman P, bool isFirst) //funkcja musi pamiÃªtac sowje wartosci (bias, angle i macierz P), do tego potrzebna jest inicjalizacja tych zmiennych jako 0
 {
 	volatile Vector3f S = {0,0,0}, y = {0,0,0}, P00_temp = {0,0,0}, P01_temp = {0,0,0};
-	//static Vector3f bias = {0,0,0};
-	//static Vector3f angles = {0,0,0};
-	//static bool isFirst = true;
+
 	if (isFirst){
 		cpyVector3f(RawAngle, KalmanAngles);
 		isFirst = false;
 	};
-	//static float P[3][2][2] = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
-
 
 	for (int i=0;i<=2;i++)
 	{
 		NewGyro[i] = NewGyro[i] - bias[i];
-		//angles[i] += dt * NewGyro[i];
 		KalmanAngles[i] += dt * NewGyro[i];
 
 		// Update estimation error covariance - Project the error covariance ahead
@@ -293,7 +303,6 @@ void KalmanFilter(Vector3f RawAngle, Vector3f NewGyro, float dt, float *KalmanAn
 		P[i][1][0] -= K[1][i] * P00_temp[i];
 		P[i][1][1] -= K[1][i] * P01_temp[i];
 
-		//KalmanAngles[i] = angles[i];
 	}
 }
 

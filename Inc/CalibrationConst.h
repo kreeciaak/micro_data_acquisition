@@ -12,8 +12,8 @@
 
 
 
-#define sampleFreq	512.0f		// sample frequency in Hz
-#define betaDef		0.1f		// 2 * proportional gain
+#define sampleFreq	100.0f		// sample frequency in Hz
+#define betaDef		2.0f		// 2 * proportional gain
 
 //Vector3f MagR, AccR, Mag, Acc, Gyro;
 static const Vector3f GravityVector = {
@@ -40,6 +40,11 @@ static const Vector3f GyroShift = {
 		-39.596f
 		};
 
+//static const Vector3f GyroShift = {
+//		0.0f,
+//		0.0f,
+//		0.0f
+//};
 static const Matrix3f MagCalib = {
 			{0.983101f, 0.019143f, 0.008105f},
 			{0.019143f, 1.012514f, -0.003008f},

@@ -43,10 +43,11 @@ void NormaliseUnits(Vector3f Acc, Vector3f Gyro, float *AccN, float *GyroN);
 float Norm(float powervalue);
 float VectorTo2PowSum(Vector3f V);
 float invSqrt(float x);
-void QuaternionToEulerAngle(float *quaternion, Vector3f MagdwickAngles);
+void QuaternionToEulerAngle(float *quaternion, Vector3f MagdwickAngles, float *siny_n, int *x);
 void cpyVector3f(float *in, float *out);
 void intToVector3f(int16_t *in, float*out);
 void addVector3fToRes(float *in, float *out);
 void addVector3fToMatrix(Vector3f V1, Result M1, int row);
+int checkSignofValue(float Value);
 
 #endif /* VECTOR_H_ */
