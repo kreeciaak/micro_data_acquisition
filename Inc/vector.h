@@ -16,7 +16,7 @@
 #define PI 				3.14159265358979323846f;
 #define RadToDegrees 	57.29578
 #define RegisterToDPS 	250/32768
-#define GravityConst	9.8126f //dla Poznania
+#define GravityConst	9.761001f //dla Poznania
 #define Gravity2GRange	16384.0f
 
 typedef float Vector3f[3];

@@ -116,25 +116,26 @@ void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Ti
 
 void IntegratioAdamsBashworthMethod(Vector3f DataInput,float fv[][5], float *DataOutput, float Timestamp, int order)
 {
+	static int orde = 0;
 	for (int i=0;i<=2;i++)
 	{
-		if (order<=3)
+		if (orde<=3)
 		{
-			fv[order][i] = DataInput[i];
-			DataOutput[i] += fv[order][i] * Timestamp;
+			fv[orde][i] = DataInput[i];
+			DataOutput[i] += fv[orde][i] * Timestamp;
 			//IntegrationReactangleMethod(fv[order][i], DataOutput[i], Timestamp);
-			order = order + 1;
 		}else{
 
 			fv[4][i] = DataInput[i];
 			DataOutput[i] += (Timestamp/1440) * (1901*fv[4][i] - 2774*fv[3][i] + 2616*fv[2][i] - 1274*fv[1][i] + 251*fv[0][i]);
 
-			for (order=0;order<=3;order++)
+			for (orde=0;orde<=3;orde++)
 			{
-				fv[order][i] = fv[order+1][i];
+				fv[orde][i] = fv[orde+1][i];
 			}
 		}
 	}
+	orde = orde + 1;
 }
 
 void RadiansToDegrees(Vector3f AnglesInRadians, float *AnglesInDegrees)

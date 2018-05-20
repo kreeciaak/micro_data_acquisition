@@ -13,7 +13,7 @@
 
 
 #define sampleFreq	100.0f		// sample frequency in Hz
-#define betaDef		2.0f		// 2 * proportional gain
+#define betaDef		20.0f		// 2 * proportional gain
 
 //Vector3f MagR, AccR, Mag, Acc, Gyro;
 static const Vector3f GravityVector = {

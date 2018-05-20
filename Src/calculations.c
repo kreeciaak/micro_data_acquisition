@@ -26,7 +26,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 			 MadgwickRotMInv 		= {{0,0,0},{0,0,0},{0,0,0}};
 
 	//statyczna inicjalizacja zmiennych
-	static Vector3f GyroAngles = {0,0,0};
+	static Vector3f GyroAngles = {0,0,0}, GyroAngles2 ={};
 	static Vector3f CFAngles = {0,0,0};
 	static Vector3f bias = {0,0,0};
 	static float quaternion[4] = {1.0,0.0,0.0,0.0};
@@ -53,12 +53,17 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	RawDataOrientationCorrection(Acc,AccShift,AccCalib, AccR);
 	RawDataOrientationCorrection(Mag,MagShift,MagCalib, MagR);
 	V3Subtract(Gyro, GyroShift, GyroR);
+	Vector3f R = {0.059369, 0.017049, 0}, R1 = {-42.1212, -1.595155, 9.720848};
+	V3Subtract(GyroR, R1, GyroR);
 	NormaliseUnits(AccR, GyroR, AccN, GyroN);
+
+	V3Subtract(AccN, R, AccN);
 
 
 	/*---WYZNACZANIE KATA OBROTU---*/
 	//Brak filtra
 	IntegrationReactangleMethod(GyroN, GyroAngles, 0.01);
+//	IntegratioAdamsBashworthMethod(GyroN,fvvelgyro,GyroAngles2, 0.01, ordvelgyro);
 
 	//Wspolny poczatek dla filtrow: Kalmana, komplementarnego
 	PitchRollYawMA(AccN, MagR, RawAngles, &MY_n, &RotCnt1);
@@ -104,16 +109,16 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 
 	/*---OBROT WEKTORA PRZYSPIESZNIA WZGLEDEM MACIERZY OBROTOW---*/
 	//Brak filtra
-	V3fTransform(AccN, GyroRotMInv, AccTGyro);
+	V3fTransform(AccN, GyroRotM, AccTGyro);
 
 	//Filtr komplementarny
 	V3fTransform(AccN, ComplimentaryRotM, AccTCF); // -------------> Chyba nie potrzeba robic macierzy odwrotnej
 
 	//Filtr Kalmana
-	V3fTransform(AccN, KalmankRotMInv, AccTKF);
+	V3fTransform(AccN, KalmankRotM, AccTKF);
 
 	//MadgwickAHRS
-	V3fTransform(AccN, MadgwickRotMInv, AccTMF);
+	V3fTransform(AccN, MadgwickRotM, AccTMF);
 
 
 	/*---REDUKCJA SK�ADOWEJ GRAWITACJI Z WEKTORA PRZYSPIESZENIA---*/
@@ -164,7 +169,13 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	//MadgwickAHRS
 	IntegrationReactangleMethod(VelRecMF, PosRecMF, 0.01);
 	IntegratioAdamsBashworthMethod(VelABMF, fvposMF, PosABMF, 0.01, ordposMF);
-	addVector3fToMatrix(PosABCF, vResBuff, 0);
+	addVector3fToMatrix(KalmanAngles, vResBuff, 0);
+	addVector3fToMatrix(KalmanAngles, vResBuff, 1);
+	addVector3fToMatrix(AccTKF, vResBuff, 2);
+	addVector3fToMatrix(AccGRKF, vResBuff, 3);
+	addVector3fToMatrix(VelRecKF, vResBuff, 4);
+	addVector3fToMatrix(PosRecKF, vResBuff, 5);
+	addVector3fToMatrix(PosABKF, vResBuff, 6);
 
 }
 
@@ -233,6 +244,7 @@ void PitchRollYawMA(Vector3f AccCorr, Vector3f MagCorr, float *Angles, float *MY
 
 	float MX = mx*cosf(pitchA)+mz*sinf(pitchA);
 	float MY = mx*sinf(rollA)*sinf(pitchA)+my*cosf(rollA)-mz*sinf(rollA)*cosf(pitchA);
+	Angles[2] = atan2f(MY,MX);
 
 	if ((checkSignofValue(*MY_n)!=checkSignofValue(MY)) && (MX < 0)){
 		if (MY>=0) {*x = *x +1;}

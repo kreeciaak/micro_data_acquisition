@@ -69,13 +69,14 @@ TIM_HandleTypeDef htim10;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-char str1[100] = {0};
+char str1[220] = {0};
 int16_t AccelData[3];
 int16_t MagData[3];
 int16_t GyroData[3];
 Vector3f MagOffset;
 Result result;
 Vector3f fAccelData, fGyroData, fMagData;
+int flag = -1;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -403,8 +404,9 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	if(htim->Instance == TIM10){
+	if((htim->Instance == TIM10) && (flag == 1)){
 		RawToResult(fAccelData, fGyroData, fMagData, MagOffset, result);
+		sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2],result[5][0],result[5][1],result[5][2],result[6][0],result[6][1],result[6][2]);
 		sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2]);
 		CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
 	}
@@ -430,7 +432,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   }
 
   if (GPIO_Pin == BUTTON_EXT_Pin){
-
+	  flag = -flag;
   }
 }
 /* USER CODE END 4 */
