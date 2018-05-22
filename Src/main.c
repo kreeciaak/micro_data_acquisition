@@ -406,8 +406,9 @@ static void MX_GPIO_Init(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if((htim->Instance == TIM10) && (flag == 1)){
 		RawToResult(fAccelData, fGyroData, fMagData, MagOffset, result);
-		sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2],result[5][0],result[5][1],result[5][2],result[6][0],result[6][1],result[6][2]);
+		//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2],result[5][0],result[5][1],result[5][2],result[6][0],result[6][1],result[6][2]);
 		sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2]);
+		//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[1][0],result[1][1],result[1][2],result[0][0],result[0][1],result[0][2]);
 		CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
 	}
 }

@@ -127,7 +127,7 @@ void IntegratioAdamsBashworthMethod(Vector3f DataInput,float fv[][5], float *Dat
 		}else{
 
 			fv[4][i] = DataInput[i];
-			DataOutput[i] += (Timestamp/1440) * (1901*fv[4][i] - 2774*fv[3][i] + 2616*fv[2][i] - 1274*fv[1][i] + 251*fv[0][i]);
+			DataOutput[i] += (Timestamp/1440) * (3802*fv[4][i] - 5548*fv[3][i] + 5232*fv[2][i] - 2548*fv[1][i] + 502*fv[0][i]);
 
 			for (orde=0;orde<=3;orde++)
 			{
@@ -254,6 +254,14 @@ int checkSignofValue(float Value)
 		return 1;
 	}else{
 		return 0;
+	}
+}
+
+void changeSignOfVector(Vector3f V1, Vector3f V2)
+{
+	for (int i=0;i<=2; i++)
+	{
+		V2[i] = -V1[i];
 	}
 }
 

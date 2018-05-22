@@ -56,6 +56,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	Vector3f R = {0.059369, 0.017049, 0}, R1 = {-42.1212, -1.595155, 9.720848};
 	V3Subtract(GyroR, R1, GyroR);
 	NormaliseUnits(AccR, GyroR, AccN, GyroN);
+	changeSignOfVector(GyroN, GyroN);
 
 	V3Subtract(AccN, R, AccN);
 
@@ -169,7 +170,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	//MadgwickAHRS
 	IntegrationReactangleMethod(VelRecMF, PosRecMF, 0.01);
 	IntegratioAdamsBashworthMethod(VelABMF, fvposMF, PosABMF, 0.01, ordposMF);
-	addVector3fToMatrix(KalmanAngles, vResBuff, 0);
+	addVector3fToMatrix(AccGRCF, vResBuff, 0);
 	addVector3fToMatrix(KalmanAngles, vResBuff, 1);
 	addVector3fToMatrix(AccTKF, vResBuff, 2);
 	addVector3fToMatrix(AccGRKF, vResBuff, 3);
@@ -234,8 +235,9 @@ void PitchRollYawMA(Vector3f AccCorr, Vector3f MagCorr, float *Angles, float *MY
 	Angles[1] = atan2f(-AccCorr[0],Norm(VectorTo2PowSum(AccCorr)));
 
 	float normA = Norm(VectorTo2PowSum(AccCorr));
-	float pitchA = asinf(AccCorr[0]/normA);
-	float rollA = asinf(AccCorr[1]/(cos(pitchA)*normA));
+	float pitchA = asinf(-AccCorr[0]/normA);
+	//float rollA = asinf(AccCorr[1]/(cos(pitchA)*normA));
+	float rollA = asinf(AccCorr[1]/(normA*cos(pitchA)));
 
 	float normM = Norm(VectorTo2PowSum(MagCorr));
 	float mx = MagCorr[0]/normM;

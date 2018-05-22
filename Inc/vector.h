@@ -49,5 +49,6 @@ void intToVector3f(int16_t *in, float*out);
 void addVector3fToRes(float *in, float *out);
 void addVector3fToMatrix(Vector3f V1, Result M1, int row);
 int checkSignofValue(float Value);
+void changeSignOfVector(Vector3f V1, Vector3f V2);
 
 #endif /* VECTOR_H_ */
