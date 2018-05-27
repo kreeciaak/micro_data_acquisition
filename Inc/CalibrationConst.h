@@ -8,20 +8,41 @@
 #ifndef CALIBRATIONCONST_H_
 #define CALIBRATIONCONST_H_
 
-//#define RadToDegrees 	57.29578
+
+#define sampleFreq		100.0f		// sample frequency in Hz
+#define betaDef			20.0f		// 2 * proportional gain
+#define accelSampleTime	1/100.0f
+#define gyroSampleTime	1/95.0f
+#define sampleTime		1/100.0f
 
 
+//Wartoœc poprawki kata obrotu wokol osi z z procedury 3s
+static const Vector3f MagRotation2 = {
+			0.0f,
+			0.0f,
+			0.0f
+		};
 
-#define sampleFreq	100.0f		// sample frequency in Hz
-#define betaDef		20.0f		// 2 * proportional gain
-
-//Vector3f MagR, AccR, Mag, Acc, Gyro;
+//Wartoœci kalibracyjne z procedury nr 2
 static const Vector3f GravityVector = {
 		0.0f,
 		0.0f,
 		GravityConst
 };
 
+static const Vector3f GyroShift = {
+		-81.166333f,
+		40.882f,
+		-39.596f
+		};
+
+static const Vector3f MagRotation1 = {
+			0.0f,
+			0.0f,
+			0.0f
+		};
+
+//Wartoœci kalibracyjne z magneto
 static const Vector3f MagShift = {
 			-79.568073f,
 			-43.539449f,
@@ -34,17 +55,7 @@ static const Vector3f AccShift = {
 		647.287009f
 		};
 
-static const Vector3f GyroShift = {
-		-81.166333f,
-		40.882f,
-		-39.596f
-		};
 
-//static const Vector3f GyroShift = {
-//		0.0f,
-//		0.0f,
-//		0.0f
-//};
 static const Matrix3f MagCalib = {
 			{0.983101f, 0.019143f, 0.008105f},
 			{0.019143f, 1.012514f, -0.003008f},
@@ -57,7 +68,7 @@ static const Matrix3f AccCalib = {
 			{-0.001628f, 0.000265f, 1.023268f}
 		};
 
-
+//Sta³e do filtrów komplementarnego i Kalmana
 static const float weight = 0.98;
 static const float Q_angle = 0.001f;
 static const float Q_bias = 0.003f;

@@ -11,22 +11,23 @@
 void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, Result vResBuff)
 {
 	Vector3f AccR= {0,0,0}, GyroR= {0,0,0}, MagR= {0,0,0};
-	Vector3f AccN = {0,0,0}, GyroN = {0,0,0}, GyroNRad = {0,0,0};
+	Vector3f AccN = {0,0,0}, GyroN = {0,0,0}, GyroARad = {0,0,0};
+	Vector3f AccA = {0,0,0}, GyroA = {0,0,0}, MagA = {0,0,0};
 	Vector3f RawAngles= {0,0,0}, RawAnglesDeg = {0,0,0}, KalmanAngles = {0,0,0}, MadgwickAngles = {0,0,0}, MadgwickAnglesDeg = {0,0,0};
 	Vector3f GyroAnglesRad = {0,0,0}, CFAnglesRad = {0,0,0}, KalmanAnglesRad = {0,0,0};
 	Vector3f AccTGyro = {0,0,0}, AccTCF = {0,0,0}, AccTKF = {0,0,0}, AccTMF = {0,0,0};
 	Vector3f AccGRGyro = {0,0,0}, AccGRCF = {0,0,0}, AccGRKF = {0,0,0}, AccGRMF = {0,0,0};
 	Matrix3f GyroRotM 				= {{0,0,0},{0,0,0},{0,0,0}},
-			 GyroRotMInv 			= {{0,0,0},{0,0,0},{0,0,0}},
+			 //GyroRotMInv 			= {{0,0,0},{0,0,0},{0,0,0}},
 			 ComplimentaryRotM 		= {{0,0,0},{0,0,0},{0,0,0}},
-			 ComplimentaryRotMInv 	= {{0,0,0},{0,0,0},{0,0,0}},
+			 //ComplimentaryRotMInv 	= {{0,0,0},{0,0,0},{0,0,0}},
 			 KalmankRotM 			= {{0,0,0},{0,0,0},{0,0,0}},
-			 KalmankRotMInv 		= {{0,0,0},{0,0,0},{0,0,0}},
-			 MadgwickRotM 			= {{0,0,0},{0,0,0},{0,0,0}},
-			 MadgwickRotMInv 		= {{0,0,0},{0,0,0},{0,0,0}};
+			 //KalmankRotMInv 		= {{0,0,0},{0,0,0},{0,0,0}},
+			 MadgwickRotM 			= {{0,0,0},{0,0,0},{0,0,0}};
+			 //MadgwickRotMInv 		= {{0,0,0},{0,0,0},{0,0,0}};
 
 	//statyczna inicjalizacja zmiennych
-	static Vector3f GyroAngles = {0,0,0}, GyroAngles2 ={};
+	static Vector3f GyroAngles = {0,0,0};
 	static Vector3f CFAngles = {0,0,0};
 	static Vector3f bias = {0,0,0};
 	static float quaternion[4] = {1.0,0.0,0.0,0.0};
@@ -35,9 +36,10 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	static Vector3f PosRecGyro = {0,0,0}, PosRecCF = {0,0,0}, PosRecKF = {0,0,0}, PosRecMF = {0,0,0};
 	static Vector3f PosABGyro = {0,0,0}, PosABCF = {0,0,0}, PosABKF = {0,0,0}, PosABMF = {0,0,0};
 	static PKalman P = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
+	static AvBuffer AccBuff = {}, GyroBuff ={}, MagBuff = {};
 	static bool isFirst = true;
 	static float MY_n = 0, siny_n = 0;
-	static int RotCnt1 = 0, RotCnt2 = 0;
+	static int RotCnt1 = 0, RotCnt2 = 0, cntA = 0, cntG = 0, cntM = 0;
 	static int ordvelgyro = 0, ordvelCF = 0, ordvelKF = 0, ordvelMF = 0, ordposgyro = 0, ordposCF = 0, ordposKF = 0, ordposMF = 0; // ---> przezanie zmiennych wskaznikiem!
 	static float 	fvvelgyro[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
 					fvvelCF[3][5] = {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}},
@@ -53,73 +55,72 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	RawDataOrientationCorrection(Acc,AccShift,AccCalib, AccR);
 	RawDataOrientationCorrection(Mag,MagShift,MagCalib, MagR);
 	V3Subtract(Gyro, GyroShift, GyroR);
-	Vector3f R = {0.059369, 0.017049, 0}, R1 = {-42.1212, -1.595155, 9.720848};
-	V3Subtract(GyroR, R1, GyroR);
 	NormaliseUnits(AccR, GyroR, AccN, GyroN);
 	changeSignOfVector(GyroN, GyroN);
 
-	V3Subtract(AccN, R, AccN);
-
+	/*---WYG£ADZENIE PRZEBIEGÓW FUNKCJI POPRZEZ ŒREDNIA RUCHOM¥---*/
+	MovingAverage(AccN, AccBuff, AccA, 8, &cntA);
+	MovingAverage(GyroN, GyroBuff, GyroA, 6, &cntG);
+	MovingAverage(MagR, MagBuff, MagA, 4, &cntM);
 
 	/*---WYZNACZANIE KATA OBROTU---*/
 	//Brak filtra
-	IntegrationReactangleMethod(GyroN, GyroAngles, 0.01);
-//	IntegratioAdamsBashworthMethod(GyroN,fvvelgyro,GyroAngles2, 0.01, ordvelgyro);
+	IntegrationReactangleMethod(GyroA, GyroAngles, sampleTime);
 
 	//Wspolny poczatek dla filtrow: Kalmana, komplementarnego
-	PitchRollYawMA(AccN, MagR, RawAngles, &MY_n, &RotCnt1);
-	//V3Subtract(RawAngles, MagOffset, RawAngles); ----------------------------> Co z t¹ funkcja
+	PitchRollYawMA(AccA, MagA, RawAngles, &MY_n, &RotCnt1);
 	RadiansToDegrees(RawAngles, RawAnglesDeg);
 
+	//Utworzenie kierunku osi x jako kierunku odniesienia
+	V3Subtract(RawAnglesDeg, MagRotation1, RawAnglesDeg);
+	V3Subtract(RawAnglesDeg, MagRotation2, RawAnglesDeg);
 
 	//Filtr komplementarny
-	ComplementaryFilter(CFAngles,GyroN,RawAnglesDeg,weight, 0.01);
-
+	ComplementaryFilter(CFAngles,GyroA,RawAnglesDeg,weight, sampleTime);
 
 	//Filtr Kalamana
-	KalmanFilter(RawAnglesDeg, GyroN, 0.01, KalmanAngles, bias, P, isFirst);
+	KalmanFilter(RawAnglesDeg, GyroA, sampleTime, KalmanAngles, bias, P, isFirst);
 
 	//MadgwickAHRS
-	DegreesToRadians(GyroN, GyroNRad);
-	MadgwickAHRSupdate(GyroNRad[0],GyroNRad[1],GyroNRad[2],AccR[0],AccR[1],AccR[2],MagR[0],MagR[2],MagR[1],quaternion);
+	DegreesToRadians(GyroA, GyroARad);
+	MadgwickAHRSupdate(GyroARad[0],GyroARad[1],GyroARad[2],AccR[0],AccR[1],AccR[2],MagR[0],MagR[2],MagR[1],quaternion);
 	QuaternionToEulerAngle(quaternion, MadgwickAngles, &siny_n, &RotCnt2);
 	RadiansToDegrees(MadgwickAngles, MadgwickAnglesDeg);
-
 
 
 	/*---WYZNACZENIE ODWROTNEJ MACIERZY OBROTOW DLA KAZDEGO Z FILTROW---*/
 	//Brak filtra
 	DegreesToRadians(GyroAngles, GyroAnglesRad);
 	RotationMatrixFromAngles(GyroAnglesRad, GyroRotM);
-	M3fInvert(GyroRotM, GyroRotMInv);
+	//M3fInvert(GyroRotM, GyroRotMInv);
 
 	//Filtr komplementarny
 	DegreesToRadians(CFAngles, CFAnglesRad);
 	RotationMatrixFromAngles(CFAnglesRad, ComplimentaryRotM);
-	M3fInvert(ComplimentaryRotM, ComplimentaryRotMInv);
+	//M3fInvert(ComplimentaryRotM, ComplimentaryRotMInv);
 
 	//Filtr Kalmana
 	DegreesToRadians(KalmanAngles, KalmanAnglesRad);
 	RotationMatrixFromAngles(KalmanAnglesRad, KalmankRotM);
-	M3fInvert(KalmankRotM, KalmankRotMInv);
+	//M3fInvert(KalmankRotM, KalmankRotMInv);
 
 	//MadgwickAHRS
 	RotationMatrixFromQuaternion(quaternion, MadgwickRotM);
-	M3fInvert(MadgwickRotM, MadgwickRotMInv);
+	//M3fInvert(MadgwickRotM, MadgwickRotMInv);
 
 
 	/*---OBROT WEKTORA PRZYSPIESZNIA WZGLEDEM MACIERZY OBROTOW---*/
 	//Brak filtra
-	V3fTransform(AccN, GyroRotM, AccTGyro);
+	V3fTransform(AccA, GyroRotM, AccTGyro);
 
 	//Filtr komplementarny
-	V3fTransform(AccN, ComplimentaryRotM, AccTCF); // -------------> Chyba nie potrzeba robic macierzy odwrotnej
+	V3fTransform(AccA, ComplimentaryRotM, AccTCF); // -------------> Chyba nie potrzeba robic macierzy odwrotnej
 
 	//Filtr Kalmana
-	V3fTransform(AccN, KalmankRotM, AccTKF);
+	V3fTransform(AccA, KalmankRotM, AccTKF);
 
 	//MadgwickAHRS
-	V3fTransform(AccN, MadgwickRotM, AccTMF);
+	V3fTransform(AccA, MadgwickRotM, AccTMF);
 
 
 	/*---REDUKCJA SKï¿½ADOWEJ GRAWITACJI Z WEKTORA PRZYSPIESZENIA---*/
@@ -138,40 +139,44 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 
 	/*---WYZNACZENIE PREDKOSCI RUCHU POJAZDU NA PODSTAWIE WEKTORA PRZYSPIESZENIA - 2 METODY CALKOWANIA---*/
 	//Brak filtra
-	IntegrationReactangleMethod(AccGRGyro, VelRecGyro, 0.01);
-	IntegratioAdamsBashworthMethod(AccGRGyro, fvvelgyro, VelABGyro, 0.01, ordvelgyro);
+	IntegrationReactangleMethod(AccGRGyro, VelRecGyro, sampleTime);
+	IntegratioAdamsBashworthMethod(AccGRGyro, fvvelgyro, VelABGyro, sampleTime, ordvelgyro);
 
 	//Filtr komplementarny
-	IntegrationReactangleMethod(AccGRCF, VelRecCF, 0.01);
-	IntegratioAdamsBashworthMethod(AccGRCF, fvvelCF, VelABCF, 0.01, ordvelCF);
+	IntegrationReactangleMethod(AccGRCF, VelRecCF, sampleTime);
+	IntegratioAdamsBashworthMethod(AccGRCF, fvvelCF, VelABCF, sampleTime, ordvelCF);
 
 	//Filtr Kalmana
-	IntegrationReactangleMethod(AccGRKF, VelRecKF, 0.01);
-	IntegratioAdamsBashworthMethod(AccGRKF, fvvelKF, VelABKF, 0.01, ordvelKF);
+	IntegrationReactangleMethod(AccGRKF, VelRecKF, sampleTime);
+	IntegratioAdamsBashworthMethod(AccGRKF, fvvelKF, VelABKF, sampleTime, ordvelKF);
 
 	//MadgwickAHRS
-	IntegrationReactangleMethod(AccGRMF, VelRecMF, 0.01);
-	IntegratioAdamsBashworthMethod(AccGRMF, fvvelMF, VelABMF, 0.01, ordvelMF);
+	IntegrationReactangleMethod(AccGRMF, VelRecMF, sampleTime);
+	IntegratioAdamsBashworthMethod(AccGRMF, fvvelMF, VelABMF, sampleTime, ordvelMF);
 
 
 	/*---WYZNACZENIE TRAJEKTORII RUCHU POJAZDU NA PODSTAWIE WEKTORA PREDKOSCI - 2 METODY CALKOWANIA---*/
 	//Brak filtra
-	IntegrationReactangleMethod(VelRecGyro, PosRecGyro, 0.01);
-	IntegratioAdamsBashworthMethod(VelABGyro, fvposgyro, PosABGyro, 0.01, ordposgyro);
+	IntegrationReactangleMethod(VelRecGyro, PosRecGyro, sampleTime);
+	IntegratioAdamsBashworthMethod(VelABGyro, fvposgyro, PosABGyro, sampleTime, ordposgyro);
 
 	//Filtr komplementarny
-	IntegrationReactangleMethod(VelRecCF, PosRecCF, 0.01);
-	IntegratioAdamsBashworthMethod(VelABCF, fvposCF, PosABCF, 0.01, ordposCF);
+	IntegrationReactangleMethod(VelRecCF, PosRecCF, sampleTime);
+	IntegratioAdamsBashworthMethod(VelABCF, fvposCF, PosABCF, sampleTime, ordposCF);
 
 	//Filtr Kalmana
-	IntegrationReactangleMethod(VelRecKF, PosRecKF, 0.01);
-	IntegratioAdamsBashworthMethod(VelABKF, fvposKF, PosABKF, 0.01, ordposKF);
+	IntegrationReactangleMethod(VelRecKF, PosRecKF, sampleTime);
+	IntegratioAdamsBashworthMethod(VelABKF, fvposKF, PosABKF, sampleTime, ordposKF);
 
 	//MadgwickAHRS
-	IntegrationReactangleMethod(VelRecMF, PosRecMF, 0.01);
-	IntegratioAdamsBashworthMethod(VelABMF, fvposMF, PosABMF, 0.01, ordposMF);
-	addVector3fToMatrix(AccGRCF, vResBuff, 0);
-	addVector3fToMatrix(KalmanAngles, vResBuff, 1);
+	IntegrationReactangleMethod(VelRecMF, PosRecMF, sampleTime);
+	IntegratioAdamsBashworthMethod(VelABMF, fvposMF, PosABMF, sampleTime, ordposMF);
+
+
+	/*---WYPISANIE WSZYSTKICH WYNIKOW---*/
+
+	addVector3fToMatrix(AccGRCF, vResBuff, 1);
+	addVector3fToMatrix(KalmanAngles, vResBuff, 0);
 	addVector3fToMatrix(AccTKF, vResBuff, 2);
 	addVector3fToMatrix(AccGRKF, vResBuff, 3);
 	addVector3fToMatrix(VelRecKF, vResBuff, 4);
@@ -180,44 +185,153 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 
 }
 
-void MagOffsetCalculation(Vector3f Data)
+void XYorietationCalibration(Vector3f DataOutput)
 {
-//	Vector3f VecAcc, VecMag, AccR, MagR, DataSum;
-//	int16_t DataAccel[3], DataMag[3];
-//
-//	for (int i=0; i<=200; i++)
-//	{
-//		LSM_Accel_GetXYZ(DataAccel);
-//		LSM_Mag_GetXYZ(DataMag);
-//
-//		intToVector3f(DataAccel, VecAcc);
-//		intToVector3f(DataMag, VecMag);
-//
-//		RawDataOrientationCorrection(VecAcc,AccShift,AccCalib, AccR);
-//		RawDataOrientationCorrection(VecMag,MagShift,MagCalib, MagR);
-//		PitchRollYawMA(AccR, MagR, Data);
-//		//RadiansToDegrees(Data, Data);
-//
-//		DataSum[2] += Data[2];
-//
-////		for (int j=0;j<=2;j++)
-////		{
-////			DataSum[j] += Data[j];
-////		}
-//		HAL_Delay(25);
-//	}
-//
-//	Data[0] = 0;
-//	Data[1] = 0;
-//	Data[2] = DataSum[2]/200;
-//	HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 1);
-//	HAL_Delay(200);
-//
-////	for (int j=0;j<=2;j++)
-////	{
-////		Data[j] = DataBuff[j] /200;
-////	}
+	Vector3f VecAcc = {}, VecMag = {}, AccR = {}, MagR = {},  AnglesRad = {};
+	int16_t DataAccel[3] = {}, DataMag[3] = {};
+	static float MY_n;
+	static int RotCnt1;
+
+	LSM_Accel_GetXYZ(DataAccel);
+	LSM_Mag_GetXYZ(DataMag);
+
+	intToVector3f(DataAccel, VecAcc);
+	intToVector3f(DataMag, VecMag);
+
+	RawDataOrientationCorrection(VecAcc,AccShift,AccCalib, AccR);
+	RawDataOrientationCorrection(VecMag,MagShift,MagCalib, MagR);
+
+	PitchRollYawMA(AccR, MagR, AnglesRad, &MY_n, &RotCnt1);
+	RadiansToDegrees(AnglesRad, DataOutput);
 }
+
+float ZorientationCorrection(Vector3f Acc, Vector3f Gyro, Vector3f Mag)
+{
+	Vector3f AccR= {0,0,0}, GyroR= {0,0,0}, MagR= {0,0,0}, AccN = {0,0,0}, GyroN = {0,0,0}, angleRad = {}, angleDeg = {};
+	Vector3f RawAngles= {0,0,0}, RawAnglesDeg = {0,0,0}, KalmanAngles = {0,0,0}, KalmanAnglesRad = {0,0,0}, AccTKF = {0,0,0};
+	Matrix3f KalmankRotM = {{0,0,0},{0,0,0},{0,0,0}};
+	volatile float normA = 0;
+
+
+	static Vector3f bias = {0,0,0};
+	static PKalman P = {{{0,0},{0,0}},{{0,0},{0,0}},{{0,0},{0,0}}};
+	static bool isFirst = true;
+	static float MY_n = 0, sum_angle = 0, angle = 0;
+	static int RotCnt1 = 0, cnt = 0;
+
+	RawDataOrientationCorrection(Acc,AccShift,AccCalib, AccR);
+	RawDataOrientationCorrection(Mag,MagShift,MagCalib, MagR);
+	V3Subtract(Gyro, GyroShift, GyroR);
+	NormaliseUnits(AccR, GyroR, AccN, GyroN);
+	changeSignOfVector(GyroN, GyroN);
+
+	PitchRollYawMA(AccN, MagR, RawAngles, &MY_n, &RotCnt1);
+	RadiansToDegrees(RawAngles, RawAnglesDeg);
+	V3Subtract(RawAnglesDeg, MagRotation1, RawAnglesDeg);
+	V3Subtract(RawAnglesDeg, MagRotation2, RawAnglesDeg);
+	KalmanFilter(RawAnglesDeg, GyroN, sampleTime, KalmanAngles, bias, P, isFirst);
+
+	DegreesToRadians(KalmanAngles, KalmanAnglesRad);
+	RotationMatrixFromAngles(KalmanAnglesRad, KalmankRotM);
+
+	V3fTransform(AccN, KalmankRotM, AccTKF);
+
+	normA = Norm(VectorTo2PowSum(AccTKF));
+
+	if (normA >= 10.0)
+	{
+		angleRad[2] = atan2f(AccTKF[1]/normA, AccTKF[0]/normA);
+		RadiansToDegrees(angleRad, angleDeg);
+
+		sum_angle += angleDeg[2];
+		cnt++;
+		angle = sum_angle/cnt;
+
+		return angle;
+	}else{
+		return angle;
+	}
+
+}
+
+void AccelOffsetCalculation(Vector3f DataOutput)
+{
+	Vector3f fData = {}, Sum = {};
+	int16_t Data[3] = {};
+
+	for (int i=1;i<=200;i++)
+	{
+		LSM_Accel_GetXYZ(Data);
+		intToVector3f(Data, fData);
+
+		for (int j=0;j<=2;j++)
+		{
+			Sum[j] += fData[j];
+			DataOutput[j] = Sum[j]/i;
+		}
+		HAL_Delay(25);
+	}
+
+	HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 1);
+	HAL_Delay(200);
+}
+
+void GyroOffsetCalculation(Vector3f DataOutput)
+{
+	Vector3f fData = {}, Sum = {};
+	int16_t Data[3] = {};
+
+	for (int i=1;i<=200;i++)
+	{
+		L3G_Gyro_GetXYZ(Data);
+		intToVector3f(Data, fData);
+
+		for (int j=0;j<=2;j++)
+		{
+			Sum[j] += fData[j];
+			DataOutput[j] = Sum[j]/i;
+		}
+		HAL_Delay(25);
+	}
+
+	HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 1);
+	HAL_Delay(200);
+}
+
+void MagOffsetCalculation(Vector3f DataOutput)
+{
+	Vector3f VecAcc = {}, VecMag = {}, AccR = {}, MagR = {}, DataSum = {}, AnglesRad = {}, AnglesDeg = {};
+	int16_t DataAccel[3] = {}, DataMag[3] = {};
+	static float MY_n;
+	static int RotCnt1;
+
+	for (int i=1; i<=200; i++)
+	{
+		LSM_Accel_GetXYZ(DataAccel);
+		LSM_Mag_GetXYZ(DataMag);
+
+		intToVector3f(DataAccel, VecAcc);
+		intToVector3f(DataMag, VecMag);
+
+		RawDataOrientationCorrection(VecAcc,AccShift,AccCalib, AccR);
+		RawDataOrientationCorrection(VecMag,MagShift,MagCalib, MagR);
+
+		PitchRollYawMA(AccR, MagR, AnglesRad, &MY_n, &RotCnt1);
+		RadiansToDegrees(AnglesRad, AnglesDeg);
+
+		DataSum[2] += AnglesDeg[2];
+
+		HAL_Delay(25);
+	}
+
+	DataOutput[0] = 0;
+	DataOutput[1] = 0;
+	DataOutput[2] = DataSum[2]/200;
+
+	HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 1);
+	HAL_Delay(200);
+}
+
 
 void RawDataOrientationCorrection(Vector3f V, const Vector3f VCorr, const Matrix3f MCorr, float *VRes) //dzia³a w chuj
 {
@@ -236,7 +350,6 @@ void PitchRollYawMA(Vector3f AccCorr, Vector3f MagCorr, float *Angles, float *MY
 
 	float normA = Norm(VectorTo2PowSum(AccCorr));
 	float pitchA = asinf(-AccCorr[0]/normA);
-	//float rollA = asinf(AccCorr[1]/(cos(pitchA)*normA));
 	float rollA = asinf(AccCorr[1]/(normA*cos(pitchA)));
 
 	float normM = Norm(VectorTo2PowSum(MagCorr));

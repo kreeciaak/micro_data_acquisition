@@ -35,7 +35,7 @@ void V3Subtract(Vector3f V1, const Vector3f V2, float *VRes)
 	VRes[2] = V1[2] - V2[2];
 }
 
-void RotationMatrixFromQuaternion(float *q, Matrix3f RotM) //q bez wskaznika? , tez sie cos jebei
+void RotationMatrixFromQuaternion(float *q, Matrix3f RotM)
 {
 	RotM[0][0] = 1 - 2*(powf(q[2],2) + powf(q[3], 2));
 	RotM[1][0] = 2 * (q[1]*q[2] + q[3]*q[0]);
@@ -50,8 +50,7 @@ void RotationMatrixFromQuaternion(float *q, Matrix3f RotM) //q bez wskaznika? , 
 	RotM[2][2] = 1- 2*(powf(q[1],2) + powf(q[2],2));
 }
 
-//void RotationMatrixFromAngles(Vector3f Angles, float **RotM) //Tait-Bryan angles - A3*A2*A1
-void RotationMatrixFromAngles(Vector3f Angles, Matrix3f RotM)
+void RotationMatrixFromAngles(Vector3f Angles, Matrix3f RotM) //Tait-Bryan angles - A3*A2*A1
 {
 	volatile float yaw = Angles[2], pitch = Angles[1], roll = Angles[0];
 
@@ -68,42 +67,74 @@ void RotationMatrixFromAngles(Vector3f Angles, Matrix3f RotM)
 	RotM[2][2] = cosf(pitch)*cosf(roll);
 }
 
-float M3fDefiner(Matrix3f M1)
+//float M3fDefiner(Matrix3f M1)
+//{
+//	float def;
+//
+//	def =	M1[0][0] * M1[1][1] * M1[2][2]
+//		  + M1[1][0] * M1[0][2] * M1[2][1]
+//		  + M1[0][1] * M1[2][0] * M1[1][2]
+//		  - M1[2][0] * M1[1][1] * M1[0][2]
+//		  - M1[1][0] * M1[2][2] * M1[0][1]
+//		  - M1[2][1] * M1[0][0] * M1[1][2];
+//
+//	return def;
+//}
+//
+//float M3fInvert(Matrix3f M1, Matrix3f MInv)
+//{
+//	float def = M3fDefiner(M1);
+//	if (def == 0){
+//		return 0;
+//	}else{
+//		def = 1.0f/def;
+//
+//		MInv[0][0] = ( M1[1][1] * M1[2][2] - M1[1][2] * M1[2][1]) *def;
+//		MInv[1][0] = (-M1[1][0] * M1[2][2] + M1[1][2] * M1[2][0]) *def;
+//		MInv[2][0] = ( M1[1][0] * M1[2][1] - M1[1][1] * M1[2][0]) *def;
+//
+//		MInv[0][1] = (-M1[0][1] * M1[2][2] + M1[0][2] * M1[2][1]) *def;
+//		MInv[1][1] = ( M1[0][0] * M1[2][2] - M1[0][2] * M1[2][0]) *def;
+//		MInv[2][1] = (-M1[0][0] * M1[2][1] + M1[0][1] * M1[2][0]) *def;
+//
+//		MInv[0][2] = ( M1[0][1] * M1[1][2] - M1[0][2] * M1[1][1]) *def;
+//		MInv[1][2] = (-M1[0][0] * M1[1][2] + M1[0][2] * M1[1][0]) *def;
+//		MInv[2][2] = ( M1[0][0] * M1[1][1] - M1[0][1] * M1[1][0]) *def;
+//
+//		return 1;
+//	}
+//}
+
+void MovingAverage(Vector3f DataInput, AvBuffer Buffer, Vector3f DataOutput, int numofrows, int *cnt)
 {
-	float def;
+	Vector3f sum = {};
 
-	def =	M1[0][0] * M1[1][1] * M1[2][2]
-		  + M1[1][0] * M1[0][2] * M1[2][1]
-		  + M1[0][1] * M1[2][0] * M1[1][2]
-		  - M1[2][0] * M1[1][1] * M1[0][2]
-		  - M1[1][0] * M1[2][2] * M1[0][1]
-		  - M1[2][1] * M1[0][0] * M1[1][2];
+	for (int i=0;i<=2;i++)
+	{
+		if (*cnt<=numofrows)
+		{
+			Buffer[*cnt][i] = DataInput[i];
+			for (int j=0;j<=*cnt;j++)
+			{
+				sum[i] += Buffer[j][i];
+			}
+			DataOutput[i] = sum[i]/(*cnt+1);
+		}else{
+			for (int j=0;j<numofrows;j++)
+			{
+				Buffer[j][i] = Buffer[j+1][i];
+			}
 
-	return def;
-}
+			Buffer[numofrows-1][i] = DataInput[i];
 
-float M3fInvert(Matrix3f M1, Matrix3f MInv)
-{
-	float def = M3fDefiner(M1);
-	if (def == 0){
-		return 0;
-	}else{
-		def = 1.0f/def;
-
-		MInv[0][0] = ( M1[1][1] * M1[2][2] - M1[1][2] * M1[2][1]) *def;
-		MInv[1][0] = (-M1[1][0] * M1[2][2] + M1[1][2] * M1[2][0]) *def;
-		MInv[2][0] = ( M1[1][0] * M1[2][1] - M1[1][1] * M1[2][0]) *def;
-
-		MInv[0][1] = (-M1[0][1] * M1[2][2] + M1[0][2] * M1[2][1]) *def;
-		MInv[1][1] = ( M1[0][0] * M1[2][2] - M1[0][2] * M1[2][0]) *def;
-		MInv[2][1] = (-M1[0][0] * M1[2][1] + M1[0][1] * M1[2][0]) *def;
-
-		MInv[0][2] = ( M1[0][1] * M1[1][2] - M1[0][2] * M1[1][1]) *def;
-		MInv[1][2] = (-M1[0][0] * M1[1][2] + M1[0][2] * M1[1][0]) *def;
-		MInv[2][2] = ( M1[0][0] * M1[1][1] - M1[0][1] * M1[1][0]) *def;
-
-		return 1;
+			for (int j=0;j<numofrows;j++)
+			{
+				sum[i] += Buffer[j][i];
+			}
+			DataOutput[i] = sum[i]/numofrows;
+		}
 	}
+	*cnt = *cnt + 1;
 }
 
 void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Timestamp)
@@ -111,6 +142,14 @@ void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Ti
 	for (int i=0;i<=2;i++)
 	{
 		DataOutput[i] += DataInput[i] * Timestamp;
+	}
+}
+
+void IntegrationTrapezoidmethod(Vector3f DataInput, Vector3f Buffer, Vector3f DataOutput, float Timestamp)
+{
+	for (int i=0;i<=2;i++)
+	{
+		DataOutput[i] += Timestamp/2 * (DataInput[i] + Buffer[i]);
 	}
 }
 
