@@ -67,43 +67,43 @@ void RotationMatrixFromAngles(Vector3f Angles, Matrix3f RotM) //Tait-Bryan angle
 	RotM[2][2] = cosf(pitch)*cosf(roll);
 }
 
-//float M3fDefiner(Matrix3f M1)
-//{
-//	float def;
-//
-//	def =	M1[0][0] * M1[1][1] * M1[2][2]
-//		  + M1[1][0] * M1[0][2] * M1[2][1]
-//		  + M1[0][1] * M1[2][0] * M1[1][2]
-//		  - M1[2][0] * M1[1][1] * M1[0][2]
-//		  - M1[1][0] * M1[2][2] * M1[0][1]
-//		  - M1[2][1] * M1[0][0] * M1[1][2];
-//
-//	return def;
-//}
-//
-//float M3fInvert(Matrix3f M1, Matrix3f MInv)
-//{
-//	float def = M3fDefiner(M1);
-//	if (def == 0){
-//		return 0;
-//	}else{
-//		def = 1.0f/def;
-//
-//		MInv[0][0] = ( M1[1][1] * M1[2][2] - M1[1][2] * M1[2][1]) *def;
-//		MInv[1][0] = (-M1[1][0] * M1[2][2] + M1[1][2] * M1[2][0]) *def;
-//		MInv[2][0] = ( M1[1][0] * M1[2][1] - M1[1][1] * M1[2][0]) *def;
-//
-//		MInv[0][1] = (-M1[0][1] * M1[2][2] + M1[0][2] * M1[2][1]) *def;
-//		MInv[1][1] = ( M1[0][0] * M1[2][2] - M1[0][2] * M1[2][0]) *def;
-//		MInv[2][1] = (-M1[0][0] * M1[2][1] + M1[0][1] * M1[2][0]) *def;
-//
-//		MInv[0][2] = ( M1[0][1] * M1[1][2] - M1[0][2] * M1[1][1]) *def;
-//		MInv[1][2] = (-M1[0][0] * M1[1][2] + M1[0][2] * M1[1][0]) *def;
-//		MInv[2][2] = ( M1[0][0] * M1[1][1] - M1[0][1] * M1[1][0]) *def;
-//
-//		return 1;
-//	}
-//}
+float M3fDefiner(Matrix3f M1)
+{
+	float def;
+
+	def =	M1[0][0] * M1[1][1] * M1[2][2]
+		  + M1[1][0] * M1[0][2] * M1[2][1]
+		  + M1[0][1] * M1[2][0] * M1[1][2]
+		  - M1[2][0] * M1[1][1] * M1[0][2]
+		  - M1[1][0] * M1[2][2] * M1[0][1]
+		  - M1[2][1] * M1[0][0] * M1[1][2];
+
+	return def;
+}
+
+float M3fInvert(Matrix3f M1, Matrix3f MInv)
+{
+	float def = M3fDefiner(M1);
+	if (def == 0){
+		return 0;
+	}else{
+		def = 1.0f/def;
+
+		MInv[0][0] = ( M1[1][1] * M1[2][2] - M1[1][2] * M1[2][1]) *def;
+		MInv[1][0] = (-M1[1][0] * M1[2][2] + M1[1][2] * M1[2][0]) *def;
+		MInv[2][0] = ( M1[1][0] * M1[2][1] - M1[1][1] * M1[2][0]) *def;
+
+		MInv[0][1] = (-M1[0][1] * M1[2][2] + M1[0][2] * M1[2][1]) *def;
+		MInv[1][1] = ( M1[0][0] * M1[2][2] - M1[0][2] * M1[2][0]) *def;
+		MInv[2][1] = (-M1[0][0] * M1[2][1] + M1[0][1] * M1[2][0]) *def;
+
+		MInv[0][2] = ( M1[0][1] * M1[1][2] - M1[0][2] * M1[1][1]) *def;
+		MInv[1][2] = (-M1[0][0] * M1[1][2] + M1[0][2] * M1[1][0]) *def;
+		MInv[2][2] = ( M1[0][0] * M1[1][1] - M1[0][1] * M1[1][0]) *def;
+
+		return 1;
+	}
+}
 
 void MovingAverage(Vector3f DataInput, AvBuffer Buffer, Vector3f DataOutput, int numofrows, int *cnt)
 {
@@ -111,7 +111,7 @@ void MovingAverage(Vector3f DataInput, AvBuffer Buffer, Vector3f DataOutput, int
 
 	for (int i=0;i<=2;i++)
 	{
-		if (*cnt<=numofrows)
+		if (*cnt<numofrows)
 		{
 			Buffer[*cnt][i] = DataInput[i];
 			for (int j=0;j<=*cnt;j++)
@@ -150,6 +150,7 @@ void IntegrationTrapezoidmethod(Vector3f DataInput, Vector3f Buffer, Vector3f Da
 	for (int i=0;i<=2;i++)
 	{
 		DataOutput[i] += Timestamp/2 * (DataInput[i] + Buffer[i]);
+		Buffer[i] = DataInput[i];
 	}
 }
 

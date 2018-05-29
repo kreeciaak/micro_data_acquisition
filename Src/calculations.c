@@ -18,13 +18,13 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	Vector3f AccTGyro = {0,0,0}, AccTCF = {0,0,0}, AccTKF = {0,0,0}, AccTMF = {0,0,0};
 	Vector3f AccGRGyro = {0,0,0}, AccGRCF = {0,0,0}, AccGRKF = {0,0,0}, AccGRMF = {0,0,0};
 	Matrix3f GyroRotM 				= {{0,0,0},{0,0,0},{0,0,0}},
-			 //GyroRotMInv 			= {{0,0,0},{0,0,0},{0,0,0}},
+			 GyroRotMInv 			= {{0,0,0},{0,0,0},{0,0,0}},
 			 ComplimentaryRotM 		= {{0,0,0},{0,0,0},{0,0,0}},
-			 //ComplimentaryRotMInv 	= {{0,0,0},{0,0,0},{0,0,0}},
+			 ComplimentaryRotMInv 	= {{0,0,0},{0,0,0},{0,0,0}},
 			 KalmankRotM 			= {{0,0,0},{0,0,0},{0,0,0}},
-			 //KalmankRotMInv 		= {{0,0,0},{0,0,0},{0,0,0}},
-			 MadgwickRotM 			= {{0,0,0},{0,0,0},{0,0,0}};
-			 //MadgwickRotMInv 		= {{0,0,0},{0,0,0},{0,0,0}};
+			 KalmankRotMInv 		= {{0,0,0},{0,0,0},{0,0,0}},
+			 MadgwickRotM 			= {{0,0,0},{0,0,0},{0,0,0}},
+			 MadgwickRotMInv 		= {{0,0,0},{0,0,0},{0,0,0}};
 
 	//statyczna inicjalizacja zmiennych
 	static Vector3f GyroAngles = {0,0,0};
@@ -59,9 +59,9 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	changeSignOfVector(GyroN, GyroN);
 
 	/*---WYG£ADZENIE PRZEBIEGÓW FUNKCJI POPRZEZ ŒREDNIA RUCHOM¥---*/
-	MovingAverage(AccN, AccBuff, AccA, 8, &cntA);
-	MovingAverage(GyroN, GyroBuff, GyroA, 6, &cntG);
-	MovingAverage(MagR, MagBuff, MagA, 4, &cntM);
+	MovingAverage(AccN, AccBuff, AccA, 14, &cntA);
+	MovingAverage(GyroN, GyroBuff, GyroA, 12, &cntG);
+	MovingAverage(MagR, MagBuff, MagA, 8, &cntM);
 
 	/*---WYZNACZANIE KATA OBROTU---*/
 	//Brak filtra
@@ -82,6 +82,9 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	KalmanFilter(RawAnglesDeg, GyroA, sampleTime, KalmanAngles, bias, P, isFirst);
 
 	//MadgwickAHRS
+	//changeSignOfVector(GyroA, GyroA);
+	//changeSignOfVector(AccR, AccR);
+	//changeSignOfVector(MagR, MagR);
 	DegreesToRadians(GyroA, GyroARad);
 	MadgwickAHRSupdate(GyroARad[0],GyroARad[1],GyroARad[2],AccR[0],AccR[1],AccR[2],MagR[0],MagR[2],MagR[1],quaternion);
 	QuaternionToEulerAngle(quaternion, MadgwickAngles, &siny_n, &RotCnt2);
@@ -90,37 +93,47 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 
 	/*---WYZNACZENIE ODWROTNEJ MACIERZY OBROTOW DLA KAZDEGO Z FILTROW---*/
 	//Brak filtra
+	changeSignOfVector(GyroAngles, GyroAngles);
 	DegreesToRadians(GyroAngles, GyroAnglesRad);
 	RotationMatrixFromAngles(GyroAnglesRad, GyroRotM);
-	//M3fInvert(GyroRotM, GyroRotMInv);
+	M3fInvert(GyroRotM, GyroRotMInv);
 
 	//Filtr komplementarny
+	changeSignOfVector(CFAngles, CFAngles);
 	DegreesToRadians(CFAngles, CFAnglesRad);
 	RotationMatrixFromAngles(CFAnglesRad, ComplimentaryRotM);
-	//M3fInvert(ComplimentaryRotM, ComplimentaryRotMInv);
+	M3fInvert(ComplimentaryRotM, ComplimentaryRotMInv);
 
 	//Filtr Kalmana
+	changeSignOfVector(KalmanAngles, KalmanAngles);
 	DegreesToRadians(KalmanAngles, KalmanAnglesRad);
 	RotationMatrixFromAngles(KalmanAnglesRad, KalmankRotM);
-	//M3fInvert(KalmankRotM, KalmankRotMInv);
+	M3fInvert(KalmankRotM, KalmankRotMInv);
 
 	//MadgwickAHRS
 	RotationMatrixFromQuaternion(quaternion, MadgwickRotM);
-	//M3fInvert(MadgwickRotM, MadgwickRotMInv);
+	M3fInvert(MadgwickRotM, MadgwickRotMInv);
 
 
 	/*---OBROT WEKTORA PRZYSPIESZNIA WZGLEDEM MACIERZY OBROTOW---*/
 	//Brak filtra
-	V3fTransform(AccA, GyroRotM, AccTGyro);
+	V3fTransform(AccA, GyroRotMInv, AccTGyro);
 
 	//Filtr komplementarny
-	V3fTransform(AccA, ComplimentaryRotM, AccTCF); // -------------> Chyba nie potrzeba robic macierzy odwrotnej
+	V3fTransform(AccA, ComplimentaryRotMInv, AccTCF); // -------------> Chyba nie potrzeba robic macierzy odwrotnej
 
 	//Filtr Kalmana
-	V3fTransform(AccA, KalmankRotM, AccTKF);
+	V3fTransform(AccA, KalmankRotMInv, AccTKF);
 
 	//MadgwickAHRS
-	V3fTransform(AccA, MadgwickRotM, AccTMF);
+	V3fTransform(AccA, MadgwickRotMInv, AccTMF);
+
+//	if (Norm(VectorTo2PowSum(AccTKF)) < 9.761)
+//	{
+//		AccTKF[0] = 0;
+//		AccTKF[1] = 0;
+//		AccTKF[2] = GravityConst;
+//	}
 
 
 	/*---REDUKCJA SKï¿½ADOWEJ GRAWITACJI Z WEKTORA PRZYSPIESZENIA---*/
@@ -140,48 +153,52 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, 
 	/*---WYZNACZENIE PREDKOSCI RUCHU POJAZDU NA PODSTAWIE WEKTORA PRZYSPIESZENIA - 2 METODY CALKOWANIA---*/
 	//Brak filtra
 	IntegrationReactangleMethod(AccGRGyro, VelRecGyro, sampleTime);
-	IntegratioAdamsBashworthMethod(AccGRGyro, fvvelgyro, VelABGyro, sampleTime, ordvelgyro);
+//	IntegratioAdamsBashworthMethod(AccGRGyro, fvvelgyro, VelABGyro, sampleTime, ordvelgyro);
 
 	//Filtr komplementarny
 	IntegrationReactangleMethod(AccGRCF, VelRecCF, sampleTime);
-	IntegratioAdamsBashworthMethod(AccGRCF, fvvelCF, VelABCF, sampleTime, ordvelCF);
+//	IntegratioAdamsBashworthMethod(AccGRCF, fvvelCF, VelABCF, sampleTime, ordvelCF);
 
 	//Filtr Kalmana
 	IntegrationReactangleMethod(AccGRKF, VelRecKF, sampleTime);
-	IntegratioAdamsBashworthMethod(AccGRKF, fvvelKF, VelABKF, sampleTime, ordvelKF);
+	IntegrationTrapezoidmethod(AccGRKF, VelABCF, VelABKF, sampleTime);
+//	IntegratioAdamsBashworthMethod(AccGRKF, fvvelKF, VelABKF, sampleTime, ordvelKF);
 
 	//MadgwickAHRS
 	IntegrationReactangleMethod(AccGRMF, VelRecMF, sampleTime);
-	IntegratioAdamsBashworthMethod(AccGRMF, fvvelMF, VelABMF, sampleTime, ordvelMF);
+//	IntegratioAdamsBashworthMethod(AccGRMF, fvvelMF, VelABMF, sampleTime, ordvelMF);
 
 
 	/*---WYZNACZENIE TRAJEKTORII RUCHU POJAZDU NA PODSTAWIE WEKTORA PREDKOSCI - 2 METODY CALKOWANIA---*/
 	//Brak filtra
 	IntegrationReactangleMethod(VelRecGyro, PosRecGyro, sampleTime);
-	IntegratioAdamsBashworthMethod(VelABGyro, fvposgyro, PosABGyro, sampleTime, ordposgyro);
+//	IntegratioAdamsBashworthMethod(VelABGyro, fvposgyro, PosABGyro, sampleTime, ordposgyro);
 
 	//Filtr komplementarny
 	IntegrationReactangleMethod(VelRecCF, PosRecCF, sampleTime);
-	IntegratioAdamsBashworthMethod(VelABCF, fvposCF, PosABCF, sampleTime, ordposCF);
+//	IntegratioAdamsBashworthMethod(VelABCF, fvposCF, PosABCF, sampleTime, ordposCF);
 
 	//Filtr Kalmana
 	IntegrationReactangleMethod(VelRecKF, PosRecKF, sampleTime);
-	IntegratioAdamsBashworthMethod(VelABKF, fvposKF, PosABKF, sampleTime, ordposKF);
+	IntegrationTrapezoidmethod(VelABKF, PosABCF, PosABKF, sampleTime);
+//	IntegratioAdamsBashworthMethod(VelABKF, fvposKF, PosABKF, sampleTime, ordposKF);
 
 	//MadgwickAHRS
 	IntegrationReactangleMethod(VelRecMF, PosRecMF, sampleTime);
-	IntegratioAdamsBashworthMethod(VelABMF, fvposMF, PosABMF, sampleTime, ordposMF);
+//	IntegratioAdamsBashworthMethod(VelABMF, fvposMF, PosABMF, sampleTime, ordposMF);
 
 
 	/*---WYPISANIE WSZYSTKICH WYNIKOW---*/
 
-	addVector3fToMatrix(AccGRCF, vResBuff, 1);
-	addVector3fToMatrix(KalmanAngles, vResBuff, 0);
-	addVector3fToMatrix(AccTKF, vResBuff, 2);
-	addVector3fToMatrix(AccGRKF, vResBuff, 3);
-	addVector3fToMatrix(VelRecKF, vResBuff, 4);
-	addVector3fToMatrix(PosRecKF, vResBuff, 5);
-	addVector3fToMatrix(PosABKF, vResBuff, 6);
+	addVector3fToMatrix(AccA, vResBuff, 1);
+	addVector3fToMatrix(AccN, vResBuff, 0);
+	addVector3fToMatrix(RawAnglesDeg, vResBuff, 2);
+	addVector3fToMatrix(KalmanAngles, vResBuff, 3);
+	addVector3fToMatrix(AccTKF, vResBuff, 4);
+	addVector3fToMatrix(AccGRKF, vResBuff, 5);
+	addVector3fToMatrix(VelRecKF, vResBuff, 6);
+	addVector3fToMatrix(PosRecKF, vResBuff, 7);
+	addVector3fToMatrix(PosABKF, vResBuff, 8);
 
 }
 

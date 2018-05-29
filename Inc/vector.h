@@ -21,7 +21,7 @@
 
 typedef float Vector3f[3];
 typedef float Matrix3f[3][3];
-typedef float Result[7][3];
+typedef float Result[9][3];
 typedef float PKalman[3][2][2];
 typedef float AvBuffer[16][3];
 
@@ -33,8 +33,8 @@ void V3Subtract(Vector3f V1, const Vector3f V2, float *VRes);
 void RotationMatrixFromQuaternion(float *q, Matrix3f RotM);
 //void RotationMatrixFromAngles(Vector3f Angles, float **RotM);
 void RotationMatrixFromAngles(Vector3f Angles, Matrix3f RotM);
-//float M3fDefiner(Matrix3f M1);
-//float M3fInvert(Matrix3f M1, Matrix3f MInv);
+float M3fDefiner(Matrix3f M1);
+float M3fInvert(Matrix3f M1, Matrix3f MInv);
 //float M3fInvert(Matrix3f M1, float **MInv);
 void MovingAverage(Vector3f DataInput, AvBuffer Buffer, Vector3f DataOutput, int numofrows, int *cnt);
 void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Timestamp);

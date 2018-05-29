@@ -69,13 +69,13 @@ TIM_HandleTypeDef htim10;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-char str1[220] = {0};
+char str1[300] = {0};
 int16_t AccelData[3], GyroData[3], MagData[3];
 Result result;
 Vector3f fAccelData, fGyroData, fMagData, AccelOffset, GyroOffset, MagOffset, RawAnglesDeg;
 float z_or_corr = 0, acc_mag = 0;
-int flag = 1;
-int Procedureflag = 3; //1 - XYorientationCorrection, 2 - OffsetCalibration, 3 - ZOrientationCorrection, 4 - Main program
+int flag = -1;
+int Procedureflag = 4; //1 - XYorientationCorrection, 2 - OffsetCalibration, 3 - ZOrientationCorrection, 4 - Main program
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -408,12 +408,13 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
 		if (Procedureflag == 4)
 		{
-			RawToResult(fAccelData, fGyroData, fMagData, MagOffset, result);
-			//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2],result[5][0],result[5][1],result[5][2],result[6][0],result[6][1],result[6][2]);
+			//RawToResult(fAccelData, fGyroData, fMagData, MagOffset, result);
+			//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2],result[5][0],result[5][1],result[5][2],result[6][0],result[6][1],result[6][2],result[7][0],result[7][1],result[7][2],result[8][0],result[8][1],result[8][2]);
 			//sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2]);
 			//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[1][0],result[1][1],result[1][2],result[0][0],result[0][1],result[0][2]);
-			sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r", AccelOffset[0], AccelOffset[1], AccelOffset[2]);
-			CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
+			//sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r", AccelOffset[0], AccelOffset[1], AccelOffset[2]);
+			//sprintf(str1, "%06.4f\n\r", result[0][0]);
+			//CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
 		}
 	}
 }
@@ -430,6 +431,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	  if (GPIO_Pin == DRDY_ACC_Pin)
 	  {
 		  LSM_Accel_GetXYZ(AccelData);
+		  sprintf(str1, "%06.4f\n\r", fAccelData[0]);
+		  CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
 	  }
 
 	  if (GPIO_Pin == DRDY_MAG_Pin)
