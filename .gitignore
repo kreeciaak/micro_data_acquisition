@@ -5,4 +5,4 @@ MGR Run.cfg
 .cproject
 MGR.xml
 .project
-.settings/
+.settings/*
