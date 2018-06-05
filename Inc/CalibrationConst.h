@@ -9,15 +9,19 @@
 #define CALIBRATIONCONST_H_
 
 
-#define sampleFreq		100.0f		// sample frequency in Hz
+#define sampleFreq		400.0f		// sample frequency in Hz
 #define betaDef			0.05f		// 2 * proportional gain
-#define accelSampleTime	1/100.0f
-#define gyroSampleTime	1/95.0f
-#define sampleTime		1/100.0f
+#define accelSampleTime	1/400.0f
+#define gyroSampleTime	1/380.0f
+#define sampleTime		1/400.0f
+#define FirstOffLimit	4000
+#define	NextOffLimit	800
+#define LowPassCoef		0.1f
+#define ZeroMoveTrig	sampleFreq/2
 
 
 //Wartoœc poprawki kata obrotu wokol osi z z procedury 3s
-static const Vector3f MagRotation2 = {
+static const Vector3f MagOff2 = {
 			0.0f,
 			0.0f,
 			0.0f
@@ -36,11 +40,6 @@ static const Vector3f GyroShift = {
 		-39.596f
 		};
 
-static const Vector3f MagRotation1 = {
-			0.0f,
-			0.0f,
-			0.0f
-		};
 
 //Wartoœci kalibracyjne z magneto
 static const Vector3f MagShift = {

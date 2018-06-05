@@ -137,7 +137,15 @@ void MovingAverage(Vector3f DataInput, AvBuffer Buffer, Vector3f DataOutput, int
 	*cnt = *cnt + 1;
 }
 
-void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Timestamp)
+//void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Timestamp)
+//{
+//	for (int i=0;i<=2;i++)
+//	{
+//		DataOutput[i] += DataInput[i] * Timestamp;
+//	}
+//}
+
+void IntegrationReactangleMethod(Vector3f DataInput, Vector3f DataOutput, float Timestamp)
 {
 	for (int i=0;i<=2;i++)
 	{
@@ -202,6 +210,23 @@ void NormaliseUnits(Vector3f Acc, Vector3f Gyro, float *AccN, float *GyroN)
 		GyroN[i] = Gyro[i] * RegisterToDPS;
 	}
 }
+
+void V3Sum(Vector3f DataInput, Vector3f DataOutput)
+{
+	for (int i=0;i<=2;i++)
+	{
+		DataOutput[i] += DataInput[i];
+	}
+}
+
+void V3DivideConst(Vector3f DataInput, Vector3f DataOutput, int divideby)
+{
+	for (int i=0;i<=2;i++)
+	{
+		DataOutput[i] = DataInput[i] / divideby;
+	}
+}
+
 
 float VectorTo2PowSum(Vector3f V) {
 	float result = 0.0;
@@ -305,3 +330,11 @@ void changeSignOfVector(Vector3f V1, Vector3f V2)
 	}
 }
 
+void lowPassFilter(Vector3f AccO, Vector3f LP_prev, Vector3f AccLP, float coef)
+{
+	for(int i=0;i<=2;i++)
+	{
+		AccLP[i] = LP_prev[i] + (AccO[i]-LP_prev[i]) * coef;
+		LP_prev[i] = AccLP[i];
+	}
+}

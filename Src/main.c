@@ -69,12 +69,12 @@ TIM_HandleTypeDef htim10;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-char str1[300] = {0};
+char str1[350] = {0};
 int16_t AccelData[3], GyroData[3], MagData[3];
 Result result;
 Vector3f fAccelData, fGyroData, fMagData, AccelOffset, GyroOffset, MagOffset, RawAnglesDeg;
 float z_or_corr = 0, acc_mag = 0;
-int flag = -1;
+int flag = 1;
 int Procedureflag = 4; //1 - XYorientationCorrection, 2 - OffsetCalibration, 3 - ZOrientationCorrection, 4 - Main program
 /* USER CODE END PV */
 
@@ -143,21 +143,21 @@ int main(void)
   L3G_Gyro_GetXYZ(GyroData);
   LSM_Mag_GetXYZ(MagData);
 
-  if (Procedureflag == 2)
-  {
-	  AccelOffsetCalculation(AccelOffset);
-	  acc_mag = Norm(VectorTo2PowSum(AccelOffset));
-	  HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 0);
-	  HAL_Delay(200);
-
-	  GyroOffsetCalculation(GyroOffset);
-	  HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 0);
-	  HAL_Delay(200);
-
-	  MagOffsetCalculation(MagOffset);
-	  HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 0);
-	  HAL_Delay(200);
-  }
+//  if (Procedureflag == 2)
+//  {
+//	  AccelOffsetCalculation(AccelOffset);
+//	  acc_mag = Norm(VectorTo2PowSum(AccelOffset));
+//	  HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 0);
+//	  HAL_Delay(200);
+//
+//	  GyroOffsetCalculation(GyroOffset);
+//	  HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 0);
+//	  HAL_Delay(200);
+//
+//	  MagOffsetCalculation(MagOffset);
+//	  HAL_GPIO_WritePin(LED_green_GPIO_Port, LED_green_Pin, 0);
+//	  HAL_Delay(200);
+//  }
 
   HAL_TIM_Base_Start_IT(&htim10);
 
@@ -181,12 +181,12 @@ int main(void)
 	  }
 
 
-	  if (Procedureflag == 2)
-	  {
-		  sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", acc_mag, AccelOffset[0], AccelOffset[1], AccelOffset[2], GyroOffset[0], GyroOffset[1], GyroOffset[2], MagOffset[0], MagOffset[1], MagOffset[2]);
-		  CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
-		  HAL_Delay(1000);
-	  }
+//	  if (Procedureflag == 2)
+//	  {
+//		  sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", acc_mag, AccelOffset[0], AccelOffset[1], AccelOffset[2], GyroOffset[0], GyroOffset[1], GyroOffset[2], MagOffset[0], MagOffset[1], MagOffset[2]);
+//		  CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
+//		  HAL_Delay(1000);
+//	  }
 
   /* USER CODE END WHILE */
 
@@ -316,7 +316,7 @@ static void MX_TIM10_Init(void)
   htim10.Instance = TIM10;
   htim10.Init.Prescaler = 9999;
   htim10.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim10.Init.Period = 95;
+  htim10.Init.Period = 23;
   htim10.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   if (HAL_TIM_Base_Init(&htim10) != HAL_OK)
   {
@@ -408,13 +408,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 
 		if (Procedureflag == 4)
 		{
-			//RawToResult(fAccelData, fGyroData, fMagData, MagOffset, result);
-			//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2],result[5][0],result[5][1],result[5][2],result[6][0],result[6][1],result[6][2],result[7][0],result[7][1],result[7][2],result[8][0],result[8][1],result[8][2]);
-			//sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2]);
-			//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[1][0],result[1][1],result[1][2],result[0][0],result[0][1],result[0][2]);
-			//sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r", AccelOffset[0], AccelOffset[1], AccelOffset[2]);
-			//sprintf(str1, "%06.4f\n\r", result[0][0]);
-			//CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
+			RawToResult(fAccelData, fGyroData, fMagData, result);
+			if (result[0][2] != 0)
+			{
+				//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2],result[5][0],result[5][1],result[5][2],result[6][0],result[6][1],result[6][2],result[7][0],result[7][1],result[7][2],result[8][0],result[8][1],result[8][2],result[9][0],result[9][1],result[9][2]);
+				//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2]);
+				sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", fGyroData[0],fGyroData[1],fGyroData[2],result[0][0],result[0][1],result[0][2]);
+				//sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r",result[0][0],result[0][1],result[0][2]);
+				//sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r", AccelOffset[0], AccelOffset[1], AccelOffset[2]);
+				//sprintf(str1, "%06.4f\n\r", result[0][0]);
+				CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
+			}
 		}
 	}
 }
@@ -431,8 +435,8 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 	  if (GPIO_Pin == DRDY_ACC_Pin)
 	  {
 		  LSM_Accel_GetXYZ(AccelData);
-		  sprintf(str1, "%06.4f\n\r", fAccelData[0]);
-		  CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
+		  //sprintf(str1, "%06.4f\n\r", fAccelData[0]);
+		  //CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
 	  }
 
 	  if (GPIO_Pin == DRDY_MAG_Pin)
@@ -449,6 +453,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   if (GPIO_Pin == BUTTON_EXT_Pin)
   {
 	  flag = -flag;
+	  HAL_GPIO_TogglePin(LED_green_GPIO_Port, LED_green_Pin);
   }
 }
 /* USER CODE END 4 */

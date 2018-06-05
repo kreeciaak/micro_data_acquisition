@@ -22,10 +22,12 @@ extern volatile float q0, q1, q2, q3;	// quaternion of sensor frame relative to 
 
 void XYorietationCalibration(Vector3f DataOutput);
 float ZorientationCorrection(Vector3f Acc, Vector3f Gyro, Vector3f Mag);
-void AccelOffsetCalculation(Vector3f DataOutput);
-void GyroOffsetCalculation(Vector3f DataOutput);
-void MagOffsetCalculation(Vector3f DataOutput);
-void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Vector3f MagOffset, Result vResBuff);
+//void AccelOffsetCalculation(Vector3f DataOutput);
+//void GyroOffsetCalculation(Vector3f DataOutput);
+//void MagOffsetCalculation(Vector3f DataOutput);
+void AccOffCalc(Vector3f AccR, Vector3f AccOff, Vector3f AccO);
+void MagOffsetCalc(Vector3f MagR, Vector3f AccO, Vector3f DataOutput);
+void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff);
 void RawDataOrientationCorrection(Vector3f V, const Vector3f VCorr, const Matrix3f MCorr, float *VRes);
 void PitchRollYawMA(Vector3f AccCorr, Vector3f MagCorr, float *Angles, float *MY_n, int *x);
 //void ComplementaryFilter(float *CFAngles, Vector3f GyroAngles, Vector3f RawAngles, float weight);
