@@ -137,19 +137,13 @@ void MovingAverage(Vector3f DataInput, AvBuffer Buffer, Vector3f DataOutput, int
 	*cnt = *cnt + 1;
 }
 
-//void IntegrationReactangleMethod(Vector3f DataInput, float *DataOutput, float Timestamp)
-//{
-//	for (int i=0;i<=2;i++)
-//	{
-//		DataOutput[i] += DataInput[i] * Timestamp;
-//	}
-//}
 
-void IntegrationReactangleMethod(Vector3f DataInput, Vector3f DataOutput, float Timestamp)
+void IntegrationReactangleMethod(Vector3f DataInput, Vector3f DataBuff, Vector3f DataOutput, float Timestamp)
 {
 	for (int i=0;i<=2;i++)
 	{
-		DataOutput[i] += DataInput[i] * Timestamp;
+		DataOutput[i] = DataInput[i] * Timestamp + DataBuff[i];
+		DataBuff[i] = DataOutput[i];
 	}
 }
 
@@ -160,30 +154,6 @@ void IntegrationTrapezoidmethod(Vector3f DataInput, Vector3f Buffer, Vector3f Da
 		DataOutput[i] += Timestamp/2 * (DataInput[i] + Buffer[i]);
 		Buffer[i] = DataInput[i];
 	}
-}
-
-void IntegratioAdamsBashworthMethod(Vector3f DataInput,float fv[][5], float *DataOutput, float Timestamp, int order)
-{
-	static int orde = 0;
-	for (int i=0;i<=2;i++)
-	{
-		if (orde<=3)
-		{
-			fv[orde][i] = DataInput[i];
-			DataOutput[i] += fv[orde][i] * Timestamp;
-			//IntegrationReactangleMethod(fv[order][i], DataOutput[i], Timestamp);
-		}else{
-
-			fv[4][i] = DataInput[i];
-			DataOutput[i] += (Timestamp/1440) * (3802*fv[4][i] - 5548*fv[3][i] + 5232*fv[2][i] - 2548*fv[1][i] + 502*fv[0][i]);
-
-			for (orde=0;orde<=3;orde++)
-			{
-				fv[orde][i] = fv[orde+1][i];
-			}
-		}
-	}
-	orde = orde + 1;
 }
 
 void RadiansToDegrees(Vector3f AnglesInRadians, float *AnglesInDegrees)

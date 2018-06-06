@@ -16,8 +16,8 @@
 #define sampleTime		1/400.0f
 #define FirstOffLimit	4000
 #define	NextOffLimit	800
-#define LowPassCoef		0.1f
-#define ZeroMoveTrig	sampleFreq/2
+#define LowPassCoef		0.15f
+#define ZeroMoveTrig	sampleFreq/4
 
 
 //Wartoœc poprawki kata obrotu wokol osi z z procedury 3s
