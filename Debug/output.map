@@ -184,7 +184,7 @@ UserTxBufferFS      0x800             Src/usbd_cdc_if.o
 MagOffset           0xc               Src/main.o
 fGyroData           0xc               Src/main.o
 GyroData            0x6               Src/main.o
-result              0x84              Src/main.o
+result              0x78              Src/main.o
 hspi1               0x58              Src/main.o
 fMagData            0xc               Src/main.o
 USBD_StrDesc        0x200             Src/usbd_desc.o
@@ -6078,6 +6078,8 @@ Discarded input sections
  .bss           0x00000000        0x0 Src/vector.o
  .text.M3fMultiply
                 0x00000000      0x1c4 Src/vector.o
+ .text.RotationMatrixFromQuaternion
+                0x00000000      0x170 Src/vector.o
  .text.MovingAverage
                 0x00000000      0x124 Src/vector.o
  .text.IntegrationTrapezoidmethod
@@ -6534,7 +6536,7 @@ LOAD c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201
                 0x08000000                g_pfnVectors
                 0x08000198                . = ALIGN (0x4)
 
-.text           0x080001a0     0xd974
+.text           0x080001a0     0xd654
                 0x080001a0                . = ALIGN (0x4)
  *(.text)
  .text          0x080001a0       0x6c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
@@ -7032,731 +7034,729 @@ LOAD c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201
                 0x08005130                MadgwickAHRSupdate
  *fill*         0x0800583c        0x4 
  .text.RawToResult
-                0x08005840      0x6e4 Src/calculations.o
+                0x08005840      0x6dc Src/calculations.o
                 0x08005840                RawToResult
  .text.L3G_Error
-                0x08005f24       0x14 Src/l3gd20.o
-                0x08005f24                L3G_Error
+                0x08005f1c       0x14 Src/l3gd20.o
+                0x08005f1c                L3G_Error
  .text.L3G_Success
-                0x08005f38       0x14 Src/l3gd20.o
-                0x08005f38                L3G_Success
+                0x08005f30       0x14 Src/l3gd20.o
+                0x08005f30                L3G_Success
  .text.L3G_SPIx_WriteRead
-                0x08005f4c       0x3c Src/l3gd20.o
-                0x08005f4c                L3G_SPIx_WriteRead
+                0x08005f44       0x3c Src/l3gd20.o
+                0x08005f44                L3G_SPIx_WriteRead
  .text.L3G_Gyro_IO_Read
-                0x08005f88       0x48 Src/l3gd20.o
-                0x08005f88                L3G_Gyro_IO_Read
+                0x08005f80       0x48 Src/l3gd20.o
+                0x08005f80                L3G_Gyro_IO_Read
  .text.L3G_Gyro_IO_Write
-                0x08005fd0       0x4c Src/l3gd20.o
-                0x08005fd0                L3G_Gyro_IO_Write
+                0x08005fc8       0x4c Src/l3gd20.o
+                0x08005fc8                L3G_Gyro_IO_Write
  .text.L3G_Gyro_ReadID
-                0x0800601c       0x1e Src/l3gd20.o
-                0x0800601c                L3G_Gyro_ReadID
+                0x08006014       0x1e Src/l3gd20.o
+                0x08006014                L3G_Gyro_ReadID
  .text.L3G_Gyro_Ini
-                0x0800603a       0x64 Src/l3gd20.o
-                0x0800603a                L3G_Gyro_Ini
+                0x08006032       0x64 Src/l3gd20.o
+                0x08006032                L3G_Gyro_Ini
  .text.L3G_Gyro_GetXYZ
-                0x0800609e       0x74 Src/l3gd20.o
-                0x0800609e                L3G_Gyro_GetXYZ
- *fill*         0x08006112        0x2 
+                0x08006096       0x74 Src/l3gd20.o
+                0x08006096                L3G_Gyro_GetXYZ
+ *fill*         0x0800610a        0x2 
  .text.LSM_Error
-                0x08006114       0x14 Src/lsm303dlhc.o
-                0x08006114                LSM_Error
+                0x0800610c       0x14 Src/lsm303dlhc.o
+                0x0800610c                LSM_Error
  .text.LSM_Success
-                0x08006128       0x14 Src/lsm303dlhc.o
-                0x08006128                LSM_Success
+                0x08006120       0x14 Src/lsm303dlhc.o
+                0x08006120                LSM_Success
  .text.LSM_I2C_Read
-                0x0800613c       0x3c Src/lsm303dlhc.o
+                0x08006134       0x3c Src/lsm303dlhc.o
  .text.LSM_I2C_Write
-                0x08006178       0x34 Src/lsm303dlhc.o
+                0x08006170       0x34 Src/lsm303dlhc.o
  .text.LSM_I2C_ReadID
-                0x080061ac        0xa Src/lsm303dlhc.o
-                0x080061ac                LSM_I2C_ReadID
+                0x080061a4        0xa Src/lsm303dlhc.o
+                0x080061a4                LSM_I2C_ReadID
  .text.LSM_Accel_Ini
-                0x080061b6       0x3a Src/lsm303dlhc.o
-                0x080061b6                LSM_Accel_Ini
+                0x080061ae       0x3a Src/lsm303dlhc.o
+                0x080061ae                LSM_Accel_Ini
  .text.LSM_Accel_GetXYZ
-                0x080061f0       0x5c Src/lsm303dlhc.o
-                0x080061f0                LSM_Accel_GetXYZ
+                0x080061e8       0x5c Src/lsm303dlhc.o
+                0x080061e8                LSM_Accel_GetXYZ
  .text.LSM_Mag_Ini
-                0x0800624c       0x34 Src/lsm303dlhc.o
-                0x0800624c                LSM_Mag_Ini
+                0x08006244       0x34 Src/lsm303dlhc.o
+                0x08006244                LSM_Mag_Ini
  .text.LSM_Mag_GetXYZ
-                0x08006280       0x5c Src/lsm303dlhc.o
-                0x08006280                LSM_Mag_GetXYZ
+                0x08006278       0x5c Src/lsm303dlhc.o
+                0x08006278                LSM_Mag_GetXYZ
  .text.MX_GPIO_Init
-                0x080062dc      0x148 Src/main.o
+                0x080062d4      0x148 Src/main.o
  .text.MX_NVIC_Init
-                0x08006424       0x14 Src/main.o
+                0x0800641c       0x14 Src/main.o
  .text.HAL_TIM_PeriodElapsedCallback
-                0x08006438      0x294 Src/main.o
-                0x08006438                HAL_TIM_PeriodElapsedCallback
+                0x08006430       0xec Src/main.o
+                0x08006430                HAL_TIM_PeriodElapsedCallback
  .text.HAL_GPIO_EXTI_Callback
-                0x080066cc       0x60 Src/main.o
-                0x080066cc                HAL_GPIO_EXTI_Callback
+                0x0800651c       0x60 Src/main.o
+                0x0800651c                HAL_GPIO_EXTI_Callback
  .text._Error_Handler
-                0x0800672c        0x2 Src/main.o
-                0x0800672c                _Error_Handler
- *fill*         0x0800672e        0x2 
+                0x0800657c        0x2 Src/main.o
+                0x0800657c                _Error_Handler
+ *fill*         0x0800657e        0x2 
  .text.MX_I2C1_Init
-                0x08006730       0x44 Src/main.o
+                0x08006580       0x44 Src/main.o
  .text.MX_SPI1_Init
-                0x08006774       0x48 Src/main.o
+                0x080065c4       0x48 Src/main.o
  .text.MX_TIM10_Init
-                0x080067bc       0x38 Src/main.o
+                0x0800660c       0x38 Src/main.o
  .text.SystemClock_Config
-                0x080067f4       0xc4 Src/main.o
-                0x080067f4                SystemClock_Config
- .text.main     0x080068b8       0xe4 Src/main.o
-                0x080068b8                main
+                0x08006644       0xc4 Src/main.o
+                0x08006644                SystemClock_Config
+ .text.main     0x08006708       0xe4 Src/main.o
+                0x08006708                main
  .text.HAL_MspInit
-                0x0800699c       0x5e Src/stm32f4xx_hal_msp.o
-                0x0800699c                HAL_MspInit
- *fill*         0x080069fa        0x2 
+                0x080067ec       0x5e Src/stm32f4xx_hal_msp.o
+                0x080067ec                HAL_MspInit
+ *fill*         0x0800684a        0x2 
  .text.HAL_I2C_MspInit
-                0x080069fc       0x58 Src/stm32f4xx_hal_msp.o
-                0x080069fc                HAL_I2C_MspInit
+                0x0800684c       0x58 Src/stm32f4xx_hal_msp.o
+                0x0800684c                HAL_I2C_MspInit
  .text.HAL_SPI_MspInit
-                0x08006a54       0x50 Src/stm32f4xx_hal_msp.o
-                0x08006a54                HAL_SPI_MspInit
+                0x080068a4       0x50 Src/stm32f4xx_hal_msp.o
+                0x080068a4                HAL_SPI_MspInit
  .text.HAL_TIM_Base_MspInit
-                0x08006aa4       0x30 Src/stm32f4xx_hal_msp.o
-                0x08006aa4                HAL_TIM_Base_MspInit
+                0x080068f4       0x30 Src/stm32f4xx_hal_msp.o
+                0x080068f4                HAL_TIM_Base_MspInit
  .text.NMI_Handler
-                0x08006ad4        0x2 Src/stm32f4xx_it.o
-                0x08006ad4                NMI_Handler
+                0x08006924        0x2 Src/stm32f4xx_it.o
+                0x08006924                NMI_Handler
  .text.HardFault_Handler
-                0x08006ad6        0x2 Src/stm32f4xx_it.o
-                0x08006ad6                HardFault_Handler
+                0x08006926        0x2 Src/stm32f4xx_it.o
+                0x08006926                HardFault_Handler
  .text.MemManage_Handler
-                0x08006ad8        0x2 Src/stm32f4xx_it.o
-                0x08006ad8                MemManage_Handler
+                0x08006928        0x2 Src/stm32f4xx_it.o
+                0x08006928                MemManage_Handler
  .text.BusFault_Handler
-                0x08006ada        0x2 Src/stm32f4xx_it.o
-                0x08006ada                BusFault_Handler
+                0x0800692a        0x2 Src/stm32f4xx_it.o
+                0x0800692a                BusFault_Handler
  .text.UsageFault_Handler
-                0x08006adc        0x2 Src/stm32f4xx_it.o
-                0x08006adc                UsageFault_Handler
+                0x0800692c        0x2 Src/stm32f4xx_it.o
+                0x0800692c                UsageFault_Handler
  .text.SVC_Handler
-                0x08006ade        0x2 Src/stm32f4xx_it.o
-                0x08006ade                SVC_Handler
+                0x0800692e        0x2 Src/stm32f4xx_it.o
+                0x0800692e                SVC_Handler
  .text.DebugMon_Handler
-                0x08006ae0        0x2 Src/stm32f4xx_it.o
-                0x08006ae0                DebugMon_Handler
+                0x08006930        0x2 Src/stm32f4xx_it.o
+                0x08006930                DebugMon_Handler
  .text.PendSV_Handler
-                0x08006ae2        0x2 Src/stm32f4xx_it.o
-                0x08006ae2                PendSV_Handler
+                0x08006932        0x2 Src/stm32f4xx_it.o
+                0x08006932                PendSV_Handler
  .text.SysTick_Handler
-                0x08006ae4        0xc Src/stm32f4xx_it.o
-                0x08006ae4                SysTick_Handler
+                0x08006934        0xc Src/stm32f4xx_it.o
+                0x08006934                SysTick_Handler
  .text.EXTI0_IRQHandler
-                0x08006af0        0xa Src/stm32f4xx_it.o
-                0x08006af0                EXTI0_IRQHandler
+                0x08006940        0xa Src/stm32f4xx_it.o
+                0x08006940                EXTI0_IRQHandler
  .text.EXTI1_IRQHandler
-                0x08006afa        0xa Src/stm32f4xx_it.o
-                0x08006afa                EXTI1_IRQHandler
+                0x0800694a        0xa Src/stm32f4xx_it.o
+                0x0800694a                EXTI1_IRQHandler
  .text.EXTI2_IRQHandler
-                0x08006b04        0xa Src/stm32f4xx_it.o
-                0x08006b04                EXTI2_IRQHandler
+                0x08006954        0xa Src/stm32f4xx_it.o
+                0x08006954                EXTI2_IRQHandler
  .text.EXTI4_IRQHandler
-                0x08006b0e        0xa Src/stm32f4xx_it.o
-                0x08006b0e                EXTI4_IRQHandler
+                0x0800695e        0xa Src/stm32f4xx_it.o
+                0x0800695e                EXTI4_IRQHandler
  .text.EXTI9_5_IRQHandler
-                0x08006b18        0xa Src/stm32f4xx_it.o
-                0x08006b18                EXTI9_5_IRQHandler
- *fill*         0x08006b22        0x2 
+                0x08006968        0xa Src/stm32f4xx_it.o
+                0x08006968                EXTI9_5_IRQHandler
+ *fill*         0x08006972        0x2 
  .text.TIM1_UP_TIM10_IRQHandler
-                0x08006b24       0x10 Src/stm32f4xx_it.o
-                0x08006b24                TIM1_UP_TIM10_IRQHandler
+                0x08006974       0x10 Src/stm32f4xx_it.o
+                0x08006974                TIM1_UP_TIM10_IRQHandler
  .text.OTG_FS_IRQHandler
-                0x08006b34       0x10 Src/stm32f4xx_it.o
-                0x08006b34                OTG_FS_IRQHandler
+                0x08006984       0x10 Src/stm32f4xx_it.o
+                0x08006984                OTG_FS_IRQHandler
  .text.SystemInit
-                0x08006b44       0x4c Src/system_stm32f4xx.o
-                0x08006b44                SystemInit
+                0x08006994       0x4c Src/system_stm32f4xx.o
+                0x08006994                SystemInit
  .text.MX_USB_DEVICE_Init
-                0x08006b90       0x38 Src/usb_device.o
-                0x08006b90                MX_USB_DEVICE_Init
+                0x080069e0       0x38 Src/usb_device.o
+                0x080069e0                MX_USB_DEVICE_Init
  .text.CDC_DeInit_FS
-                0x08006bc8        0x4 Src/usbd_cdc_if.o
+                0x08006a18        0x4 Src/usbd_cdc_if.o
  .text.CDC_Control_FS
-                0x08006bcc        0x4 Src/usbd_cdc_if.o
+                0x08006a1c        0x4 Src/usbd_cdc_if.o
  .text.CDC_Receive_FS
-                0x08006bd0       0x1c Src/usbd_cdc_if.o
+                0x08006a20       0x1c Src/usbd_cdc_if.o
  .text.CDC_Init_FS
-                0x08006bec       0x28 Src/usbd_cdc_if.o
+                0x08006a3c       0x28 Src/usbd_cdc_if.o
  .text.CDC_Transmit_FS
-                0x08006c14       0x2c Src/usbd_cdc_if.o
-                0x08006c14                CDC_Transmit_FS
+                0x08006a64       0x2c Src/usbd_cdc_if.o
+                0x08006a64                CDC_Transmit_FS
  .text.HAL_PCD_MspInit
-                0x08006c40       0x68 Src/usbd_conf.o
-                0x08006c40                HAL_PCD_MspInit
+                0x08006a90       0x68 Src/usbd_conf.o
+                0x08006a90                HAL_PCD_MspInit
  .text.HAL_PCD_SetupStageCallback
-                0x08006ca8       0x10 Src/usbd_conf.o
-                0x08006ca8                HAL_PCD_SetupStageCallback
+                0x08006af8       0x10 Src/usbd_conf.o
+                0x08006af8                HAL_PCD_SetupStageCallback
  .text.HAL_PCD_DataOutStageCallback
-                0x08006cb8       0x18 Src/usbd_conf.o
-                0x08006cb8                HAL_PCD_DataOutStageCallback
+                0x08006b08       0x18 Src/usbd_conf.o
+                0x08006b08                HAL_PCD_DataOutStageCallback
  .text.HAL_PCD_DataInStageCallback
-                0x08006cd0       0x16 Src/usbd_conf.o
-                0x08006cd0                HAL_PCD_DataInStageCallback
+                0x08006b20       0x16 Src/usbd_conf.o
+                0x08006b20                HAL_PCD_DataInStageCallback
  .text.HAL_PCD_SOFCallback
-                0x08006ce6        0xc Src/usbd_conf.o
-                0x08006ce6                HAL_PCD_SOFCallback
+                0x08006b36        0xc Src/usbd_conf.o
+                0x08006b36                HAL_PCD_SOFCallback
  .text.HAL_PCD_ResetCallback
-                0x08006cf2       0x20 Src/usbd_conf.o
-                0x08006cf2                HAL_PCD_ResetCallback
- *fill*         0x08006d12        0x2 
+                0x08006b42       0x20 Src/usbd_conf.o
+                0x08006b42                HAL_PCD_ResetCallback
+ *fill*         0x08006b62        0x2 
  .text.HAL_PCD_SuspendCallback
-                0x08006d14       0x30 Src/usbd_conf.o
-                0x08006d14                HAL_PCD_SuspendCallback
+                0x08006b64       0x30 Src/usbd_conf.o
+                0x08006b64                HAL_PCD_SuspendCallback
  .text.HAL_PCD_ResumeCallback
-                0x08006d44        0xc Src/usbd_conf.o
-                0x08006d44                HAL_PCD_ResumeCallback
+                0x08006b94        0xc Src/usbd_conf.o
+                0x08006b94                HAL_PCD_ResumeCallback
  .text.HAL_PCD_ISOOUTIncompleteCallback
-                0x08006d50        0xc Src/usbd_conf.o
-                0x08006d50                HAL_PCD_ISOOUTIncompleteCallback
+                0x08006ba0        0xc Src/usbd_conf.o
+                0x08006ba0                HAL_PCD_ISOOUTIncompleteCallback
  .text.HAL_PCD_ISOINIncompleteCallback
-                0x08006d5c        0xc Src/usbd_conf.o
-                0x08006d5c                HAL_PCD_ISOINIncompleteCallback
+                0x08006bac        0xc Src/usbd_conf.o
+                0x08006bac                HAL_PCD_ISOINIncompleteCallback
  .text.HAL_PCD_ConnectCallback
-                0x08006d68        0xc Src/usbd_conf.o
-                0x08006d68                HAL_PCD_ConnectCallback
+                0x08006bb8        0xc Src/usbd_conf.o
+                0x08006bb8                HAL_PCD_ConnectCallback
  .text.HAL_PCD_DisconnectCallback
-                0x08006d74        0xc Src/usbd_conf.o
-                0x08006d74                HAL_PCD_DisconnectCallback
+                0x08006bc4        0xc Src/usbd_conf.o
+                0x08006bc4                HAL_PCD_DisconnectCallback
  .text.USBD_LL_Init
-                0x08006d80       0x74 Src/usbd_conf.o
-                0x08006d80                USBD_LL_Init
+                0x08006bd0       0x74 Src/usbd_conf.o
+                0x08006bd0                USBD_LL_Init
  .text.USBD_LL_Start
-                0x08006df4       0x1c Src/usbd_conf.o
-                0x08006df4                USBD_LL_Start
+                0x08006c44       0x1c Src/usbd_conf.o
+                0x08006c44                USBD_LL_Start
  .text.USBD_LL_OpenEP
-                0x08006e10       0x22 Src/usbd_conf.o
-                0x08006e10                USBD_LL_OpenEP
+                0x08006c60       0x22 Src/usbd_conf.o
+                0x08006c60                USBD_LL_OpenEP
  .text.USBD_LL_CloseEP
-                0x08006e32       0x1c Src/usbd_conf.o
-                0x08006e32                USBD_LL_CloseEP
+                0x08006c82       0x1c Src/usbd_conf.o
+                0x08006c82                USBD_LL_CloseEP
  .text.USBD_LL_StallEP
-                0x08006e4e       0x1c Src/usbd_conf.o
-                0x08006e4e                USBD_LL_StallEP
+                0x08006c9e       0x1c Src/usbd_conf.o
+                0x08006c9e                USBD_LL_StallEP
  .text.USBD_LL_ClearStallEP
-                0x08006e6a       0x1c Src/usbd_conf.o
-                0x08006e6a                USBD_LL_ClearStallEP
+                0x08006cba       0x1c Src/usbd_conf.o
+                0x08006cba                USBD_LL_ClearStallEP
  .text.USBD_LL_IsStallEP
-                0x08006e86       0x2e Src/usbd_conf.o
-                0x08006e86                USBD_LL_IsStallEP
+                0x08006cd6       0x2e Src/usbd_conf.o
+                0x08006cd6                USBD_LL_IsStallEP
  .text.USBD_LL_SetUSBAddress
-                0x08006eb4       0x1c Src/usbd_conf.o
-                0x08006eb4                USBD_LL_SetUSBAddress
+                0x08006d04       0x1c Src/usbd_conf.o
+                0x08006d04                USBD_LL_SetUSBAddress
  .text.USBD_LL_Transmit
-                0x08006ed0       0x1c Src/usbd_conf.o
-                0x08006ed0                USBD_LL_Transmit
+                0x08006d20       0x1c Src/usbd_conf.o
+                0x08006d20                USBD_LL_Transmit
  .text.USBD_LL_PrepareReceive
-                0x08006eec       0x1c Src/usbd_conf.o
-                0x08006eec                USBD_LL_PrepareReceive
+                0x08006d3c       0x1c Src/usbd_conf.o
+                0x08006d3c                USBD_LL_PrepareReceive
  .text.USBD_LL_GetRxDataSize
-                0x08006f08        0xc Src/usbd_conf.o
-                0x08006f08                USBD_LL_GetRxDataSize
+                0x08006d58        0xc Src/usbd_conf.o
+                0x08006d58                USBD_LL_GetRxDataSize
  .text.USBD_FS_DeviceDescriptor
-                0x08006f14        0xc Src/usbd_desc.o
-                0x08006f14                USBD_FS_DeviceDescriptor
+                0x08006d64        0xc Src/usbd_desc.o
+                0x08006d64                USBD_FS_DeviceDescriptor
  .text.USBD_FS_LangIDStrDescriptor
-                0x08006f20        0xc Src/usbd_desc.o
-                0x08006f20                USBD_FS_LangIDStrDescriptor
+                0x08006d70        0xc Src/usbd_desc.o
+                0x08006d70                USBD_FS_LangIDStrDescriptor
  .text.USBD_FS_ProductStrDescriptor
-                0x08006f2c       0x24 Src/usbd_desc.o
-                0x08006f2c                USBD_FS_ProductStrDescriptor
+                0x08006d7c       0x24 Src/usbd_desc.o
+                0x08006d7c                USBD_FS_ProductStrDescriptor
  .text.USBD_FS_ManufacturerStrDescriptor
-                0x08006f50       0x1c Src/usbd_desc.o
-                0x08006f50                USBD_FS_ManufacturerStrDescriptor
+                0x08006da0       0x1c Src/usbd_desc.o
+                0x08006da0                USBD_FS_ManufacturerStrDescriptor
  .text.USBD_FS_SerialStrDescriptor
-                0x08006f6c       0x24 Src/usbd_desc.o
-                0x08006f6c                USBD_FS_SerialStrDescriptor
+                0x08006dbc       0x24 Src/usbd_desc.o
+                0x08006dbc                USBD_FS_SerialStrDescriptor
  .text.USBD_FS_ConfigStrDescriptor
-                0x08006f90       0x24 Src/usbd_desc.o
-                0x08006f90                USBD_FS_ConfigStrDescriptor
+                0x08006de0       0x24 Src/usbd_desc.o
+                0x08006de0                USBD_FS_ConfigStrDescriptor
  .text.USBD_FS_InterfaceStrDescriptor
-                0x08006fb4       0x24 Src/usbd_desc.o
-                0x08006fb4                USBD_FS_InterfaceStrDescriptor
+                0x08006e04       0x24 Src/usbd_desc.o
+                0x08006e04                USBD_FS_InterfaceStrDescriptor
  .text.V3fTransform
-                0x08006fd8       0x92 Src/vector.o
-                0x08006fd8                V3fTransform
+                0x08006e28       0x92 Src/vector.o
+                0x08006e28                V3fTransform
  .text.V3Subtract
-                0x0800706a       0x32 Src/vector.o
-                0x0800706a                V3Subtract
- .text.RotationMatrixFromQuaternion
-                0x0800709c      0x170 Src/vector.o
-                0x0800709c                RotationMatrixFromQuaternion
+                0x08006eba       0x32 Src/vector.o
+                0x08006eba                V3Subtract
  .text.RotationMatrixFromAngles
-                0x0800720c      0x1ae Src/vector.o
-                0x0800720c                RotationMatrixFromAngles
+                0x08006eec      0x1ae Src/vector.o
+                0x08006eec                RotationMatrixFromAngles
  .text.M3fDefiner
-                0x080073ba       0x6a Src/vector.o
-                0x080073ba                M3fDefiner
+                0x0800709a       0x6a Src/vector.o
+                0x0800709a                M3fDefiner
  .text.M3fInvert
-                0x08007424      0x174 Src/vector.o
-                0x08007424                M3fInvert
+                0x08007104      0x174 Src/vector.o
+                0x08007104                M3fInvert
  .text.IntegrationReactangleMethod
-                0x08007598       0x30 Src/vector.o
-                0x08007598                IntegrationReactangleMethod
+                0x08007278       0x30 Src/vector.o
+                0x08007278                IntegrationReactangleMethod
  .text.RadiansToDegrees
-                0x080075c8       0x30 Src/vector.o
-                0x080075c8                RadiansToDegrees
+                0x080072a8       0x30 Src/vector.o
+                0x080072a8                RadiansToDegrees
  .text.DegreesToRadians
-                0x080075f8       0x30 Src/vector.o
-                0x080075f8                DegreesToRadians
+                0x080072d8       0x30 Src/vector.o
+                0x080072d8                DegreesToRadians
  .text.NormaliseUnits
-                0x08007628       0x54 Src/vector.o
-                0x08007628                NormaliseUnits
- .text.V3Sum    0x0800767c       0x2c Src/vector.o
-                0x0800767c                V3Sum
+                0x08007308       0x54 Src/vector.o
+                0x08007308                NormaliseUnits
+ .text.V3Sum    0x0800735c       0x2c Src/vector.o
+                0x0800735c                V3Sum
  .text.V3DivideConst
-                0x080076a8       0x30 Src/vector.o
-                0x080076a8                V3DivideConst
+                0x08007388       0x30 Src/vector.o
+                0x08007388                V3DivideConst
  .text.VectorTo2PowSum
-                0x080076d8       0x38 Src/vector.o
-                0x080076d8                VectorTo2PowSum
- .text.Norm     0x08007710        0x8 Src/vector.o
-                0x08007710                Norm
- .text.invSqrt  0x08007718       0x30 Src/vector.o
-                0x08007718                invSqrt
+                0x080073b8       0x38 Src/vector.o
+                0x080073b8                VectorTo2PowSum
+ .text.Norm     0x080073f0        0x8 Src/vector.o
+                0x080073f0                Norm
+ .text.invSqrt  0x080073f8       0x30 Src/vector.o
+                0x080073f8                invSqrt
  .text.cpyVector3f
-                0x08007748       0x14 Src/vector.o
-                0x08007748                cpyVector3f
+                0x08007428       0x14 Src/vector.o
+                0x08007428                cpyVector3f
  .text.intToVector3f
-                0x0800775c       0x1c Src/vector.o
-                0x0800775c                intToVector3f
+                0x0800743c       0x1c Src/vector.o
+                0x0800743c                intToVector3f
  .text.addVector3fToMatrix
-                0x08007778       0x16 Src/vector.o
-                0x08007778                addVector3fToMatrix
+                0x08007458       0x16 Src/vector.o
+                0x08007458                addVector3fToMatrix
  .text.checkSignofValue
-                0x0800778e       0x12 Src/vector.o
-                0x0800778e                checkSignofValue
+                0x0800746e       0x12 Src/vector.o
+                0x0800746e                checkSignofValue
  .text.QuaternionToEulerAngle
-                0x080077a0      0x228 Src/vector.o
-                0x080077a0                QuaternionToEulerAngle
+                0x08007480      0x228 Src/vector.o
+                0x08007480                QuaternionToEulerAngle
  .text.changeSignOfVector
-                0x080079c8       0x28 Src/vector.o
-                0x080079c8                changeSignOfVector
+                0x080076a8       0x28 Src/vector.o
+                0x080076a8                changeSignOfVector
  .text.lowPassFilter
-                0x080079f0       0x34 Src/vector.o
-                0x080079f0                lowPassFilter
+                0x080076d0       0x34 Src/vector.o
+                0x080076d0                lowPassFilter
  .text.Reset_Handler
-                0x08007a24       0x50 startup/startup_stm32f411xe.o
-                0x08007a24                Reset_Handler
+                0x08007704       0x50 startup/startup_stm32f411xe.o
+                0x08007704                Reset_Handler
  .text.Default_Handler
-                0x08007a74        0x2 startup/startup_stm32f411xe.o
-                0x08007a74                RTC_Alarm_IRQHandler
-                0x08007a74                SPI4_IRQHandler
-                0x08007a74                TIM1_CC_IRQHandler
-                0x08007a74                DMA2_Stream5_IRQHandler
-                0x08007a74                DMA1_Stream5_IRQHandler
-                0x08007a74                PVD_IRQHandler
-                0x08007a74                SDIO_IRQHandler
-                0x08007a74                TAMP_STAMP_IRQHandler
-                0x08007a74                EXTI3_IRQHandler
-                0x08007a74                I2C3_ER_IRQHandler
-                0x08007a74                I2C2_EV_IRQHandler
-                0x08007a74                DMA1_Stream2_IRQHandler
-                0x08007a74                FPU_IRQHandler
-                0x08007a74                DMA2_Stream2_IRQHandler
-                0x08007a74                SPI1_IRQHandler
-                0x08007a74                TIM1_BRK_TIM9_IRQHandler
-                0x08007a74                DMA2_Stream3_IRQHandler
-                0x08007a74                USART6_IRQHandler
-                0x08007a74                DMA2_Stream0_IRQHandler
-                0x08007a74                TIM4_IRQHandler
-                0x08007a74                I2C1_EV_IRQHandler
-                0x08007a74                DMA1_Stream6_IRQHandler
-                0x08007a74                DMA1_Stream1_IRQHandler
-                0x08007a74                TIM3_IRQHandler
-                0x08007a74                RCC_IRQHandler
-                0x08007a74                Default_Handler
-                0x08007a74                EXTI15_10_IRQHandler
-                0x08007a74                ADC_IRQHandler
-                0x08007a74                DMA1_Stream7_IRQHandler
-                0x08007a74                SPI5_IRQHandler
-                0x08007a74                TIM5_IRQHandler
-                0x08007a74                DMA2_Stream7_IRQHandler
-                0x08007a74                I2C3_EV_IRQHandler
-                0x08007a74                RTC_WKUP_IRQHandler
-                0x08007a74                SPI2_IRQHandler
-                0x08007a74                DMA1_Stream0_IRQHandler
-                0x08007a74                WWDG_IRQHandler
-                0x08007a74                TIM2_IRQHandler
-                0x08007a74                OTG_FS_WKUP_IRQHandler
-                0x08007a74                TIM1_TRG_COM_TIM11_IRQHandler
-                0x08007a74                USART2_IRQHandler
-                0x08007a74                I2C2_ER_IRQHandler
-                0x08007a74                DMA2_Stream1_IRQHandler
-                0x08007a74                FLASH_IRQHandler
-                0x08007a74                DMA2_Stream4_IRQHandler
-                0x08007a74                USART1_IRQHandler
-                0x08007a74                SPI3_IRQHandler
-                0x08007a74                DMA1_Stream4_IRQHandler
-                0x08007a74                I2C1_ER_IRQHandler
-                0x08007a74                DMA2_Stream6_IRQHandler
-                0x08007a74                DMA1_Stream3_IRQHandler
- *fill*         0x08007a76        0x2 
- .text.cos      0x08007a78       0xc0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_cos.o)
-                0x08007a78                cos
- .text.cosf     0x08007b38       0x90 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_cos.o)
-                0x08007b38                cosf
- .text.sinf     0x08007bc8       0x94 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_sin.o)
-                0x08007bc8                sinf
- .text.asin     0x08007c5c       0xbc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_asin.o)
-                0x08007c5c                asin
- .text.atan2    0x08007d18        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_atan2.o)
-                0x08007d18                atan2
- .text.sqrt     0x08007d1c       0xb8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_sqrt.o)
-                0x08007d1c                sqrt
- .text.asinf    0x08007dd4       0xb8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_asin.o)
-                0x08007dd4                asinf
- .text.atan2f   0x08007e8c        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_atan2.o)
-                0x08007e8c                atan2f
- .text.powf     0x08007e90      0x328 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_pow.o)
-                0x08007e90                powf
- .text.sqrtf    0x080081b8       0xac c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_sqrt.o)
-                0x080081b8                sqrtf
- *fill*         0x08008264        0x4 
+                0x08007754        0x2 startup/startup_stm32f411xe.o
+                0x08007754                RTC_Alarm_IRQHandler
+                0x08007754                SPI4_IRQHandler
+                0x08007754                TIM1_CC_IRQHandler
+                0x08007754                DMA2_Stream5_IRQHandler
+                0x08007754                DMA1_Stream5_IRQHandler
+                0x08007754                PVD_IRQHandler
+                0x08007754                SDIO_IRQHandler
+                0x08007754                TAMP_STAMP_IRQHandler
+                0x08007754                EXTI3_IRQHandler
+                0x08007754                I2C3_ER_IRQHandler
+                0x08007754                I2C2_EV_IRQHandler
+                0x08007754                DMA1_Stream2_IRQHandler
+                0x08007754                FPU_IRQHandler
+                0x08007754                DMA2_Stream2_IRQHandler
+                0x08007754                SPI1_IRQHandler
+                0x08007754                TIM1_BRK_TIM9_IRQHandler
+                0x08007754                DMA2_Stream3_IRQHandler
+                0x08007754                USART6_IRQHandler
+                0x08007754                DMA2_Stream0_IRQHandler
+                0x08007754                TIM4_IRQHandler
+                0x08007754                I2C1_EV_IRQHandler
+                0x08007754                DMA1_Stream6_IRQHandler
+                0x08007754                DMA1_Stream1_IRQHandler
+                0x08007754                TIM3_IRQHandler
+                0x08007754                RCC_IRQHandler
+                0x08007754                Default_Handler
+                0x08007754                EXTI15_10_IRQHandler
+                0x08007754                ADC_IRQHandler
+                0x08007754                DMA1_Stream7_IRQHandler
+                0x08007754                SPI5_IRQHandler
+                0x08007754                TIM5_IRQHandler
+                0x08007754                DMA2_Stream7_IRQHandler
+                0x08007754                I2C3_EV_IRQHandler
+                0x08007754                RTC_WKUP_IRQHandler
+                0x08007754                SPI2_IRQHandler
+                0x08007754                DMA1_Stream0_IRQHandler
+                0x08007754                WWDG_IRQHandler
+                0x08007754                TIM2_IRQHandler
+                0x08007754                OTG_FS_WKUP_IRQHandler
+                0x08007754                TIM1_TRG_COM_TIM11_IRQHandler
+                0x08007754                USART2_IRQHandler
+                0x08007754                I2C2_ER_IRQHandler
+                0x08007754                DMA2_Stream1_IRQHandler
+                0x08007754                FLASH_IRQHandler
+                0x08007754                DMA2_Stream4_IRQHandler
+                0x08007754                USART1_IRQHandler
+                0x08007754                SPI3_IRQHandler
+                0x08007754                DMA1_Stream4_IRQHandler
+                0x08007754                I2C1_ER_IRQHandler
+                0x08007754                DMA2_Stream6_IRQHandler
+                0x08007754                DMA1_Stream3_IRQHandler
+ *fill*         0x08007756        0x2 
+ .text.cos      0x08007758       0xc0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_cos.o)
+                0x08007758                cos
+ .text.cosf     0x08007818       0x90 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_cos.o)
+                0x08007818                cosf
+ .text.sinf     0x080078a8       0x94 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_sin.o)
+                0x080078a8                sinf
+ .text.asin     0x0800793c       0xbc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_asin.o)
+                0x0800793c                asin
+ .text.atan2    0x080079f8        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_atan2.o)
+                0x080079f8                atan2
+ .text.sqrt     0x080079fc       0xb8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_sqrt.o)
+                0x080079fc                sqrt
+ .text.asinf    0x08007ab4       0xb8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_asin.o)
+                0x08007ab4                asinf
+ .text.atan2f   0x08007b6c        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_atan2.o)
+                0x08007b6c                atan2f
+ .text.powf     0x08007b70      0x328 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_pow.o)
+                0x08007b70                powf
+ .text.sqrtf    0x08007e98       0xac c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_sqrt.o)
+                0x08007e98                sqrtf
+ *fill*         0x08007f44        0x4 
  .text.__ieee754_asin
-                0x08008268      0x484 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_asin.o)
-                0x08008268                __ieee754_asin
- *fill*         0x080086ec        0x4 
+                0x08007f48      0x484 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_asin.o)
+                0x08007f48                __ieee754_asin
+ *fill*         0x080083cc        0x4 
  .text.__ieee754_atan2
-                0x080086f0      0x1c4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_atan2.o)
-                0x080086f0                __ieee754_atan2
- *fill*         0x080088b4        0x4 
+                0x080083d0      0x1c4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_atan2.o)
+                0x080083d0                __ieee754_atan2
+ *fill*         0x08008594        0x4 
  .text.__ieee754_rem_pio2
-                0x080088b8      0x44c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_rem_pio2.o)
-                0x080088b8                __ieee754_rem_pio2
+                0x08008598      0x44c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_rem_pio2.o)
+                0x08008598                __ieee754_rem_pio2
  .text.__ieee754_sqrt
-                0x08008d04      0x198 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_sqrt.o)
-                0x08008d04                __ieee754_sqrt
+                0x080089e4      0x198 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_sqrt.o)
+                0x080089e4                __ieee754_sqrt
  .text.__ieee754_asinf
-                0x08008e9c      0x1f8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_asin.o)
-                0x08008e9c                __ieee754_asinf
+                0x08008b7c      0x1f8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_asin.o)
+                0x08008b7c                __ieee754_asinf
  .text.__ieee754_atan2f
-                0x08009094      0x180 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_atan2.o)
-                0x08009094                __ieee754_atan2f
+                0x08008d74      0x180 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_atan2.o)
+                0x08008d74                __ieee754_atan2f
  .text.__ieee754_powf
-                0x08009214      0x5f0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_pow.o)
-                0x08009214                __ieee754_powf
+                0x08008ef4      0x5f0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_pow.o)
+                0x08008ef4                __ieee754_powf
  .text.__ieee754_rem_pio2f
-                0x08009804      0x290 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_rem_pio2.o)
-                0x08009804                __ieee754_rem_pio2f
+                0x080094e4      0x290 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_rem_pio2.o)
+                0x080094e4                __ieee754_rem_pio2f
  .text.__ieee754_sqrtf
-                0x08009a94        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_sqrt.o)
-                0x08009a94                __ieee754_sqrtf
- *fill*         0x08009a9c        0x4 
+                0x08009774        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_sqrt.o)
+                0x08009774                __ieee754_sqrtf
+ *fill*         0x0800977c        0x4 
  .text.__kernel_cos
-                0x08009aa0      0x284 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_cos.o)
-                0x08009aa0                __kernel_cos
- *fill*         0x08009d24        0x4 
+                0x08009780      0x284 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_cos.o)
+                0x08009780                __kernel_cos
+ *fill*         0x08009a04        0x4 
  .text.__kernel_rem_pio2
-                0x08009d28      0x870 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_rem_pio2.o)
-                0x08009d28                __kernel_rem_pio2
+                0x08009a08      0x870 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_rem_pio2.o)
+                0x08009a08                __kernel_rem_pio2
  .text.__kernel_sin
-                0x0800a598      0x194 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_sin.o)
-                0x0800a598                __kernel_sin
+                0x0800a278      0x194 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_sin.o)
+                0x0800a278                __kernel_sin
  .text.__kernel_cosf
-                0x0800a72c      0x104 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_cos.o)
-                0x0800a72c                __kernel_cosf
+                0x0800a40c      0x104 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_cos.o)
+                0x0800a40c                __kernel_cosf
  .text.__kernel_rem_pio2f
-                0x0800a830      0x690 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_rem_pio2.o)
-                0x0800a830                __kernel_rem_pio2f
+                0x0800a510      0x690 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_rem_pio2.o)
+                0x0800a510                __kernel_rem_pio2f
  .text.__kernel_sinf
-                0x0800aec0       0x90 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_sin.o)
-                0x0800aec0                __kernel_sinf
- .text.atan     0x0800af50      0x368 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_atan.o)
-                0x0800af50                atan
- .text.fabs     0x0800b2b8       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_fabs.o)
-                0x0800b2b8                fabs
- .text.floor    0x0800b2c8      0x120 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_floor.o)
-                0x0800b2c8                floor
- .text.matherr  0x0800b3e8        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_matherr.o)
-                0x0800b3e8                matherr
- *fill*         0x0800b3ec        0x4 
- .text.nan      0x0800b3f0       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_nan.o)
-                0x0800b3f0                nan
- .text.rint     0x0800b400      0x124 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_rint.o)
-                0x0800b400                rint
- *fill*         0x0800b524        0x4 
- .text.scalbn   0x0800b528      0x10c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_scalbn.o)
-                0x0800b528                scalbn
- .text.atanf    0x0800b634      0x1b0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_atan.o)
-                0x0800b634                atanf
- .text.fabsf    0x0800b7e4       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_fabs.o)
-                0x0800b7e4                fabsf
- .text.finitef  0x0800b7f4       0x14 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_finite.o)
-                0x0800b7f4                finitef
- .text.floorf   0x0800b808       0x90 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_floor.o)
-                0x0800b808                floorf
- .text.nanf     0x0800b898        0xc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_nan.o)
-                0x0800b898                nanf
- .text.scalbnf  0x0800b8a4       0xd0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_scalbn.o)
-                0x0800b8a4                scalbnf
+                0x0800aba0       0x90 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_sin.o)
+                0x0800aba0                __kernel_sinf
+ .text.atan     0x0800ac30      0x368 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_atan.o)
+                0x0800ac30                atan
+ .text.fabs     0x0800af98       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_fabs.o)
+                0x0800af98                fabs
+ .text.floor    0x0800afa8      0x120 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_floor.o)
+                0x0800afa8                floor
+ .text.matherr  0x0800b0c8        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_matherr.o)
+                0x0800b0c8                matherr
+ *fill*         0x0800b0cc        0x4 
+ .text.nan      0x0800b0d0       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_nan.o)
+                0x0800b0d0                nan
+ .text.rint     0x0800b0e0      0x124 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_rint.o)
+                0x0800b0e0                rint
+ *fill*         0x0800b204        0x4 
+ .text.scalbn   0x0800b208      0x10c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_scalbn.o)
+                0x0800b208                scalbn
+ .text.atanf    0x0800b314      0x1b0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_atan.o)
+                0x0800b314                atanf
+ .text.fabsf    0x0800b4c4       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_fabs.o)
+                0x0800b4c4                fabsf
+ .text.finitef  0x0800b4d4       0x14 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_finite.o)
+                0x0800b4d4                finitef
+ .text.floorf   0x0800b4e8       0x90 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_floor.o)
+                0x0800b4e8                floorf
+ .text.nanf     0x0800b578        0xc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_nan.o)
+                0x0800b578                nanf
+ .text.scalbnf  0x0800b584       0xd0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_scalbn.o)
+                0x0800b584                scalbnf
  .text.copysign
-                0x0800b974       0x1c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_copysign.o)
-                0x0800b974                copysign
+                0x0800b654       0x1c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_copysign.o)
+                0x0800b654                copysign
  .text.copysignf
-                0x0800b990       0x18 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_copysign.o)
-                0x0800b990                copysignf
- .text.__errno  0x0800b9a8        0xc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-errno.o)
-                0x0800b9a8                __errno
+                0x0800b670       0x18 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_copysign.o)
+                0x0800b670                copysignf
+ .text.__errno  0x0800b688        0xc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-errno.o)
+                0x0800b688                __errno
  .text.__libc_init_array
-                0x0800b9b4       0x48 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-init.o)
-                0x0800b9b4                __libc_init_array
- .text.malloc   0x0800b9fc       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-malloc.o)
-                0x0800b9fc                malloc
- .text.free     0x0800ba0c       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-malloc.o)
-                0x0800ba0c                free
- .text.memset   0x0800ba1c       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memset.o)
-                0x0800ba1c                memset
- .text._free_r  0x0800ba2c       0x9c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-freer.o)
-                0x0800ba2c                _free_r
+                0x0800b694       0x48 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-init.o)
+                0x0800b694                __libc_init_array
+ .text.malloc   0x0800b6dc       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-malloc.o)
+                0x0800b6dc                malloc
+ .text.free     0x0800b6ec       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-malloc.o)
+                0x0800b6ec                free
+ .text.memset   0x0800b6fc       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memset.o)
+                0x0800b6fc                memset
+ .text._free_r  0x0800b70c       0x9c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-freer.o)
+                0x0800b70c                _free_r
  .text._malloc_r
-                0x0800bac8       0xbc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-mallocr.o)
-                0x0800bac8                _malloc_r
- .text.__cvt    0x0800bb84       0xc2 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
-                0x0800bb84                __cvt
+                0x0800b7a8       0xbc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-mallocr.o)
+                0x0800b7a8                _malloc_r
+ .text.__cvt    0x0800b864       0xc2 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
+                0x0800b864                __cvt
  .text.__exponent
-                0x0800bc46       0x6a c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
-                0x0800bc46                __exponent
+                0x0800b926       0x6a c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
+                0x0800b926                __exponent
  .text._printf_float
-                0x0800bcb0      0x480 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
-                0x0800bcb0                _printf_float
+                0x0800b990      0x480 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
+                0x0800b990                _printf_float
  .text._printf_common
-                0x0800c130       0xec c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
-                0x0800c130                _printf_common
+                0x0800be10       0xec c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x0800be10                _printf_common
  .text._printf_i
-                0x0800c21c      0x240 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
-                0x0800c21c                _printf_i
- .text._sbrk_r  0x0800c45c       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-sbrkr.o)
-                0x0800c45c                _sbrk_r
- .text.sprintf  0x0800c47c       0x48 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-sprintf.o)
-                0x0800c47c                siprintf
-                0x0800c47c                sprintf
- .text.quorem   0x0800c4c4      0x118 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-dtoa.o)
- *fill*         0x0800c5dc        0x4 
- .text._dtoa_r  0x0800c5e0      0xb9c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-dtoa.o)
-                0x0800c5e0                _dtoa_r
+                0x0800befc      0x240 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x0800befc                _printf_i
+ .text._sbrk_r  0x0800c13c       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-sbrkr.o)
+                0x0800c13c                _sbrk_r
+ .text.sprintf  0x0800c15c       0x48 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-sprintf.o)
+                0x0800c15c                siprintf
+                0x0800c15c                sprintf
+ .text.quorem   0x0800c1a4      0x118 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-dtoa.o)
+ *fill*         0x0800c2bc        0x4 
+ .text._dtoa_r  0x0800c2c0      0xb9c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-dtoa.o)
+                0x0800c2c0                _dtoa_r
  .text._localeconv_r
-                0x0800d17c       0x1c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-localeconv.o)
-                0x0800d17c                _localeconv_r
- .text.memcpy   0x0800d198       0x16 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memcpy-stub.o)
-                0x0800d198                memcpy
+                0x0800ce5c       0x1c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-localeconv.o)
+                0x0800ce5c                _localeconv_r
+ .text.memcpy   0x0800ce78       0x16 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memcpy-stub.o)
+                0x0800ce78                memcpy
  .text.__malloc_lock
-                0x0800d1ae        0x2 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mlock.o)
-                0x0800d1ae                __malloc_lock
+                0x0800ce8e        0x2 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mlock.o)
+                0x0800ce8e                __malloc_lock
  .text.__malloc_unlock
-                0x0800d1b0        0x2 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mlock.o)
-                0x0800d1b0                __malloc_unlock
- .text._Balloc  0x0800d1b2       0x68 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d1b2                _Balloc
- .text._Bfree   0x0800d21a       0x2e c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d21a                _Bfree
+                0x0800ce90        0x2 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mlock.o)
+                0x0800ce90                __malloc_unlock
+ .text._Balloc  0x0800ce92       0x68 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800ce92                _Balloc
+ .text._Bfree   0x0800cefa       0x2e c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800cefa                _Bfree
  .text.__multadd
-                0x0800d248       0x76 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d248                __multadd
+                0x0800cf28       0x76 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800cf28                __multadd
  .text.__hi0bits
-                0x0800d2be       0x3e c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d2be                __hi0bits
+                0x0800cf9e       0x3e c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800cf9e                __hi0bits
  .text.__lo0bits
-                0x0800d2fc       0x5e c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d2fc                __lo0bits
- .text.__i2b    0x0800d35a       0x12 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d35a                __i2b
+                0x0800cfdc       0x5e c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800cfdc                __lo0bits
+ .text.__i2b    0x0800d03a       0x12 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800d03a                __i2b
  .text.__multiply
-                0x0800d36c      0x11a c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d36c                __multiply
- *fill*         0x0800d486        0x2 
+                0x0800d04c      0x11a c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800d04c                __multiply
+ *fill*         0x0800d166        0x2 
  .text.__pow5mult
-                0x0800d488       0x9c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d488                __pow5mult
+                0x0800d168       0x9c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800d168                __pow5mult
  .text.__lshift
-                0x0800d524       0xa2 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d524                __lshift
- .text.__mcmp   0x0800d5c6       0x34 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d5c6                __mcmp
- .text.__mdiff  0x0800d5fa       0xbc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d5fa                __mdiff
- .text.__d2b    0x0800d6b6       0x9e c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800d6b6                __d2b
+                0x0800d204       0xa2 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800d204                __lshift
+ .text.__mcmp   0x0800d2a6       0x34 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800d2a6                __mcmp
+ .text.__mdiff  0x0800d2da       0xbc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800d2da                __mdiff
+ .text.__d2b    0x0800d396       0x9e c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800d396                __d2b
  .text._calloc_r
-                0x0800d754       0x1c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-callocr.o)
-                0x0800d754                _calloc_r
+                0x0800d434       0x1c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-callocr.o)
+                0x0800d434                _calloc_r
  .text.__ssputs_r
-                0x0800d770       0xb6 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
-                0x0800d770                __ssputs_r
- *fill*         0x0800d826        0x2 
+                0x0800d450       0xb6 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+                0x0800d450                __ssputs_r
+ *fill*         0x0800d506        0x2 
  .text._svfprintf_r
-                0x0800d828      0x1e8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
-                0x0800d828                _svfiprintf_r
-                0x0800d828                _svfprintf_r
+                0x0800d508      0x1e8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+                0x0800d508                _svfiprintf_r
+                0x0800d508                _svfprintf_r
  .text.__ascii_mbtowc
-                0x0800da10       0x24 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mbtowc_r.o)
-                0x0800da10                __ascii_mbtowc
- .text.memmove  0x0800da34       0x34 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memmove.o)
-                0x0800da34                memmove
+                0x0800d6f0       0x24 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mbtowc_r.o)
+                0x0800d6f0                __ascii_mbtowc
+ .text.memmove  0x0800d714       0x34 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memmove.o)
+                0x0800d714                memmove
  .text._realloc_r
-                0x0800da68       0x4c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-reallocr.o)
-                0x0800da68                _realloc_r
+                0x0800d748       0x4c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-reallocr.o)
+                0x0800d748                _realloc_r
  .text.__ascii_wctomb
-                0x0800dab4       0x1a c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-wctomb_r.o)
-                0x0800dab4                __ascii_wctomb
+                0x0800d794       0x1a c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-wctomb_r.o)
+                0x0800d794                __ascii_wctomb
  .text._malloc_usable_size_r
-                0x0800dace       0x12 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-msizer.o)
-                0x0800dace                _malloc_usable_size_r
- .text._sbrk    0x0800dae0       0x1c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libnosys.a(sbrk.o)
-                0x0800dae0                _sbrk
+                0x0800d7ae       0x12 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-msizer.o)
+                0x0800d7ae                _malloc_usable_size_r
+ .text._sbrk    0x0800d7c0       0x1c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libnosys.a(sbrk.o)
+                0x0800d7c0                _sbrk
  *(.glue_7)
- .glue_7        0x0800dafc        0x0 linker stubs
+ .glue_7        0x0800d7dc        0x0 linker stubs
  *(.glue_7t)
- .glue_7t       0x0800dafc        0x0 linker stubs
+ .glue_7t       0x0800d7dc        0x0 linker stubs
  *(.eh_frame)
- .eh_frame      0x0800dafc        0x0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+ .eh_frame      0x0800d7dc        0x0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
  *(.init)
- .init          0x0800dafc        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crti.o
-                0x0800dafc                _init
- .init          0x0800db00        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
+ .init          0x0800d7dc        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crti.o
+                0x0800d7dc                _init
+ .init          0x0800d7e0        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
  *(.fini)
- .fini          0x0800db08        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crti.o
-                0x0800db08                _fini
- .fini          0x0800db0c        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
-                0x0800db14                . = ALIGN (0x4)
-                0x0800db14                _etext = .
+ .fini          0x0800d7e8        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crti.o
+                0x0800d7e8                _fini
+ .fini          0x0800d7ec        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
+                0x0800d7f4                . = ALIGN (0x4)
+                0x0800d7f4                _etext = .
 
-.vfp11_veneer   0x0800db14        0x0
- .vfp11_veneer  0x0800db14        0x0 linker stubs
+.vfp11_veneer   0x0800d7f4        0x0
+ .vfp11_veneer  0x0800d7f4        0x0 linker stubs
 
-.v4_bx          0x0800db14        0x0
- .v4_bx         0x0800db14        0x0 linker stubs
+.v4_bx          0x0800d7f4        0x0
+ .v4_bx         0x0800d7f4        0x0 linker stubs
 
-.iplt           0x0800db14        0x0
- .iplt          0x0800db14        0x0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+.iplt           0x0800d7f4        0x0
+ .iplt          0x0800d7f4        0x0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
 
-.rodata         0x0800db18      0xab8
-                0x0800db18                . = ALIGN (0x4)
+.rodata         0x0800d7f8      0x9e0
+                0x0800d7f8                . = ALIGN (0x4)
  *(.rodata)
- .rodata        0x0800db18       0x84 Src/calculations.o
- .rodata        0x0800db9c       0x18 Src/system_stm32f4xx.o
-                0x0800db9c                AHBPrescTable
-                0x0800dbac                APBPrescTable
+ .rodata        0x0800d7f8       0x84 Src/calculations.o
+ .rodata        0x0800d87c       0x18 Src/system_stm32f4xx.o
+                0x0800d87c                AHBPrescTable
+                0x0800d88c                APBPrescTable
  *(.rodata*)
  .rodata.str1.4
-                0x0800dbb4      0x10c Src/main.o
+                0x0800d894       0x32 Src/main.o
+ *fill*         0x0800d8c6        0x2 
  .rodata.str1.4
-                0x0800dcc0       0x13 Src/usbd_conf.o
- *fill*         0x0800dcd3        0x1 
+                0x0800d8c8       0x13 Src/usbd_conf.o
+ *fill*         0x0800d8db        0x1 
  .rodata.str1.4
-                0x0800dcd4       0x56 Src/usbd_desc.o
- *fill*         0x0800dd2a        0x2 
+                0x0800d8dc       0x56 Src/usbd_desc.o
+ *fill*         0x0800d932        0x2 
  .rodata.asin.str1.4
-                0x0800dd2c        0x5 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_asin.o)
+                0x0800d934        0x5 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_asin.o)
                                   0x9 (size before relaxing)
- *fill*         0x0800dd31        0x3 
+ *fill*         0x0800d939        0x3 
  .rodata.sqrt.str1.4
-                0x0800dd34        0x5 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_sqrt.o)
- *fill*         0x0800dd39        0x3 
+                0x0800d93c        0x5 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_sqrt.o)
+ *fill*         0x0800d941        0x3 
  .rodata.asinf.str1.4
-                0x0800dd3c        0x6 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_asin.o)
+                0x0800d944        0x6 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_asin.o)
                                   0x9 (size before relaxing)
- *fill*         0x0800dd42        0x2 
+ *fill*         0x0800d94a        0x2 
  .rodata.powf.str1.4
-                0x0800dd44        0x5 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_pow.o)
- *fill*         0x0800dd49        0x3 
+                0x0800d94c        0x5 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_pow.o)
+ *fill*         0x0800d951        0x3 
  .rodata.sqrtf.str1.4
-                0x0800dd4c        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_sqrt.o)
+                0x0800d954        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_sqrt.o)
                                   0x6 (size before relaxing)
  .rodata.npio2_hw
-                0x0800dd54       0x80 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_rem_pio2.o)
+                0x0800d95c       0x80 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_rem_pio2.o)
  .rodata.two_over_pi
-                0x0800ddd4      0x108 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_rem_pio2.o)
+                0x0800d9dc      0x108 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_rem_pio2.o)
  .rodata.__ieee754_powf.str1.4
-                0x0800dedc        0x1 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_pow.o)
+                0x0800dae4        0x1 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_pow.o)
  .rodata.npio2_hw
-                0x0800dedc       0x80 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_rem_pio2.o)
+                0x0800dae4       0x80 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_rem_pio2.o)
  .rodata.two_over_pi
-                0x0800df5c      0x318 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_rem_pio2.o)
- *fill*         0x0800e274        0x4 
- .rodata.PIo2   0x0800e278       0x40 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_rem_pio2.o)
+                0x0800db64      0x318 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_rem_pio2.o)
+ *fill*         0x0800de7c        0x4 
+ .rodata.PIo2   0x0800de80       0x40 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_rem_pio2.o)
  .rodata.init_jk
-                0x0800e2b8       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_rem_pio2.o)
- .rodata.PIo2   0x0800e2c8       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_rem_pio2.o)
+                0x0800dec0       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_rem_pio2.o)
+ .rodata.PIo2   0x0800ded0       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_rem_pio2.o)
  .rodata.init_jk
-                0x0800e2f4        0xc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_rem_pio2.o)
+                0x0800defc        0xc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_rem_pio2.o)
  .rodata.atanhi
-                0x0800e300       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_atan.o)
+                0x0800df08       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_atan.o)
  .rodata.atanlo
-                0x0800e320       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_atan.o)
- .rodata.TWO52  0x0800e340       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_rint.o)
+                0x0800df28       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_atan.o)
+ .rodata.TWO52  0x0800df48       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_rint.o)
  .rodata.atanhi
-                0x0800e350       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_atan.o)
+                0x0800df58       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_atan.o)
  .rodata.atanlo
-                0x0800e360       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_atan.o)
+                0x0800df68       0x10 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_atan.o)
  .rodata._printf_float.str1.1
-                0x0800e370       0x12 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
+                0x0800df78       0x12 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
  .rodata._printf_i.str1.1
-                0x0800e382       0x22 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
+                0x0800df8a       0x22 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
  .rodata._dtoa_r.str1.1
-                0x0800e3a4        0xd c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-dtoa.o)
+                0x0800dfac        0xd c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-dtoa.o)
                                   0xf (size before relaxing)
- *fill*         0x0800e3b1        0x7 
+ *fill*         0x0800dfb9        0x7 
  .rodata.__mprec_bigtens
-                0x0800e3b8       0x28 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800e3b8                __mprec_bigtens
+                0x0800dfc0       0x28 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800dfc0                __mprec_bigtens
  .rodata.__mprec_tens
-                0x0800e3e0       0xc8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
-                0x0800e3e0                __mprec_tens
+                0x0800dfe8       0xc8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800dfe8                __mprec_tens
  .rodata.p05.7170
-                0x0800e4a8        0xc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+                0x0800e0b0        0xc c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
  .rodata._svfprintf_r.str1.1
-                0x0800e4b4       0x11 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+                0x0800e0bc       0x11 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
  .rodata._setlocale_r.str1.1
-                0x0800e4c5        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-locale.o)
+                0x0800e0cd        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-locale.o)
                                   0x9 (size before relaxing)
  .rodata.str1.1
-                0x0800e4cd        0x2 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-locale.o)
+                0x0800e0d5        0x2 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-locale.o)
  .rodata._ctype_
-                0x0800e4cf      0x101 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-ctype_.o)
-                0x0800e4cf                _ctype_
-                0x0800e5d0                . = ALIGN (0x4)
+                0x0800e0d7      0x101 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-ctype_.o)
+                0x0800e0d7                _ctype_
+                0x0800e1d8                . = ALIGN (0x4)
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
 
-.ARM            0x0800e5d0        0x8
-                0x0800e5d0                __exidx_start = .
+.ARM            0x0800e1d8        0x8
+                0x0800e1d8                __exidx_start = .
  *(.ARM.exidx*)
- .ARM.exidx     0x0800e5d0        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_udivmoddi4.o)
-                0x0800e5d8                __exidx_end = .
+ .ARM.exidx     0x0800e1d8        0x8 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_udivmoddi4.o)
+                0x0800e1e0                __exidx_end = .
 
-.rel.dyn        0x0800e5d8        0x0
- .rel.iplt      0x0800e5d8        0x0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+.rel.dyn        0x0800e1e0        0x0
+ .rel.iplt      0x0800e1e0        0x0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
 
-.preinit_array  0x0800e5d8        0x0
-                0x0800e5d8                PROVIDE (__preinit_array_start, .)
+.preinit_array  0x0800e1e0        0x0
+                0x0800e1e0                PROVIDE (__preinit_array_start, .)
  *(.preinit_array*)
-                0x0800e5d8                PROVIDE (__preinit_array_end, .)
+                0x0800e1e0                PROVIDE (__preinit_array_end, .)
 
-.init_array     0x0800e5d8        0x4
-                0x0800e5d8                PROVIDE (__init_array_start, .)
+.init_array     0x0800e1e0        0x4
+                0x0800e1e0                PROVIDE (__init_array_start, .)
  *(SORT(.init_array.*))
  *(.init_array*)
- .init_array    0x0800e5d8        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
-                0x0800e5dc                PROVIDE (__init_array_end, .)
+ .init_array    0x0800e1e0        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+                0x0800e1e4                PROVIDE (__init_array_end, .)
 
-.fini_array     0x0800e5dc        0x4
+.fini_array     0x0800e1e4        0x4
                 [!provide]                PROVIDE (__fini_array_start, .)
  *(SORT(.fini_array.*))
  *(.fini_array*)
- .fini_array    0x0800e5dc        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
+ .fini_array    0x0800e1e4        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
                 [!provide]                PROVIDE (__fini_array_end, .)
-                0x0800e5e0                _sidata = LOADADDR (.data)
+                0x0800e1e8                _sidata = LOADADDR (.data)
 
-.data           0x20000000      0x35c load address 0x0800e5e0
+.data           0x20000000      0x35c load address 0x0800e1e8
                 0x20000000                . = ALIGN (0x4)
                 0x20000000                _sdata = .
  *(.data)
@@ -7796,14 +7796,14 @@ LOAD c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201
                 0x2000035c                . = ALIGN (0x4)
                 0x2000035c                _edata = .
 
-.jcr            0x2000035c        0x0 load address 0x0800e93c
+.jcr            0x2000035c        0x0 load address 0x0800e544
  .jcr           0x2000035c        0x0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
 
-.igot.plt       0x2000035c        0x0 load address 0x0800e93c
+.igot.plt       0x2000035c        0x0 load address 0x0800e544
  .igot.plt      0x2000035c        0x0 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtbegin.o
                 0x2000035c                . = ALIGN (0x4)
 
-.bss            0x2000035c     0x1d48 load address 0x0800e93c
+.bss            0x2000035c     0x1d3c load address 0x0800e544
                 0x2000035c                _sbss = .
                 0x2000035c                __bss_start__ = _sbss
  *(.bss)
@@ -7828,7 +7828,7 @@ LOAD c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201
  *(COMMON)
  COMMON         0x200006b0        0x4 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
                 0x200006b0                uwTick
- COMMON         0x200006b4      0x1d6 Src/main.o
+ COMMON         0x200006b4      0x1ca Src/main.o
                 0x200006b4                GyroOffset
                 0x200006c0                hi2c1
                 0x20000714                htim10
@@ -7839,37 +7839,36 @@ LOAD c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201
                 0x2000077c                fGyroData
                 0x20000788                GyroData
                 0x20000790                result
-                0x20000814                hspi1
-                0x2000086c                fMagData
-                0x20000878                fAccelData
-                0x20000884                MagData
- *fill*         0x2000088a        0x2 
- COMMON         0x2000088c      0x224 Src/usb_device.o
-                0x2000088c                hUsbDeviceFS
- COMMON         0x20000ab0     0x1000 Src/usbd_cdc_if.o
-                0x20000ab0                UserRxBufferFS
-                0x200012b0                UserTxBufferFS
- COMMON         0x20001ab0      0x3f0 Src/usbd_conf.o
-                0x20001ab0                hpcd_USB_OTG_FS
- COMMON         0x20001ea0      0x200 Src/usbd_desc.o
-                0x20001ea0                USBD_StrDesc
- COMMON         0x200020a0        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-reent.o)
-                0x200020a0                errno
-                0x200020a4                . = ALIGN (0x4)
-                0x200020a4                _ebss = .
-                0x200020a4                __bss_end__ = _ebss
+                0x20000808                hspi1
+                0x20000860                fMagData
+                0x2000086c                fAccelData
+                0x20000878                MagData
+ *fill*         0x2000087e        0x2 
+ COMMON         0x20000880      0x224 Src/usb_device.o
+                0x20000880                hUsbDeviceFS
+ COMMON         0x20000aa4     0x1000 Src/usbd_cdc_if.o
+                0x20000aa4                UserRxBufferFS
+                0x200012a4                UserTxBufferFS
+ COMMON         0x20001aa4      0x3f0 Src/usbd_conf.o
+                0x20001aa4                hpcd_USB_OTG_FS
+ COMMON         0x20001e94      0x200 Src/usbd_desc.o
+                0x20001e94                USBD_StrDesc
+ COMMON         0x20002094        0x4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-reent.o)
+                0x20002094                errno
+                0x20002098                . = ALIGN (0x4)
+                0x20002098                _ebss = .
+                0x20002098                __bss_end__ = _ebss
 
 ._user_heap_stack
-                0x200020a4      0x604 load address 0x0800e93c
-                0x200020a8                . = ALIGN (0x8)
- *fill*         0x200020a4        0x4 
-                0x200020a8                PROVIDE (end, .)
+                0x20002098      0x600 load address 0x0800e544
+                0x20002098                . = ALIGN (0x8)
+                0x20002098                PROVIDE (end, .)
                 [!provide]                PROVIDE (_end, .)
-                0x200022a8                . = (. + _Min_Heap_Size)
- *fill*         0x200020a8      0x200 
-                0x200026a8                . = (. + _Min_Stack_Size)
- *fill*         0x200022a8      0x400 
-                0x200026a8                . = ALIGN (0x8)
+                0x20002298                . = (. + _Min_Heap_Size)
+ *fill*         0x20002098      0x200 
+                0x20002698                . = (. + _Min_Stack_Size)
+ *fill*         0x20002298      0x400 
+                0x20002698                . = ALIGN (0x8)
 
 /DISCARD/
  libc.a(*)
@@ -8101,7 +8100,7 @@ LOAD c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201
                 0x000015c9       0x22 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard/crtn.o
 OUTPUT(MGR.elf elf32-littlearm)
 
-.debug_info     0x00000000    0x2b003
+.debug_info     0x00000000    0x2af0a
  .debug_info    0x00000000     0x1170 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
  .debug_info    0x00001170     0x16ca Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
  .debug_info    0x0000283a      0xfbf Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
@@ -8117,19 +8116,19 @@ OUTPUT(MGR.elf elf32-littlearm)
  .debug_info    0x00015429     0x1490 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
  .debug_info    0x000168b9     0x1666 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
  .debug_info    0x00017f1f      0xfd9 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
- .debug_info    0x00018ef8     0x305f Src/calculations.o
- .debug_info    0x0001bf57     0x1374 Src/l3gd20.o
- .debug_info    0x0001d2cb     0x13cf Src/lsm303dlhc.o
- .debug_info    0x0001e69a     0x2a18 Src/main.o
- .debug_info    0x000210b2     0x1a41 Src/stm32f4xx_hal_msp.o
- .debug_info    0x00022af3     0x1391 Src/stm32f4xx_it.o
- .debug_info    0x00023e84      0xd5a Src/system_stm32f4xx.o
- .debug_info    0x00024bde      0xe91 Src/usb_device.o
- .debug_info    0x00025a6f     0x10ae Src/usbd_cdc_if.o
- .debug_info    0x00026b1d     0x222e Src/usbd_conf.o
- .debug_info    0x00028d4b      0xd69 Src/usbd_desc.o
- .debug_info    0x00029ab4     0x14c7 Src/vector.o
- .debug_info    0x0002af7b       0x88 startup/startup_stm32f411xe.o
+ .debug_info    0x00018ef8     0x2f7e Src/calculations.o
+ .debug_info    0x0001be76     0x1374 Src/l3gd20.o
+ .debug_info    0x0001d1ea     0x13cf Src/lsm303dlhc.o
+ .debug_info    0x0001e5b9     0x2a00 Src/main.o
+ .debug_info    0x00020fb9     0x1a41 Src/stm32f4xx_hal_msp.o
+ .debug_info    0x000229fa     0x1391 Src/stm32f4xx_it.o
+ .debug_info    0x00023d8b      0xd5a Src/system_stm32f4xx.o
+ .debug_info    0x00024ae5      0xe91 Src/usb_device.o
+ .debug_info    0x00025976     0x10ae Src/usbd_cdc_if.o
+ .debug_info    0x00026a24     0x222e Src/usbd_conf.o
+ .debug_info    0x00028c52      0xd69 Src/usbd_desc.o
+ .debug_info    0x000299bb     0x14c7 Src/vector.o
+ .debug_info    0x0002ae82       0x88 startup/startup_stm32f411xe.o
 
 .debug_abbrev   0x00000000     0x4cdf
  .debug_abbrev  0x00000000      0x2e3 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
@@ -8161,7 +8160,7 @@ OUTPUT(MGR.elf elf32-littlearm)
  .debug_abbrev  0x00004962      0x36b Src/vector.o
  .debug_abbrev  0x00004ccd       0x12 startup/startup_stm32f411xe.o
 
-.debug_loc      0x00000000    0x1073f
+.debug_loc      0x00000000    0x1078a
  .debug_loc     0x00000000      0x108 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
  .debug_loc     0x00000108      0x5ce Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
  .debug_loc     0x000006d6      0x430 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
@@ -8177,16 +8176,16 @@ OUTPUT(MGR.elf elf32-littlearm)
  .debug_loc     0x0000c4b2      0x71c Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
  .debug_loc     0x0000cbce      0xb78 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
  .debug_loc     0x0000d746      0x23c Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
- .debug_loc     0x0000d982      0xfd7 Src/calculations.o
- .debug_loc     0x0000e959      0x1c2 Src/l3gd20.o
- .debug_loc     0x0000eb1b      0x2a4 Src/lsm303dlhc.o
- .debug_loc     0x0000edbf       0x74 Src/main.o
- .debug_loc     0x0000ee33       0xf0 Src/stm32f4xx_hal_msp.o
- .debug_loc     0x0000ef23      0x13e Src/system_stm32f4xx.o
- .debug_loc     0x0000f061      0x113 Src/usbd_cdc_if.o
- .debug_loc     0x0000f174      0xbe7 Src/usbd_conf.o
- .debug_loc     0x0000fd5b      0x2b7 Src/usbd_desc.o
- .debug_loc     0x00010012      0x72d Src/vector.o
+ .debug_loc     0x0000d982     0x1022 Src/calculations.o
+ .debug_loc     0x0000e9a4      0x1c2 Src/l3gd20.o
+ .debug_loc     0x0000eb66      0x2a4 Src/lsm303dlhc.o
+ .debug_loc     0x0000ee0a       0x74 Src/main.o
+ .debug_loc     0x0000ee7e       0xf0 Src/stm32f4xx_hal_msp.o
+ .debug_loc     0x0000ef6e      0x13e Src/system_stm32f4xx.o
+ .debug_loc     0x0000f0ac      0x113 Src/usbd_cdc_if.o
+ .debug_loc     0x0000f1bf      0xbe7 Src/usbd_conf.o
+ .debug_loc     0x0000fda6      0x2b7 Src/usbd_desc.o
+ .debug_loc     0x0001005d      0x72d Src/vector.o
 
 .debug_aranges  0x00000000     0x1590
  .debug_aranges
@@ -8390,7 +8389,7 @@ OUTPUT(MGR.elf elf32-littlearm)
  .debug_macro   0x0001b5a1      0x39f Src/vector.o
  .debug_macro   0x0001b940      0x174 Src/vector.o
 
-.debug_line     0x00000000    0x135bb
+.debug_line     0x00000000    0x135b6
  .debug_line    0x00000000      0x99c Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
  .debug_line    0x0000099c      0x9d8 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
  .debug_line    0x00001374      0x92e Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
@@ -8406,21 +8405,21 @@ OUTPUT(MGR.elf elf32-littlearm)
  .debug_line    0x0000a498      0xaab Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.o
  .debug_line    0x0000af43      0xac0 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.o
  .debug_line    0x0000ba03      0x936 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
- .debug_line    0x0000c339      0xb71 Src/calculations.o
- .debug_line    0x0000ceaa      0x86e Src/l3gd20.o
- .debug_line    0x0000d718      0x8b5 Src/lsm303dlhc.o
- .debug_line    0x0000dfcd      0xaa0 Src/main.o
- .debug_line    0x0000ea6d      0x84e Src/stm32f4xx_hal_msp.o
- .debug_line    0x0000f2bb      0x8c0 Src/stm32f4xx_it.o
- .debug_line    0x0000fb7b      0x7ec Src/system_stm32f4xx.o
- .debug_line    0x00010367      0x924 Src/usb_device.o
- .debug_line    0x00010c8b      0x953 Src/usbd_cdc_if.o
- .debug_line    0x000115de      0xb08 Src/usbd_conf.o
- .debug_line    0x000120e6      0x91f Src/usbd_desc.o
- .debug_line    0x00012a05      0xb37 Src/vector.o
- .debug_line    0x0001353c       0x7f startup/startup_stm32f411xe.o
+ .debug_line    0x0000c339      0xb73 Src/calculations.o
+ .debug_line    0x0000ceac      0x86e Src/l3gd20.o
+ .debug_line    0x0000d71a      0x8b5 Src/lsm303dlhc.o
+ .debug_line    0x0000dfcf      0xa99 Src/main.o
+ .debug_line    0x0000ea68      0x84e Src/stm32f4xx_hal_msp.o
+ .debug_line    0x0000f2b6      0x8c0 Src/stm32f4xx_it.o
+ .debug_line    0x0000fb76      0x7ec Src/system_stm32f4xx.o
+ .debug_line    0x00010362      0x924 Src/usb_device.o
+ .debug_line    0x00010c86      0x953 Src/usbd_cdc_if.o
+ .debug_line    0x000115d9      0xb08 Src/usbd_conf.o
+ .debug_line    0x000120e1      0x91f Src/usbd_desc.o
+ .debug_line    0x00012a00      0xb37 Src/vector.o
+ .debug_line    0x00013537       0x7f startup/startup_stm32f411xe.o
 
-.debug_str      0x00000000    0x8f1e2
+.debug_str      0x00000000    0x8f1e7
  .debug_str     0x00000000    0x862be Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
                               0x866d3 (size before relaxing)
  .debug_str     0x000862be      0x3ae Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
@@ -8451,29 +8450,29 @@ OUTPUT(MGR.elf elf32-littlearm)
                               0x86aac (size before relaxing)
  .debug_str     0x0008b950       0x51 Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.o
                               0x869d9 (size before relaxing)
- .debug_str     0x0008b9a1     0x11c1 Src/calculations.o
-                              0x86e60 (size before relaxing)
- .debug_str     0x0008cb62      0x636 Src/l3gd20.o
+ .debug_str     0x0008b9a1     0x11a9 Src/calculations.o
+                              0x86e48 (size before relaxing)
+ .debug_str     0x0008cb4a      0x636 Src/l3gd20.o
                               0x8660d (size before relaxing)
- .debug_str     0x0008d198     0x18ce Src/lsm303dlhc.o
+ .debug_str     0x0008d180     0x18ce Src/lsm303dlhc.o
                               0x879c2 (size before relaxing)
- .debug_str     0x0008ea66      0x15e Src/main.o
-                              0x8a642 (size before relaxing)
- .debug_str     0x0008ebc4       0x25 Src/stm32f4xx_hal_msp.o
+ .debug_str     0x0008ea4e      0x15e Src/main.o
+                              0x8a647 (size before relaxing)
+ .debug_str     0x0008ebac       0x25 Src/stm32f4xx_hal_msp.o
                               0x86970 (size before relaxing)
- .debug_str     0x0008ebe9      0x14a Src/stm32f4xx_it.o
+ .debug_str     0x0008ebd1      0x14a Src/stm32f4xx_it.o
                               0x86388 (size before relaxing)
- .debug_str     0x0008ed33       0x5a Src/system_stm32f4xx.o
+ .debug_str     0x0008ed1b       0x5a Src/system_stm32f4xx.o
                               0x85cbc (size before relaxing)
- .debug_str     0x0008ed8d       0x14 Src/usb_device.o
+ .debug_str     0x0008ed75       0x14 Src/usb_device.o
                               0x86c49 (size before relaxing)
- .debug_str     0x0008eda1       0x97 Src/usbd_cdc_if.o
+ .debug_str     0x0008ed89       0x97 Src/usbd_cdc_if.o
                               0x86d4a (size before relaxing)
- .debug_str     0x0008ee38       0x51 Src/usbd_conf.o
+ .debug_str     0x0008ee20       0x51 Src/usbd_conf.o
                               0x87683 (size before relaxing)
- .debug_str     0x0008ee89      0x237 Src/usbd_desc.o
+ .debug_str     0x0008ee71      0x237 Src/usbd_desc.o
                               0x86888 (size before relaxing)
- .debug_str     0x0008f0c0      0x122 Src/vector.o
+ .debug_str     0x0008f0a8      0x13f Src/vector.o
                               0x8682d (size before relaxing)
 
 .comment        0x00000000       0x7f
@@ -8506,7 +8505,7 @@ OUTPUT(MGR.elf elf32-littlearm)
  .comment       0x0000007f       0x80 Src/usbd_desc.o
  .comment       0x0000007f       0x80 Src/vector.o
 
-.debug_frame    0x00000000     0x50ec
+.debug_frame    0x00000000     0x509c
  .debug_frame   0x00000000      0x1cc Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal.o
  .debug_frame   0x000001cc      0x15c Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_cortex.o
  .debug_frame   0x00000328       0xd0 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.o
@@ -8525,85 +8524,85 @@ OUTPUT(MGR.elf elf32-littlearm)
  .debug_frame   0x00002d70      0x2b0 Src/calculations.o
  .debug_frame   0x00003020       0xf8 Src/l3gd20.o
  .debug_frame   0x00003118      0x108 Src/lsm303dlhc.o
- .debug_frame   0x00003220      0x184 Src/main.o
- .debug_frame   0x000033a4       0xc0 Src/stm32f4xx_hal_msp.o
- .debug_frame   0x00003464      0x150 Src/stm32f4xx_it.o
- .debug_frame   0x000035b4       0x30 Src/system_stm32f4xx.o
- .debug_frame   0x000035e4       0x28 Src/usb_device.o
- .debug_frame   0x0000360c       0x78 Src/usbd_cdc_if.o
- .debug_frame   0x00003684      0x2b0 Src/usbd_conf.o
- .debug_frame   0x00003934       0xa8 Src/usbd_desc.o
- .debug_frame   0x000039dc      0x2e8 Src/vector.o
- .debug_frame   0x00003cc4       0x3c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_cos.o)
- .debug_frame   0x00003d00       0x34 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_cos.o)
- .debug_frame   0x00003d34       0x34 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_sin.o)
- .debug_frame   0x00003d68       0x4c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_asin.o)
- .debug_frame   0x00003db4       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_atan2.o)
- .debug_frame   0x00003dd4       0x4c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_sqrt.o)
- .debug_frame   0x00003e20       0x44 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_asin.o)
- .debug_frame   0x00003e64       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_atan2.o)
- .debug_frame   0x00003e84       0x64 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_pow.o)
- .debug_frame   0x00003ee8       0x50 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_sqrt.o)
- .debug_frame   0x00003f38       0x50 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_asin.o)
- .debug_frame   0x00003f88       0x44 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_atan2.o)
- .debug_frame   0x00003fcc       0x44 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_rem_pio2.o)
- .debug_frame   0x00004010       0x30 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_sqrt.o)
- .debug_frame   0x00004040       0x70 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_asin.o)
- .debug_frame   0x000040b0       0x48 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_atan2.o)
- .debug_frame   0x000040f8       0x80 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_pow.o)
- .debug_frame   0x00004178       0x3c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_rem_pio2.o)
- .debug_frame   0x000041b4       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_sqrt.o)
- .debug_frame   0x000041d4       0x68 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_cos.o)
- .debug_frame   0x0000423c       0x50 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_rem_pio2.o)
- .debug_frame   0x0000428c       0x68 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_sin.o)
- .debug_frame   0x000042f4       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_cos.o)
- .debug_frame   0x00004314       0x5c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_rem_pio2.o)
- .debug_frame   0x00004370       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_sin.o)
- .debug_frame   0x00004390       0x38 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_atan.o)
- .debug_frame   0x000043c8       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_fabs.o)
- .debug_frame   0x000043e8       0x30 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_floor.o)
- .debug_frame   0x00004418       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_matherr.o)
- .debug_frame   0x00004438       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_nan.o)
- .debug_frame   0x00004458       0x3c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_rint.o)
- .debug_frame   0x00004494       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_scalbn.o)
- .debug_frame   0x000044c0       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_atan.o)
- .debug_frame   0x000044ec       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_fabs.o)
- .debug_frame   0x0000450c       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_finite.o)
- .debug_frame   0x0000452c       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_floor.o)
- .debug_frame   0x0000454c       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_nan.o)
- .debug_frame   0x0000456c       0x44 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_scalbn.o)
- .debug_frame   0x000045b0       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_copysign.o)
- .debug_frame   0x000045d0       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_copysign.o)
- .debug_frame   0x000045f0       0xac c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_addsubdf3.o)
- .debug_frame   0x0000469c       0x50 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_muldivdf3.o)
- .debug_frame   0x000046ec       0xc4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_cmpdf2.o)
- .debug_frame   0x000047b0       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_unorddf2.o)
- .debug_frame   0x000047d0       0x24 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_fixdfsi.o)
- .debug_frame   0x000047f4       0x24 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_truncdfsf2.o)
- .debug_frame   0x00004818       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_aeabi_uldivmod.o)
- .debug_frame   0x00004844       0x34 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_udivmoddi4.o)
- .debug_frame   0x00004878       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-errno.o)
- .debug_frame   0x00004898       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-init.o)
- .debug_frame   0x000048c4       0x30 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-malloc.o)
- .debug_frame   0x000048f4       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memset.o)
- .debug_frame   0x00004914       0x38 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-freer.o)
- .debug_frame   0x0000494c       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-mallocr.o)
- .debug_frame   0x00004978       0x8c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
- .debug_frame   0x00004a04       0x60 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
- .debug_frame   0x00004a64       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-sbrkr.o)
- .debug_frame   0x00004a90       0x70 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-sprintf.o)
- .debug_frame   0x00004b00       0x6c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-dtoa.o)
- .debug_frame   0x00004b6c       0x40 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-localeconv.o)
- .debug_frame   0x00004bac       0x28 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memcpy-stub.o)
- .debug_frame   0x00004bd4       0x30 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mlock.o)
- .debug_frame   0x00004c04      0x240 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
- .debug_frame   0x00004e44       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-callocr.o)
- .debug_frame   0x00004e70       0x90 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
- .debug_frame   0x00004f00       0x5c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-reent.o)
- .debug_frame   0x00004f5c       0x68 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-locale.o)
- .debug_frame   0x00004fc4       0x48 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mbtowc_r.o)
- .debug_frame   0x0000500c       0x28 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memmove.o)
- .debug_frame   0x00005034       0x3c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-reallocr.o)
- .debug_frame   0x00005070       0x3c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-wctomb_r.o)
- .debug_frame   0x000050ac       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-msizer.o)
- .debug_frame   0x000050cc       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libnosys.a(sbrk.o)
+ .debug_frame   0x00003220      0x134 Src/main.o
+ .debug_frame   0x00003354       0xc0 Src/stm32f4xx_hal_msp.o
+ .debug_frame   0x00003414      0x150 Src/stm32f4xx_it.o
+ .debug_frame   0x00003564       0x30 Src/system_stm32f4xx.o
+ .debug_frame   0x00003594       0x28 Src/usb_device.o
+ .debug_frame   0x000035bc       0x78 Src/usbd_cdc_if.o
+ .debug_frame   0x00003634      0x2b0 Src/usbd_conf.o
+ .debug_frame   0x000038e4       0xa8 Src/usbd_desc.o
+ .debug_frame   0x0000398c      0x2e8 Src/vector.o
+ .debug_frame   0x00003c74       0x3c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_cos.o)
+ .debug_frame   0x00003cb0       0x34 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_cos.o)
+ .debug_frame   0x00003ce4       0x34 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_sin.o)
+ .debug_frame   0x00003d18       0x4c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_asin.o)
+ .debug_frame   0x00003d64       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_atan2.o)
+ .debug_frame   0x00003d84       0x4c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-w_sqrt.o)
+ .debug_frame   0x00003dd0       0x44 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_asin.o)
+ .debug_frame   0x00003e14       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_atan2.o)
+ .debug_frame   0x00003e34       0x64 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_pow.o)
+ .debug_frame   0x00003e98       0x50 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-wf_sqrt.o)
+ .debug_frame   0x00003ee8       0x50 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_asin.o)
+ .debug_frame   0x00003f38       0x44 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_atan2.o)
+ .debug_frame   0x00003f7c       0x44 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_rem_pio2.o)
+ .debug_frame   0x00003fc0       0x30 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-e_sqrt.o)
+ .debug_frame   0x00003ff0       0x70 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_asin.o)
+ .debug_frame   0x00004060       0x48 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_atan2.o)
+ .debug_frame   0x000040a8       0x80 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_pow.o)
+ .debug_frame   0x00004128       0x3c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_rem_pio2.o)
+ .debug_frame   0x00004164       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-ef_sqrt.o)
+ .debug_frame   0x00004184       0x68 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_cos.o)
+ .debug_frame   0x000041ec       0x50 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_rem_pio2.o)
+ .debug_frame   0x0000423c       0x68 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-k_sin.o)
+ .debug_frame   0x000042a4       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_cos.o)
+ .debug_frame   0x000042c4       0x5c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_rem_pio2.o)
+ .debug_frame   0x00004320       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-kf_sin.o)
+ .debug_frame   0x00004340       0x38 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_atan.o)
+ .debug_frame   0x00004378       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_fabs.o)
+ .debug_frame   0x00004398       0x30 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_floor.o)
+ .debug_frame   0x000043c8       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_matherr.o)
+ .debug_frame   0x000043e8       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_nan.o)
+ .debug_frame   0x00004408       0x3c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_rint.o)
+ .debug_frame   0x00004444       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_scalbn.o)
+ .debug_frame   0x00004470       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_atan.o)
+ .debug_frame   0x0000449c       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_fabs.o)
+ .debug_frame   0x000044bc       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_finite.o)
+ .debug_frame   0x000044dc       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_floor.o)
+ .debug_frame   0x000044fc       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_nan.o)
+ .debug_frame   0x0000451c       0x44 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_scalbn.o)
+ .debug_frame   0x00004560       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-s_copysign.o)
+ .debug_frame   0x00004580       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libm.a(lib_a-sf_copysign.o)
+ .debug_frame   0x000045a0       0xac c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_addsubdf3.o)
+ .debug_frame   0x0000464c       0x50 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_muldivdf3.o)
+ .debug_frame   0x0000469c       0xc4 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_cmpdf2.o)
+ .debug_frame   0x00004760       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_unorddf2.o)
+ .debug_frame   0x00004780       0x24 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_fixdfsi.o)
+ .debug_frame   0x000047a4       0x24 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_arm_truncdfsf2.o)
+ .debug_frame   0x000047c8       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_aeabi_uldivmod.o)
+ .debug_frame   0x000047f4       0x34 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/thumb/v7e-m/fpv4-sp/hard\libgcc.a(_udivmoddi4.o)
+ .debug_frame   0x00004828       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-errno.o)
+ .debug_frame   0x00004848       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-init.o)
+ .debug_frame   0x00004874       0x30 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-malloc.o)
+ .debug_frame   0x000048a4       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memset.o)
+ .debug_frame   0x000048c4       0x38 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-freer.o)
+ .debug_frame   0x000048fc       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-mallocr.o)
+ .debug_frame   0x00004928       0x8c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_float.o)
+ .debug_frame   0x000049b4       0x60 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-vfprintf_i.o)
+ .debug_frame   0x00004a14       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-sbrkr.o)
+ .debug_frame   0x00004a40       0x70 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-sprintf.o)
+ .debug_frame   0x00004ab0       0x6c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-dtoa.o)
+ .debug_frame   0x00004b1c       0x40 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-localeconv.o)
+ .debug_frame   0x00004b5c       0x28 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x00004b84       0x30 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mlock.o)
+ .debug_frame   0x00004bb4      0x240 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mprec.o)
+ .debug_frame   0x00004df4       0x2c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-callocr.o)
+ .debug_frame   0x00004e20       0x90 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-svfprintf.o)
+ .debug_frame   0x00004eb0       0x5c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-reent.o)
+ .debug_frame   0x00004f0c       0x68 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-locale.o)
+ .debug_frame   0x00004f74       0x48 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-mbtowc_r.o)
+ .debug_frame   0x00004fbc       0x28 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-memmove.o)
+ .debug_frame   0x00004fe4       0x3c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-reallocr.o)
+ .debug_frame   0x00005020       0x3c c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-wctomb_r.o)
+ .debug_frame   0x0000505c       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libc_nano.a(lib_a-nano-msizer.o)
+ .debug_frame   0x0000507c       0x20 c:/eclipseoxygen/plugins/fr.ac6.mcu.externaltools.arm-none.win32_1.15.0.201708311556/tools/compiler/bin/../lib/gcc/arm-none-eabi/6.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m/fpv4-sp/hard\libnosys.a(sbrk.o)

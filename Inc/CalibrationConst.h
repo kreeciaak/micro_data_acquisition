@@ -10,7 +10,7 @@
 
 
 #define sampleFreq		400.0f		// sample frequency in Hz
-#define betaDef			0.05f		// 2 * proportional gain
+#define betaDef			0.0000001f		// 2 * proportional gain
 #define accelSampleTime	1/400.0f
 #define gyroSampleTime	1/380.0f
 #define sampleTime		1/400.0f

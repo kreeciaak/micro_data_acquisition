@@ -100,6 +100,9 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
 			FirstOffCnt = 0;
 			state = 0;
 		}
+		quaternion[0] = cosf((0.01745329251994*MagOff[2])/2);
+		quaternion[4] = sinf((0.01745329251994*MagOff[2])/2);
+
 		break;
 
 	case 3:
@@ -124,6 +127,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
 			break;
 		}
 		break;
+
 
 	default:
 
@@ -166,7 +170,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
 
 		//MadgwickAHRs
 		DegreesToRadians(GyroN, GyroORad);
-		MadgwickAHRSupdate(GyroORad[0],GyroORad[1],GyroORad[2],AccO[0],AccO[1],AccO[2],MagR[0],MagR[2],MagR[1],quaternion);
+		MadgwickAHRSupdate(GyroORad[0],GyroORad[1],GyroORad[2],AccLP[0],AccLP[1],AccLP[2],MagR[0],MagR[2],MagR[1],quaternion);
 		QuaternionToEulerAngle(quaternion, MadgwickAngles, &siny_n, &RotCnt2);
 		//lowPassFilter(MadgwickAngles, LPMadgwickAnglesPrev, MadgwickAnglesLP, LowPassCoef);
 		RadiansToDegrees(MadgwickAngles, MadgwickAnglesDeg);
@@ -179,6 +183,8 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
 
 			KalmanAngles[2] = GyroAngles[2];
 			KalmanAnglesLP[2] = GyroAngles[2];
+
+			//MadgwickAnglesDeg[2] = GyroAngles[2];
 		//}
 
 
@@ -206,7 +212,9 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
 		M3fInvert(KalmankRotM, KalmankRotMInv);
 
 		//MadgwickAHRS
-		RotationMatrixFromQuaternion(quaternion, MadgwickRotM);
+		changeSignOfVector(MadgwickAngles, MadgwickAngles);
+		RotationMatrixFromAngles(MadgwickAngles, MadgwickRotM);
+		//RotationMatrixFromQuaternion(quaternion, MadgwickRotM);
 		M3fInvert(MadgwickRotM, MadgwickRotMInv);
 
 
@@ -225,7 +233,7 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
 
 		/*---WYKRYCIE BRAKU RUCHU UK£ADU---*/
 
-		if (fabs(Norm(VectorTo2PowSum(AccN))-GravityConst) <= 0.04)
+		if (fabs(Norm(VectorTo2PowSum(AccN))-GravityConst) <= 0.02)
 		{
 			for (int i=0;i<=2;i++)
 			{
@@ -314,20 +322,74 @@ void RawToResult(Vector3f Acc, Vector3f Gyro, Vector3f Mag, Result vResBuff)
 
 		//addVector3fToMatrix(GyroN, vResBuff, 0);
 		//addVector3fToMatrix(GyroAngles, vResBuff, 1);
+//
+//		addVector3fToMatrix(AccR, vResBuff, 0);
+//		addVector3fToMatrix(AccO, vResBuff, 1);
+//		addVector3fToMatrix(AccLP, vResBuff, 2);
+//		addVector3fToMatrix(AccN, vResBuff, 3);
+////		addVector3fToMatrix(AccTKF, vResBuff, 4);
+//		addVector3fToMatrix(RawAnglesDeg, vResBuff, 4);
+//		addVector3fToMatrix(KalmanAngles, vResBuff, 5);
+//		addVector3fToMatrix(AccTKF, vResBuff, 6);
+//		addVector3fToMatrix(AccGRKFLP, vResBuff, 7);
+////		addVector3fToMatrix(AccGRKF, vResBuff, 7);
+//		addVector3fToMatrix(VelRecKF, vResBuff, 8);
+//		addVector3fToMatrix(PosRecKF, vResBuff, 9);
+//		//addVector3fToMatrix(PosABKF, vResBuff, 8);
 
-		addVector3fToMatrix(AccR, vResBuff, 0);
-		addVector3fToMatrix(AccO, vResBuff, 1);
-		addVector3fToMatrix(AccLP, vResBuff, 2);
-		addVector3fToMatrix(AccN, vResBuff, 3);
-//		addVector3fToMatrix(AccTKF, vResBuff, 4);
-		addVector3fToMatrix(RawAnglesDeg, vResBuff, 4);
-		addVector3fToMatrix(KalmanAngles, vResBuff, 5);
-		addVector3fToMatrix(AccTKF, vResBuff, 6);
-		addVector3fToMatrix(AccGRKFLP, vResBuff, 7);
+//		addVector3fToMatrix(AccO, vResBuff, 0);
+//		addVector3fToMatrix(AccN, vResBuff, 1);
+//		addVector3fToMatrix(GyroAngles, vResBuff, 2);
+//		addVector3fToMatrix(AccGRGyro, vResBuff, 3);
+//		addVector3fToMatrix(CFAngles, vResBuff, 4);
+//		addVector3fToMatrix(AccGRCF, vResBuff, 5);
+//		addVector3fToMatrix(KalmanAngles, vResBuff, 6);
 //		addVector3fToMatrix(AccGRKF, vResBuff, 7);
-		addVector3fToMatrix(VelRecKF, vResBuff, 8);
-		addVector3fToMatrix(PosRecKF, vResBuff, 9);
-		//addVector3fToMatrix(PosABKF, vResBuff, 8);
+//		addVector3fToMatrix(MadgwickAnglesDeg, vResBuff, 8);
+//		addVector3fToMatrix(AccGRMF, vResBuff, 9);
+
+		addVector3fToMatrix(MadgwickAnglesDeg, vResBuff, 0);
+
+//				addVector3fToMatrix(AccR, vResBuff, 0);
+//				addVector3fToMatrix(AccO, vResBuff, 1);
+//				addVector3fToMatrix(AccLP, vResBuff, 2);
+//				addVector3fToMatrix(AccN, vResBuff, 3);
+//				addVector3fToMatrix(Gyro, vResBuff, 4);
+//				addVector3fToMatrix(GyroN, vResBuff, 5);
+//				addVector3fToMatrix(GyroAngles, vResBuff, 6);
+//				addVector3fToMatrix(RawAnglesDeg, vResBuff, 7);
+//				addVector3fToMatrix(CFAngles, vResBuff, 8);
+//				addVector3fToMatrix(CFAnglesLP, vResBuff, 9);
+//				addVector3fToMatrix(KalmanAngles, vResBuff, 10);
+//				addVector3fToMatrix(KalmanAnglesLP, vResBuff, 11);
+//				addVector3fToMatrix(MadgwickAnglesDeg, vResBuff, 12);
+//				addVector3fToMatrix(AccTGyro, vResBuff, 13);
+//				addVector3fToMatrix(AccTCF, vResBuff, 14);
+//				addVector3fToMatrix(AccTKF, vResBuff, 15);
+//				addVector3fToMatrix(AccTMF, vResBuff, 16);
+//				addVector3fToMatrix(AccGRGyro, vResBuff, 17);
+//				addVector3fToMatrix(AccGRCF, vResBuff, 18);
+//				addVector3fToMatrix(AccGRKF, vResBuff, 19);
+//				addVector3fToMatrix(AccGRMF, vResBuff, 20);
+//				addVector3fToMatrix(AccGRGyroLP, vResBuff, 21);
+//				addVector3fToMatrix(AccGRCFLP, vResBuff, 22);
+//				addVector3fToMatrix(AccGRKFLP, vResBuff, 23);
+//				addVector3fToMatrix(AccGRMFLP, vResBuff, 24);
+//				addVector3fToMatrix(VelRecGyro, vResBuff, 25);
+//				addVector3fToMatrix(VelRecCF, vResBuff, 26);
+//				addVector3fToMatrix(VelRecKF, vResBuff, 27);
+//				addVector3fToMatrix(VelRecMF, vResBuff, 28);
+//				addVector3fToMatrix(PosRecGyro, vResBuff, 29);
+//				addVector3fToMatrix(PosRecCF, vResBuff, 30);
+//				addVector3fToMatrix(PosRecKF, vResBuff, 31);
+//				addVector3fToMatrix(PosRecMF, vResBuff, 32);
+//				addVector3fToMatrix(AccOff, vResBuff, 33);
+//				addVector3fToMatrix(GyroOff, vResBuff, 34);
+//				addVector3fToMatrix(MagOff, vResBuff, 35);
+
+
+				//addVector3fToMatrix(PosABKF, vResBuff, 8);
+
 
 		break;
 	}

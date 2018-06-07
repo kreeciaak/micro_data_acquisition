@@ -21,7 +21,7 @@
 
 typedef float Vector3f[3];
 typedef float Matrix3f[3][3];
-typedef float Result[11][3];
+typedef float Result[10][3];
 typedef float PKalman[3][2][2];
 typedef float AvBuffer[16][3];
 

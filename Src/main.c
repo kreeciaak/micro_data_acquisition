@@ -70,12 +70,13 @@ TIM_HandleTypeDef htim10;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 char str1[350] = {0};
+
 int16_t AccelData[3], GyroData[3], MagData[3];
 Result result;
 Vector3f fAccelData, fGyroData, fMagData, AccelOffset, GyroOffset, MagOffset, RawAnglesDeg;
 float z_or_corr = 0, acc_mag = 0;
 int flag = -1;
-int Procedureflag = 4; //1 - XYorientationCorrection, 2 - OffsetCalibration, 3 - ZOrientationCorrection, 4 - Main program
+int Procedureflag = 4; //1 - XYorientationCorrection, 3 - ZOrientationCorrection, 4 - Main program
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -180,13 +181,6 @@ int main(void)
 		  HAL_Delay(20);
 	  }
 
-
-//	  if (Procedureflag == 2)
-//	  {
-//		  sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", acc_mag, AccelOffset[0], AccelOffset[1], AccelOffset[2], GyroOffset[0], GyroOffset[1], GyroOffset[2], MagOffset[0], MagOffset[1], MagOffset[2]);
-//		  CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
-//		  HAL_Delay(1000);
-//	  }
 
   /* USER CODE END WHILE */
 
@@ -411,14 +405,19 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 			RawToResult(fAccelData, fGyroData, fMagData, result);
 			if (result[0][2] != 0)
 			{
-				sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2],result[5][0],result[5][1],result[5][2],result[6][0],result[6][1],result[6][2],result[7][0],result[7][1],result[7][2],result[8][0],result[8][1],result[8][2],result[9][0],result[9][1],result[9][2]);
+				//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2],result[5][0],result[5][1],result[5][2],result[6][0],result[6][1],result[6][2],result[7][0],result[7][1],result[7][2],result[8][0],result[8][1],result[8][2],result[9][0],result[9][1],result[9][2]);
+				//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2],result[5][0],result[5][1],result[5][2],result[6][0],result[6][1],result[6][2],result[7][0],result[7][1],result[7][2],result[8][0],result[8][1],result[8][2],result[9][0],result[9][1],result[9][2],result[10][0],result[10][1],result[10][2],result[11][0],result[11][1],result[11][2],result[12][0],result[12][1],result[12][2],result[13][0],result[13][1],result[13][2],result[14][0],result[14][1],result[14][2],result[15][0],result[15][1],result[15][2],result[16][0],result[16][1],result[16][2],result[17][0],result[17][1],result[17][2],result[18][0],result[18][1],result[18][2],result[19][0],result[19][1],result[19][2],result[20][0],result[20][1],result[20][2],result[21][0],result[21][1],result[21][2],result[22][0],result[22][1],result[22][2],result[23][0],result[23][1],result[23][2],result[24][0],result[24][1],result[24][2],result[25][0],result[25][1],result[25][2],result[26][0],result[26][1],result[26][2],result[27][0],result[27][1],result[27][2],result[28][0],result[28][1],result[28][2],result[29][0],result[29][1],result[29][2],result[30][0],result[30][1],result[30][2],result[31][0],result[31][1],result[31][2],result[32][0],result[32][1],result[32][2],result[33][0],result[33][1],result[33][2],result[34][0],result[34][1],result[34][2],result[35][0],result[35][1],result[35][2]);
 				//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2],result[2][0],result[2][1],result[2][2],result[3][0],result[3][1],result[3][2],result[4][0],result[4][1],result[4][2]);
 				//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", fGyroData[0],fGyroData[1],fGyroData[2],result[0][0],result[0][1],result[0][2]);
 				//sprintf(str1, "%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;%06.4f;\n\r", result[0][0],result[0][1],result[0][2],result[1][0],result[1][1],result[1][2]);
-				//sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r",result[0][0],result[0][1],result[0][2]);
+				sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r",result[0][0],result[0][1],result[0][2]);
 				//sprintf(str1, "%06.4f;%06.4f;%06.4f;\n\r", AccelOffset[0], AccelOffset[1], AccelOffset[2]);
 				//sprintf(str1, "%06.4f\n\r", result[0][0]);
 				CDC_Transmit_FS((uint8_t*)str1, strlen(str1));
+
+				//sprintf(str2, "%06.4f;%06.4f;%06.4f;\n\r",result[10][0],result[10][1],result[10][2]);
+				//CDC_Transmit_FS((uint8_t*)str2, strlen(str2));
+
 			}
 		}
 	}
