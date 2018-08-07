@@ -6,11 +6,11 @@
  */
 
 
+#include <xmpu9250.h>
 #include "stm32f4xx_hal.h"
-#include "mpu9250.h"
 
 
-/*extern I2C_HandleTypeDef hi2c3;
+extern I2C_HandleTypeDef hi2c3;
 
 
 // LED Indication
@@ -64,7 +64,7 @@ void MPU_Accel_Ini(void)
 		MPU_I2C_Write(LSM303DLHC_ADDRESS_A,LSM303DLHC_RA_CTRL_REG4_A,ctrl);
 	}
 	HAL_Delay(500);
-}*/
+}
 
 
 extern SPI_HandleTypeDef hspi2;
@@ -142,7 +142,7 @@ void MPU_Gyro_Ini(void)
 
 	if(MPU_Gyro_ReadID()==0x71)
 	{
-	/*	ctrl = L3GD20_DR_190HZ | L3GD20_BW_VHIGH | L3GD20_NORM_MODE_EN | L3GD20_XYZ_EN;
+		ctrl = L3GD20_DR_190HZ | L3GD20_BW_VHIGH | L3GD20_NORM_MODE_EN | L3GD20_XYZ_EN;
 		L3G_Gyro_IO_Write(&ctrl,L3GD20_CTRL_REG1,1);
 
 		ctrl = L3GD20_HPM_NOR_M_R | L3GD20_HPCF_10;
@@ -155,7 +155,7 @@ void MPU_Gyro_Ini(void)
 		L3G_Gyro_IO_Write(&ctrl,L3GD20_CTRL_REG4,1);
 
 	}else{
-		L3G_Error();*/
+		L3G_Error();
 	}
 	HAL_Delay(500);
 }
